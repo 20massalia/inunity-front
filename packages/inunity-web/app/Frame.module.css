@@ -1,0 +1,360 @@
+.time1 {
+  position: relative;
+  line-height: 22px;
+  font-weight: 600;
+}
+.time {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 6px 0px 16px;
+}
+.dynamicIslandSpacer {
+  width: 124px;
+  height: 10px;
+}
+.cellularConnectionIcon {
+  width: 19.2px;
+  position: relative;
+  height: 12.2px;
+}
+.wifiIcon {
+  width: 17.1px;
+  position: relative;
+  height: 12.3px;
+}
+.border {
+  position: absolute;
+  height: 100%;
+  top: 0%;
+  bottom: 0%;
+  left: calc(50% - 13.65px);
+  border-radius: 4.3px;
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  width: 25px;
+  opacity: 0.35;
+  mix-blend-mode: normal;
+}
+.capIcon {
+  position: absolute;
+  height: 31.54%;
+  top: 36.78%;
+  bottom: 31.68%;
+  left: calc(50% + 12.35px);
+  max-height: 100%;
+  width: 1.3px;
+  opacity: 0.4;
+  mix-blend-mode: normal;
+}
+.capacity {
+  position: absolute;
+  height: 69.23%;
+  top: 15.38%;
+  bottom: 15.38%;
+  left: calc(50% - 11.65px);
+  border-radius: 2.5px;
+  background-color: #fff;
+  width: 21px;
+}
+.battery {
+  width: 27.3px;
+  position: relative;
+  height: 13px;
+}
+.levels {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 16px 0px 6px;
+  gap: 7px;
+}
+.frame {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.statusBarIphone {
+  align-self: stretch;
+  background-color: #002874;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 21px 0px 0px;
+  box-sizing: border-box;
+}
+.div1 {
+  position: relative;
+  font-weight: 800;
+}
+.div2 {
+  width: 118px;
+  position: relative;
+  font-size: 32px;
+  font-weight: 800;
+  display: inline-block;
+}
+.parent {
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  z-index: 0;
+}
+.chevronLeftIcon {
+  width: 32px;
+  position: absolute;
+  margin: 0 !important;
+  top: -6px;
+  left: -9px;
+  height: 32px;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.frameContainer {
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  position: relative;
+  gap: 2px;
+}
+.editIcon {
+  width: 20px;
+  position: relative;
+  border-radius: 1000px;
+  height: 20px;
+}
+.editWrapper {
+  border-radius: 1000px;
+  background-color: #f9f9f9;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px;
+}
+.frameDiv {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+}
+.frameGroup {
+  align-self: stretch;
+  background-color: #002874;
+  height: 209px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #fff;
+}
+.genericAvatarIcon {
+  width: 40px;
+  position: relative;
+  border-radius: 100px;
+  height: 40px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.user {
+  position: relative;
+  letter-spacing: 0.01em;
+  line-height: 28px;
+  font-weight: 500;
+}
+.handle {
+  position: relative;
+  letter-spacing: 0.01em;
+  line-height: 28px;
+}
+.verifiedBadgeBlue {
+  width: 18.8px;
+  position: relative;
+  height: 18.8px;
+}
+.handleParent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  margin-top: -8px;
+  color: #536471;
+}
+.userHandle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.spacer {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+}
+.moreVerticalIcon {
+  width: 15px;
+  position: relative;
+  height: 28px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.postUserProfile {
+  align-self: stretch;
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0px 0px 16px;
+  gap: 11px;
+}
+.p {
+  margin: 0;
+}
+.div3 {
+  align-self: stretch;
+  position: relative;
+  font-size: 15px;
+  font-weight: 500;
+  color: #3b3f43;
+  display: -webkit-inline-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.date {
+  position: relative;
+  letter-spacing: -0.02em;
+  line-height: 28px;
+}
+.timestamp {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 11px 0px 14px;
+  color: #536471;
+}
+.line {
+  align-self: stretch;
+  position: relative;
+  border-top: 1px solid #eff3f4;
+  box-sizing: border-box;
+  height: 1px;
+}
+.chatBubbleIcon {
+  width: 18px;
+  position: relative;
+  height: 18px;
+}
+.retweets {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+}
+.thumbsUpIcon {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.interactions {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 12px 0px 0px 5px;
+  gap: 20px;
+  font-size: 13px;
+}
+.postListItem {
+  width: 393px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 13px 15px;
+  box-sizing: border-box;
+}
+.div6 {
+  align-self: stretch;
+  position: relative;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  color: #3b3f43;
+  display: -webkit-inline-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.genericAvatarIcon2 {
+  width: 40px;
+  position: relative;
+  border-radius: 100px;
+  height: 40px;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.frameParent {
+  align-self: stretch;
+  flex: 1;
+  background-color: #f2f2f2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  text-align: left;
+  font-size: 16px;
+  color: #0f1419;
+}
+.div {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  height: 852px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: center;
+  font-size: 17px;
+  color: #fff;
+  font-family: Inter;
+}
+

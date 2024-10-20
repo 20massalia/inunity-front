@@ -8,7 +8,9 @@
     "start": "yarn nextapp & yarn nativeapp"
   },
   "workspaces": [
-    "packages/*"
+    "packages/inunity-native",
+    "packages/inunity-web",
+    "packages/message-type"
   ],
   "devDependencies": {
     "typescript": "^5.6.3"

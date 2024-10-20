@@ -1,0 +1,463 @@
+.time1 {
+  position: relative;
+  line-height: 22px;
+  font-weight: 600;
+}
+.time {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 6px 0px 16px;
+}
+.dynamicIslandSpacer {
+  width: 124px;
+  height: 10px;
+}
+.cellularConnectionIcon {
+  width: 19.2px;
+  position: relative;
+  height: 12.2px;
+}
+.wifiIcon {
+  width: 17.1px;
+  position: relative;
+  height: 12.3px;
+}
+.border {
+  position: absolute;
+  height: 100%;
+  top: 0%;
+  bottom: 0%;
+  left: calc(50% - 13.65px);
+  border-radius: 4.3px;
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  width: 25px;
+  opacity: 0.35;
+  mix-blend-mode: normal;
+}
+.capIcon {
+  position: absolute;
+  height: 31.54%;
+  top: 36.78%;
+  bottom: 31.68%;
+  left: calc(50% + 12.35px);
+  max-height: 100%;
+  width: 1.3px;
+  opacity: 0.4;
+  mix-blend-mode: normal;
+}
+.capacity {
+  position: absolute;
+  height: 69.23%;
+  top: 15.38%;
+  bottom: 15.38%;
+  left: calc(50% - 11.65px);
+  border-radius: 2.5px;
+  background-color: #fff;
+  width: 21px;
+}
+.battery {
+  width: 27.3px;
+  position: relative;
+  height: 13px;
+}
+.levels {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 16px 0px 6px;
+  gap: 7px;
+}
+.frame {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.statusBarIphone {
+  align-self: stretch;
+  background-color: #002874;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 21px 0px 0px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 17px;
+}
+.chevronLeftIcon {
+  width: 24px;
+  position: relative;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.departmentName {
+  position: relative;
+  font-weight: 800;
+}
+.noticeTitle {
+  position: relative;
+  font-size: 16px;
+  font-weight: 800;
+}
+.departmentAndNoticeWrapper {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+}
+.moreVerticalIcon {
+  width: 5px;
+  position: relative;
+  height: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.header {
+  align-self: stretch;
+  background-color: #002874;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+.genericAvatarIcon {
+  width: 40px;
+  position: relative;
+  border-radius: 100px;
+  height: 40px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.user {
+  position: relative;
+  letter-spacing: 0.01em;
+  line-height: 28px;
+  font-weight: 500;
+}
+.handle {
+  position: relative;
+  letter-spacing: 0.01em;
+  line-height: 28px;
+}
+.verifiedBadgeBlue {
+  width: 18.8px;
+  position: relative;
+  height: 18.8px;
+}
+.departmentHandleWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  margin-top: -8px;
+  color: #536471;
+}
+.userHandle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.spacer {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+}
+.userBar {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0px 0px 16px;
+  gap: 11px;
+  font-size: 16px;
+  color: #0f1419;
+}
+.p {
+  margin: 0;
+}
+.postText {
+  align-self: stretch;
+  position: relative;
+  font-weight: 500;
+}
+.inlineImageIcon {
+  width: 291px;
+  position: relative;
+  height: 51px;
+  object-fit: cover;
+}
+.date {
+  position: relative;
+  letter-spacing: -0.02em;
+  line-height: 28px;
+}
+.timestamp {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  font-size: 15px;
+  color: #536471;
+}
+.postContentWrapper {
+  align-self: stretch;
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  gap: 10px;
+}
+.commentCount {
+  position: relative;
+  font-size: 12px;
+  font-weight: 800;
+}
+.commentTitle {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.userAvatarIcon {
+  width: 30px;
+  position: relative;
+  border-radius: 1000px;
+  height: 30px;
+  object-fit: cover;
+}
+.commenterNameWrapper {
+  height: 41px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.commenterInfoWrapper {
+  height: 41px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+}
+.commentProfile {
+  align-self: stretch;
+  height: 41px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.commentTimestamp {
+  position: relative;
+  font-weight: 500;
+  color: #828282;
+}
+.commentTextWrapper {
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: 10px;
+}
+.commentItem {
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.divider1 {
+  align-self: stretch;
+  position: relative;
+  border-top: 1px solid #cac4d0;
+  box-sizing: border-box;
+  height: 1px;
+}
+.divider {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.commenterDepartment {
+  position: relative;
+  font-size: 10px;
+  font-weight: 500;
+  color: #828282;
+}
+.commentList {
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px 0px;
+  gap: 10px;
+  font-size: 13px;
+}
+.commentArea {
+  align-self: stretch;
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px;
+  gap: 10px;
+  font-size: 16px;
+}
+.spacer1 {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+.container {
+  width: 18px;
+  position: relative;
+  border-radius: 2px;
+  background-color: #65558f;
+  height: 18px;
+  z-index: 0;
+}
+.checkSmallIcon {
+  width: 24px;
+  position: absolute;
+  margin: 0 !important;
+  top: calc(50% - 12px);
+  left: calc(50% - 12px);
+  height: 24px;
+  z-index: 1;
+}
+.stateLayer {
+  border-radius: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.anonymityText {
+  position: relative;
+  border: none;
+  background: none;
+  width:100%;
+  font-weight: 500;
+}
+.selectedStateWrapper {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 8px 0px 5px;
+  gap: 10px;
+}
+.submitText {
+  position: relative;
+  font-weight: 500;
+  color: #007aff;
+}
+.anonymityWrapper {
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.inputFieldWrapper {
+  align-self: stretch;
+  border-radius: 50px;
+  background-color: #f4f4f4;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 10px;
+  color: #494949;
+}
+.commentInputContainer {
+  align-self: stretch;
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 40px 20px;
+  font-size: 12px;
+  position: fixed;
+  bottom: 0;
+  left:0;
+  right:0;
+}
+.postContainer {
+  align-self: stretch;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  color: #000;
+}
+.div {
+  width: 100%;
+  position: relative;
+  background-color: #f2f2f2;
+  height: 852px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 10px;
+  color: #fff;
+  font-family: Inter;
+}
+
