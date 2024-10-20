@@ -1,0 +1,16 @@
+//
+// tsconfig.base.json
+//
+{
+  "extends": "./tsconfig.spec.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+		
+    }
+  },
+  "files": [],
+  "references": [
+
+  ]
+}
