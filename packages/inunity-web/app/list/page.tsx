@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import styles from '../Frame.module.css';
-import { useEffect, useState } from 'react';
 import { useMessageManager } from '@/lib/MessageManager';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { MessageEventType } from 'message-type/message-type';
+import { useQuery } from '@tanstack/react-query';
 
 const fetchList = async () => {
   return fetch('http://192.168.1.146:8888/list', {
@@ -24,17 +24,13 @@ export default function List() {
 
   const messageManager = useMessageManager();
 
-  const [list, setList] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    fetchList().then(async res => {
+  const {data, isLoading} = useQuery({
+    queryKey: ['list'],
+    queryFn: () => fetchList().then(async res => {
       messageManager?.sendMessage(MessageEventType.Log, res.ok)
-      if (res.ok) {
-        setList((await res.json()))
-        setLoading(false)
-      }
-    }).catch(err => messageManager?.sendMessage(MessageEventType.Log, err.message))
-  }, [])
+      return (await res.json()) as Post[];
+    })
+  })
 
 
   return (
@@ -56,8 +52,8 @@ export default function List() {
           </div>
         </div>
         {
-          !loading &&
-          list.map(item => <div key={item.content} className={styles.postListItem} onClick={() => {
+          !isLoading &&
+          data?.map(item => <div key={item.content} className={styles.postListItem} onClick={() => {
             messageManager?.sendMessage(MessageEventType.Log, 'test')
             if (platformResolver(navigator.userAgent.toLowerCase()).isWebView) messageManager?.sendMessage(MessageEventType.Navigation, { path: 'detail' })
             else router.push('detail')

@@ -68,25 +68,45 @@ export default function Login() {
  
 
   return (
-    <div className="App">
-      <p>id</p>
-      <input onChange={({ target: { value } }) => edit('id', value)}></input>
-      <p>pw</p>
-      <input onChange={({ target: { value } }) => edit('pw', value)}></input>
-      <p onClick={() => messageManager?.sendMessage(MessageEventType.Navigation, {route: 'find', pararms: {param1: 'param1'}})}>Lost Password?</p>
-      <button onClick={onSubmit}> login </button>
-      <p>
-        쿠키값:
-        {
-          // cookies().getAll().join(', ')
-        }
-      </p>
-      <p>
-        {
-          username
-        }
-      </p>
-
+    <div className="App flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-80">
+        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+        <div className="mb-4">
+          <label htmlFor="id" className="block text-sm font-medium text-gray-700 mb-1">ID</label>
+          <input
+            id="id"
+            type="text"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={({ target: { value } }) => edit('id', value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="pw" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input
+            id="pw"
+            type="password"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={({ target: { value } }) => edit('pw', value)}
+          />
+        </div>
+        <p
+          className="text-sm text-blue-600 hover:underline cursor-pointer mb-4"
+          onClick={() => messageManager?.sendMessage(MessageEventType.Navigation, {route: 'find', pararms: {param1: 'param1'}})}
+        >
+          Lost Password?
+        </p>
+        <button
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+          onClick={onSubmit}
+        >
+          Login
+        </button>
+        {username && (
+          <p className="mt-4 text-sm text-gray-600">
+            Welcome, {username}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

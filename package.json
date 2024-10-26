@@ -3,9 +3,9 @@
   "packageManager": "yarn@4.2.2",
   "private": true,
   "scripts": {
-    "nextapp": "yarn workspace inunity-web run dev",
-    "nativeapp": "yarn workspace inunity-native run ios",
-    "start": "yarn nextapp & yarn nativeapp"
+    "nextapp": "yarn workspace inunity-web",
+    "nativeapp": "yarn workspace inunity-native ",
+    "start": "yarn nextapp run dev & yarn nativeapp run ios"
   },
   "workspaces": [
     "packages/inunity-native",
