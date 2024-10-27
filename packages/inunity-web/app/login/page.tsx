@@ -13,7 +13,7 @@ import Typography from 'ui/src/Typography';
 
 
 const requestLogin = async (id: string, pw: string) => {
-  return fetch('http://192.168.1.146:8888/signin', {
+  return fetch(process.env.NEXT_PUBLIC_API_URL+'/signin', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -24,7 +24,7 @@ const requestLogin = async (id: string, pw: string) => {
 }
 
 const checkValidity = async () => {
-  return fetch('http://192.168.1.146:8888/welcome', {
+  return fetch(process.env.NEXT_PUBLIC_API_URL +'/welcome', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -45,6 +45,8 @@ export default function Login() {
   const router = useRouter();
 
   const onSubmit = async () => {
+
+
     requestLogin(form.id, form.pw).then(res => {
       messageManager?.sendMessage(MessageEventType.Log, res.ok)
       if (res) {

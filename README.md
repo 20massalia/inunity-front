@@ -42,3 +42,14 @@ EXPO_PUBLIC_WEB_URL=http://192.168.1.146:3000 # next.js 서버를 구동하는 �
 ```bash
 export EXPO_PUBLIC_WEB_URL=http://192.168.1.146:3000; yarn start
 ```
+### API URL
+현재 테스트에 사용하고 있는 쿠키 인증 서버가 있습니다.
+
+https://github.com/INUnity-for-UNI/inunity-cookie-test
+
+이 레포지토리를 클론해서 세팅한 다음, 웹뷰 URL과 같이 이번엔 **next.js** 패키지의 env를 지정해주세요.
+```env
+# packages/inunity-web/.env.local
+
+NEXT_PUBLIC_API_URL=http://192.168.1.146:8888 # 쿠키 테스트 서버를 구동하는 호스트
+```
