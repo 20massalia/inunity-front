@@ -4,9 +4,12 @@ import { useMessageManager } from '@/lib/MessageManager';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { MessageEventType } from 'message-type/message-type';
 import { useRouter } from 'next/navigation';
-import { useState,  useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-import {CustomButton} from 'ui/components';
+import { Button } from 'ui/components';
+import Input from 'ui/src/Input';
+import Typography from 'ui/src/Typography';
+
 
 
 const requestLogin = async (id: string, pw: string) => {
@@ -46,7 +49,7 @@ export default function Login() {
       messageManager?.sendMessage(MessageEventType.Log, res.ok)
       if (res) {
         messageManager?.sendMessage(MessageEventType.Login, document.cookie);
-        router.replace('/list', );
+        router.replace('/list',);
       }
       else {
         // Todo: Clear credentials ;;
@@ -61,38 +64,44 @@ export default function Login() {
     checkValidity().then(async res => {
       if (!isWebView) return;
       messageManager?.sendMessage(MessageEventType.Log, res.status)
-      if (res.ok){
+      if (res.ok) {
         router.replace('/list',);
       } else setUsername('')
 
     })
   }, [checkValidity])
 
- 
+
+  const [pwVisible, setPwVisible] = useState(false);
+  const pwRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="App">
-      <p>id</p>
-      <CustomButton>
-        hi
-      </CustomButton>
-      <input onChange={({ target: { value } }) => edit('id', value)}></input>
-      <p>pw</p>
-      <input onChange={({ target: { value } }) => edit('pw', value)}></input>
-      <p onClick={() => messageManager?.sendMessage(MessageEventType.Navigation, {route: 'find', pararms: {param1: 'param1'}})}>Lost Password?</p>
-      <button onClick={onSubmit}> login </button>
-      <p>
-        쿠키값:
-        {
-          // cookies().getAll().join(', ')
+    <div className={`p-5 gap-3 flex flex-col`} >
+      <Typography variant='h3'>아이디</Typography>
+      <Input
+        value={form.id}
+        setValue={(value) => edit('id', value)}
+        placeholder='포탈 아이디'
+      />    
+      <Typography variant='h3' >비밀번호</Typography>
+      <Input
+        ref={pwRef}
+        value={form.pw}
+        setValue={(value) => edit('pw', value)}
+        placeholder='포탈 비밀번호'
+        masked={!pwVisible}
+        rightIcon={
+        <svg onClick={() => {
+          setPwVisible(prev => !prev);
+          pwRef.current?.focus()
+        }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path d="M12 4C6.477 4 0 9.477 0 16s6.477 12 12 12 12-9.477 12-12S17.523 4 12 4zm0 18a8 8 0 100-16 8 8 0 000 16zm-.75-11.25h1.5v-1.5h-1.5v1.5zm0-3h1.5v-1.5h-1.5v1.5zm0-3h1.5v-1.5h-1.5v1.5zm0-3h1.5v-1.5h-1.5v1.5zm0 3h1.5v1.5h-1.5v-1.5zm0 3h1.5v1.5h-1.5v-1.5zm0 3h1.5v1.5h-1.5v-1.5z"/>
+        </svg>
         }
-      </p>
-      <p>
-        {
-          username
-        }
-      </p>
+      />
 
+      <p onClick={() => messageManager?.sendMessage(MessageEventType.Navigation, { route: 'find', pararms: { param1: 'param1' } })}>Lost Password?</p>
+      <Button onClick={onSubmit}> 로그인 </Button>
     </div>
   );
 }

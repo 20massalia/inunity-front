@@ -34,8 +34,8 @@ const COLORS = {
 };
 
 const FONTS = {
-  name: "font-['Inter'] font-medium",
-  introduction: "font-['Inter'] font-normal",
+  name: "font-medium",
+  introduction: "font-normal",
 };
 
 const SIZES = {
@@ -78,7 +78,10 @@ export const UserProfile = ({
       </div>
       <div className="flex-shrink-0">
         <div className="relative" data-menu-id={id}>
-          <button className="p-2" onClick={onToggleMenu}>
+          <button className="p-2" onClick={(e)=>{
+            e.stopPropagation()
+            onToggleMenu()
+          }}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`${SIZES.menuIcon} ${COLORS.menuIcon}`}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
@@ -89,7 +92,8 @@ export const UserProfile = ({
                 <button
                   key={index}
                   className={`block w-full text-left px-4 py-2 text-sm ${COLORS.menuItem} ${COLORS.menuItemHover}`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     action.onClick();
                     onToggleMenu();
                   }}

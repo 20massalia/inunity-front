@@ -6,7 +6,8 @@ import { useMessageManager } from '@/lib/MessageManager';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { MessageEventType } from 'message-type/message-type';
 import { UserProfile } from 'ui/components';
-import {useQuery} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import PostListItem from 'ui/src/PostListItem';
 
 const fetchList = async () => {
   return fetch('http://192.168.1.146:8888/list', {
@@ -25,7 +26,7 @@ export default function List() {
 
   const messageManager = useMessageManager();
 
-  const {data, isLoading} = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['list'],
     queryFn: () => fetchList().then(async res => {
       messageManager?.sendMessage(MessageEventType.Log, res.ok)
@@ -59,30 +60,20 @@ export default function List() {
             if (platformResolver(navigator.userAgent.toLowerCase()).isWebView) messageManager?.sendMessage(MessageEventType.Navigation, { path: 'detail' })
             else router.push('detail')
           }}>
-            <UserProfile
-              profileImage={''}
+            <PostListItem
               name={item.author}
-              introduction={item.authorOrg}
-              id={item.author}
-              isMenuOpen={false}
-              onToggleMenu={function (): void {
+              department={item.authorOrg}
+              content={item.content}
+              date={item.date}
+              likes={item.likes}
+              bookmarks={item.comments}
+              postId={''}
+              toggleLike={function (postId: string): void {
                 throw new Error('Function not implemented.');
-              }} />
-            <div className={styles.div3}>
-              <p className={styles.p}>{item.content}</p>
-            </div>
-            <div className={styles.timestamp}>
-              <div className={styles.date}>{item.date}</div>
-            </div>
-            <div className={styles.line} />
-            <div className={styles.interactions}>
-              <div className={styles.retweets}>
-                <div className={styles.handle}>{item.comments}</div>
-              </div>
-              <div className={styles.retweets}>
-                <div className={styles.handle}>{item.likes}</div>
-              </div>
-            </div>
+              }} toggleBookmark={function (postId: string): void {
+                throw new Error('Function not implemented.');
+              }} isLiked={false} isBookmarked={false} />
+        
           </div>)
         }
 

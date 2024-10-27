@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from './Typography';
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary';
@@ -7,7 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-export const CustomButton: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'medium',
   children,
@@ -27,8 +28,9 @@ export const CustomButton: React.FC<ButtonProps> = ({
   const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`;
 
   return (
-    <button className={classes} onClick={onClick}>
-      {children}
-    </button>
+    <div onClick={onClick} className=" px-2.5 py-1 bg-[#185bec]/80 rounded-[10px] justify-center items-center gap-2.5 inline-flex">
+      <Typography variant='body' className="text-center text-white text-xl font-semibold  leading-9">{children}</Typography>
+
+    </div>
   );
 };

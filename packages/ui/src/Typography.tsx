@@ -3,7 +3,7 @@ import React from 'react';
 type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'subtitle1' | 'subtitle2' | 'body' | 'caption' | 'overline';
 
 interface TypographyProps {
-  variant: TypographyVariant;
+  variant?: TypographyVariant;
   children: React.ReactNode;
   className?: string;
 }
@@ -22,7 +22,7 @@ const variantClasses: Record<TypographyVariant, string> = {
   overline: 'text-xs uppercase tracking-wider',
 };
 
-export default function Typography({ variant, children, className = '' }: TypographyProps)  {
+export default function Typography({ variant='body', children, className = '' }: TypographyProps)  {
   const Element = variant.startsWith('h') ? variant : 'p';
   const classes = `${variantClasses[variant]} ${className}`;
 
