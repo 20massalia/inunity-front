@@ -43,7 +43,7 @@ export default function Detail() {
             ref={webViewRef}
             injectedJavaScriptBeforeContentLoaded={`document.cookie=${cookie}`}
             source={{
-              uri: "http://192.168.1.146:3000/detail",
+              uri: `${process.env.EXPO_PUBLIC_WEB_URL}/detail`,
             }}
             userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
             sharedCookiesEnabled
