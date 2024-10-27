@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 
 export interface UserProfileProps {
   /** 사용자 프로필 이미지 */
@@ -13,6 +13,10 @@ export interface UserProfileProps {
     icon?: React.ReactNode;
     onClick: () => void;
   }>;
+  /** Unique identifier for each UserProfile */
+  id: string;
+  isMenuOpen: boolean;
+  onToggleMenu: () => void;
 }
 
 // Define theme constants
@@ -49,31 +53,31 @@ export const UserProfile = ({
   name,
   introduction,
   actions,
+  id,
+  isMenuOpen,
+  onToggleMenu,
 }: UserProfileProps) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  console.log(actions);
-
   return (
-    <div className={`${SIZES.container} flex flex-row pb-4 ${COLORS.background} justify-start items-center ${SIZES.gap} inline-flex`}>
-        <div className={`${SIZES.profile} relative ${COLORS.profileBackground} rounded-[100px] flex items-center justify-center`}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={COLORS.profileIcon} style={{width: 48}}>
-          <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
-        </svg>
-      </div>
-      <div className="flex-col justify-start items-start inline-flex">
-        <div className={`${COLORS.name} ${SIZES.name} ${FONTS.name} tracking-tight`}>{name}</div>
-        <div className="justify-start items-center gap-1 inline-flex">
-          <div className={`${COLORS.introduction} ${SIZES.introduction} ${FONTS.introduction} tracking-tight`}>{introduction}</div>
-
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={COLORS.verifiedIcon} className={SIZES.icon}>
+    <div className={`w-full ${SIZES.container} flex flex-row pb-4 ${COLORS.background} justify-between items-center ${SIZES.gap}`}>
+      <div className="flex items-center">
+        <div className={`${SIZES.profile} relative ${COLORS.profileBackground} rounded-[100px] flex items-center justify-center mr-3`}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={COLORS.profileIcon} style={{width: 48}}>
+            <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
+          </svg>
+        </div>
+        <div className="flex-col justify-start items-start inline-flex">
+          <div className={`${COLORS.name} ${SIZES.name} ${FONTS.name} tracking-tight`}>{name}</div>
+          <div className="justify-start items-center gap-1 inline-flex">
+            <div className={`${COLORS.introduction} ${SIZES.introduction} ${FONTS.introduction} tracking-tight`}>{introduction}</div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={COLORS.verifiedIcon} className={SIZES.icon}>
               <path d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" />
             </svg>
-            
+          </div>
         </div>
       </div>
-      <div className="grow shrink basis-0 self-stretch">
-        <div className="h-full flex items-center justify-end relative">
-          <button className="p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+      <div className="flex-shrink-0">
+        <div className="relative" data-menu-id={id}>
+          <button className="p-2" onClick={onToggleMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`${SIZES.menuIcon} ${COLORS.menuIcon}`}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
@@ -86,7 +90,7 @@ export const UserProfile = ({
                   className={`block w-full text-left px-4 py-2 text-sm ${COLORS.menuItem} ${COLORS.menuItemHover}`}
                   onClick={() => {
                     action.onClick();
-                    setIsMenuOpen(false);
+                    onToggleMenu();
                   }}
                 >
                   {action.icon && <span className="mr-2">{action.icon}</span>}

@@ -5,12 +5,11 @@
   "scripts": {
     "nextapp": "yarn workspace inunity-web",
     "nativeapp": "yarn workspace inunity-native ",
-    "start": "yarn nextapp run dev & yarn nativeapp run ios"
+    "start": "yarn nextapp run dev & yarn nativeapp run ios",
+    "storybook": "yarn workspace inunity-design-system storybook"
   },
   "workspaces": [
-    "packages/inunity-native",
-    "packages/inunity-web",
-    "packages/message-type"
+    "packages/*"
   ],
   "devDependencies": {
     "typescript": "^5.6.3"
