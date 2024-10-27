@@ -6,6 +6,7 @@ import { useMessageManager } from '@/lib/MessageManager';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { MessageEventType } from 'message-type/message-type';
 import { UserProfile } from 'ui/components';
+import {useQuery} from '@tanstack/react-query';
 
 const fetchList = async () => {
   return fetch('http://192.168.1.146:8888/list', {
