@@ -1,12 +1,12 @@
-import { router } from "expo-router";
 import { useRef, useState, useEffect } from "react";
 import { SafeAreaView, Platform, Button, View } from "react-native";
 import WebView from "react-native-webview";
-import * as SecureStore from "expo-secure-store";
+
 import { ThemedText } from "@/components/ThemedText";
 import AuthManager from "@/lib/AuthManager";
 import { useMessageManager, parseMessage, handleMessage } from "@/lib/MessageManager";
 import { MessageEventType, NavigationEvent } from "message-type/message-type";
+import { router } from "expo-router";
 
 
 export default function Index() {
