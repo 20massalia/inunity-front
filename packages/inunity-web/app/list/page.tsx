@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useMessageManager } from '@/lib/MessageManager';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { MessageEventType } from 'message-type/message-type';
+import { UserProfile } from 'ui';
 
 const fetchList = async () => {
   return fetch('http://192.168.1.146:8888/list', {
@@ -17,7 +18,7 @@ const fetchList = async () => {
   })
 }
 
-type Post = {author: string; authorOrg: string; content:string; date:string;likes:number;comments:number;};
+type Post = { author: string; authorOrg: string; content: string; date: string; likes: number; comments: number; };
 
 export default function List() {
   const router = useRouter();
@@ -62,15 +63,15 @@ export default function List() {
             if (platformResolver(navigator.userAgent.toLowerCase()).isWebView) messageManager?.sendMessage(MessageEventType.Navigation, { path: 'detail' })
             else router.push('detail')
           }}>
-            <div className={styles.postUserProfile}>
-              <div className={styles.userHandle}>
-                <div className={styles.user}>{item.author}</div>
-                <div className={styles.handleParent}>
-                  <div className={styles.handle}>{item.authorOrg}</div>
-                </div>
-              </div>
-              <div className={styles.spacer} />
-            </div>
+            <UserProfile
+              profileImage={''}
+              name={item.author}
+              introduction={item.authorOrg}
+              id={item.author}
+              isMenuOpen={false}
+              onToggleMenu={function (): void {
+                throw new Error('Function not implemented.');
+              }} />
             <div className={styles.div3}>
               <p className={styles.p}>{item.content}</p>
             </div>

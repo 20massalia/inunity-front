@@ -6,6 +6,9 @@ import { MessageEventType } from 'message-type/message-type';
 import { useRouter } from 'next/navigation';
 import { useState,  useEffect } from 'react';
 
+import {CustomButton} from 'ui/components';
+
+
 const requestLogin = async (id: string, pw: string) => {
   return fetch('http://192.168.1.146:8888/signin', {
     headers: {
@@ -70,6 +73,9 @@ export default function Login() {
   return (
     <div className="App">
       <p>id</p>
+      <CustomButton>
+        hi
+      </CustomButton>
       <input onChange={({ target: { value } }) => edit('id', value)}></input>
       <p>pw</p>
       <input onChange={({ target: { value } }) => edit('pw', value)}></input>
