@@ -14,6 +14,10 @@ export class MessageManager {
     )
   }
 
+  log(...messages:string[]) {
+    this.sendMessage(MessageEventType.Log, messages.join(' '))
+  }
+
 
   onMessageReceived({ data }: {data: string, }, listeners?: CustomMessageListenerType) {
     if (!data) return;
@@ -44,34 +48,3 @@ export class MessageManager {
 
 }
 
-
-export const useMessageManager = (listeners?: CustomMessageListenerType) => {
-  const [messageManager, setMessageManager] = useState<MessageManager>();
-  const {os, isWebView} = usePlatformResolver();
-
-  useEffect(() => {
-    if (!isWebView) return;
-    const msgManager = new MessageManager(window.ReactNativeWebView);
-   
-    msgManager.sendMessage(MessageEventType.Log, `adding event listener: ${os} ${isWebView}`)
-    const onMessageReceived = (event: MessageEvent) => {
-      // 메시지 처리 로직
-      msgManager.onMessageReceived(event, listeners)
-    };
-
-    if (os === 'ios')
-      window.addEventListener('message', onMessageReceived);
-    else if (os === 'android')
-      document.addEventListener('message', onMessageReceived as EventListener);
-
-    setMessageManager(msgManager);
-
-    return () => {
-      const obj = os === 'ios' ? window : document
-      obj.removeEventListener('message', onMessageReceived as EventListener);
-
-    }
-  }, [isWebView]);
-
-  return messageManager
-}

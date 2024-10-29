@@ -8,22 +8,15 @@ export const handleMessage = (
   message: Message,
   handlers: Record<string, () => void>
 ) => {
+
   switch (message.event) {
     case MessageEventType.Auth: {
-      console.log(message);
       AuthManager.saveCredential(message.value as string);
       
       break;
     }
-    case MessageEventType.Log: {
-      console.log(message);
-      break;
-    }
-    case MessageEventType.Navigation: {
-      handlers[MessageEventType.Navigation]?.();
-      break;
-    }
   }
+  handlers[message.event]?.();
 };
 
 export const parseMessage = (messageText: string) => {

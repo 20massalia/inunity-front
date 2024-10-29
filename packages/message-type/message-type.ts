@@ -4,6 +4,7 @@ export const enum MessageEventType {
   Log = "log",
   Auth = "auth",
   Navigation = "navigation",
+  ThemeColor = 'themeColor'
 }
 
 export type CustomMessageListenerType = Partial<Record<MessageEventType, () => void>>;

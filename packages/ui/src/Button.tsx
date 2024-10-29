@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from './Typography';
 
 interface ButtonProps {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'disabled';
   size?: 'small' | 'medium' | 'large';
   children: React.ReactNode;
   onClick?: () => void;
@@ -14,10 +14,10 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
 }) => {
-  const baseClasses = 'font-bold rounded focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'px-2.5 py-1  rounded-xl justify-center items-center gap-2.5 inline-flex';
   const variantClasses = {
-    primary: 'bg-blue-500 hover:bg-blue-700 text-white',
-    secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
+    primary: 'bg-primary/80 hover:bg-primary/60 text-white',
+    disabled: 'bg-disabled-bg text-disabled-text',
   };
   const sizeClasses = {
     small: 'py-1 px-2 text-sm',
@@ -28,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
   const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`;
 
   return (
-    <div onClick={onClick} className=" px-2.5 py-1 bg-[#185bec]/80 rounded-[10px] justify-center items-center gap-2.5 inline-flex">
+    <div onClick={variant !== 'disabled' ? onClick : undefined} className={classes}>
       <Typography variant='body' className="text-center text-white text-xl font-semibold  leading-9">{children}</Typography>
 
     </div>

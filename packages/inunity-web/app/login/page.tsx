@@ -1,8 +1,9 @@
 "use client";
 
-import { useMessageManager } from '@/lib/MessageManager';
+import { useMessageManager } from '@/components/MessageContext';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { MessageEventType } from 'message-type/message-type';
+import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 
@@ -33,20 +34,19 @@ const checkValidity = async () => {
   })
 }
 
+export const medatdata: Metadata = {
+  
+
+}
+
 export default function Login() {
   const [form, setForm] = useState({ id: '', pw: '' })
   const edit = (field: string, value: string) => setForm(prev => ({ ...prev, [field]: value }));
-  const messageManager = useMessageManager({
-    [MessageEventType.Auth]: () => {
-      alert('auth message received');
-      messageManager?.sendMessage(MessageEventType.Log, 'Auth Completed!');
-    },
-  });
+  const messageManager = useMessageManager();
   const router = useRouter();
 
   const onSubmit = async () => {
-
-
+    messageManager.log('sending login request')
     requestLogin(form.id, form.pw).then(res => {
       messageManager?.sendMessage(MessageEventType.Log, res.ok)
       if (res) {
@@ -78,7 +78,7 @@ export default function Login() {
   const pwRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className={`p-5 gap-3 flex flex-col`} >
+    <div className={`p-5 gap-3 flex flex-col `} >
       <Typography variant='h3'>아이디</Typography>
       <Input
         value={form.id}
@@ -103,7 +103,7 @@ export default function Login() {
       />
 
       <p onClick={() => messageManager?.sendMessage(MessageEventType.Navigation, { route: 'find', pararms: { param1: 'param1' } })}>Lost Password?</p>
-      <Button onClick={onSubmit}> 로그인 </Button>
+      <Button  onClick={onSubmit}> 로그인 </Button>
     </div>
   );
 }

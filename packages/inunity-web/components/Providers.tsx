@@ -34,15 +34,22 @@ export function getQueryClient() {
     return browserQueryClient;
   }
 }
+import dynamic from 'next/dynamic';
+
+const MessageProvider = dynamic(() => import('./MessageContext').then(r => r.MessageProvider), {ssr:false});
+
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
-
+  
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <MenuProvider>
-        {children}  
+        <MessageProvider>
+        {children}    
+        </MessageProvider>
+      
       </MenuProvider>
       
     </QueryClientProvider>

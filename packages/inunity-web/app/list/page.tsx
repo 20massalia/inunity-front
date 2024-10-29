@@ -2,15 +2,17 @@
 
 import { useRouter } from 'next/navigation';
 import styles from '../Frame.module.css';
-import { useMessageManager } from '@/lib/MessageManager';
-import { platformResolver } from '@/lib/PlatformResolver';
+
+import { platformResolver, usePlatformResolver } from '@/lib/PlatformResolver';
 import { MessageEventType } from 'message-type/message-type';
 import { UserProfile } from 'ui/components';
 import { useQuery } from '@tanstack/react-query';
 import PostListItem from 'ui/src/PostListItem';
+import { Metadata } from 'next';
+import { useMessageManager } from '@/components/MessageContext';
 
 const fetchList = async () => {
-  return fetch('http://192.168.1.146:8888/list', {
+  return fetch(process.env.NEXT_PUBLIC_API_URL+'/list', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -21,6 +23,7 @@ const fetchList = async () => {
 
 type Post = { author: string; authorOrg: string; content: string; date: string; likes: number; comments: number; };
 
+
 export default function List() {
   const router = useRouter();
 
@@ -29,15 +32,15 @@ export default function List() {
   const { data, isLoading } = useQuery({
     queryKey: ['list'],
     queryFn: () => fetchList().then(async res => {
-      messageManager?.sendMessage(MessageEventType.Log, res.ok)
       return (await res.json()) as Post[];
-    })
+    }),
   })
+  const {isWebView} = usePlatformResolver();
 
 
   return (
     <div className={styles.div}>
-
+      <meta name="theme-color" content="#002874"></meta>
       <div className={styles.frameParent}>
         <div className={styles.frameGroup}>
           <div className={styles.frameContainer}>
@@ -55,9 +58,9 @@ export default function List() {
         </div>
         {
           !isLoading &&
-          data?.map(item => <div key={item.content} className={styles.postListItem} onClick={() => {
-            messageManager?.sendMessage(MessageEventType.Log, 'test')
-            if (platformResolver(navigator.userAgent.toLowerCase()).isWebView) messageManager?.sendMessage(MessageEventType.Navigation, { path: 'detail' })
+          data?.map(item => <div key={item.content} className={styles.postListItem}
+             onClick={() => {
+            if (isWebView) messageManager?.sendMessage(MessageEventType.Navigation, { path: 'detail' })
             else router.push('detail')
           }}>
             <PostListItem
