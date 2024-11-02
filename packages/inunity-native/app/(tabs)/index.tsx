@@ -2,11 +2,13 @@ import { useRef, useState, useEffect } from "react";
 import { SafeAreaView, Platform, Button, View, StatusBar } from "react-native";
 import WebView from "react-native-webview";
 
-import { ThemedText } from "@/components/ThemedText";
+
 import AuthManager from "@/lib/AuthManager";
 import { useMessageManager, parseMessage, handleMessage } from "@/lib/MessageManager";
 import { MessageEventType, NavigationEvent } from "message-type/message-type";
 import { router } from "expo-router";
+import {WebViewProvider, useWebView} from '../../components/useWebView'
+
 
 function isLightColor(hex: string): boolean {
   // Remove the hash at the start if it's there
@@ -50,16 +52,21 @@ export default function Index() {
 
   const [themeColor, setThemeColor] = useState('#ffffff');
 
-
+  const webView = useWebView();
   return (
     <SafeAreaView style={{backgroundColor: themeColor}}>
       <View style={{height:'100%',}}>
       <WebView
         ref={webViewRef}
         
-        injectedJavaScriptBeforeContentLoaded={`document.cookie=${cookie}; window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor`}
+        injectedJavaScriptBeforeContentLoaded={`
+          if (!document.cookie)
+            document.cookie=${cookie};
+          window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
+
+          `}
         source={{
-          uri: `${process.env.EXPO_PUBLIC_WEB_URL}/login`,
+          uri: `${process.env.EXPO_PUBLIC_WEB_URL}/${webView.url}`,
         }}
         userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
         sharedCookiesEnabled

@@ -9,7 +9,7 @@ export interface InputProps {
     masked?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     const { value, setValue, leftIcon, rightIcon, placeholder = "Input Placeholder", masked } = props;
 
     return (
@@ -28,4 +28,3 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     );
 });
 
-export default Input;

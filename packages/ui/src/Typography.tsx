@@ -22,9 +22,11 @@ const variantClasses: Record<TypographyVariant, string> = {
   overline: 'text-xs uppercase tracking-wider',
 };
 
-export default function Typography({ variant='body', children, className = '' }: TypographyProps)  {
+export const Typography = React.forwardRef<HTMLElement, TypographyProps>((props, ref) => {
+  const { variant = 'body', children, className = '' } = props;
   const Element = variant.startsWith('h') ? variant : 'p';
   const classes = `${variantClasses[variant]} ${className}`;
 
-  return React.createElement(Element, { className: classes }, children);
-};
+  return React.createElement(Element, { ref: ref, className: classes }, children);
+});
+Typography.displayName = 'Typography';

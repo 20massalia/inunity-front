@@ -13,9 +13,16 @@ const config: Config = {
         'primary': '#185bec',
         'disabled-text': '#626262',
         'disabled-bg': '#D9D9D9',
+        placeholder: 'rgba(0,0,0,0.5)',
+        unselected: 'rgba(0,0,0,0.04)',
+        success: '2CF500',
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      height: {
+        'real-screen': 'calc(var(--vh) * 100)',
+      },
+
     },
   },
   plugins: [],

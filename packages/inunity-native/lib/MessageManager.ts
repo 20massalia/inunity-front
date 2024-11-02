@@ -10,8 +10,8 @@ export const handleMessage = (
 ) => {
 
   switch (message.event) {
-    case MessageEventType.Auth: {
-      AuthManager.saveCredential(message.value as string);
+    case MessageEventType.Login: {
+            AuthManager.saveCredential(message.value as string);
       
       break;
     }

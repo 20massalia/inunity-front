@@ -1,15 +1,13 @@
 import { CustomMessageListenerType, Message, MessageEventType } from "message-type/message-type";
-import {  usePlatformResolver } from "./PlatformResolver";
-import { useState, useEffect } from "react";
 
 export class MessageManager {
-  webViewInstance: ReactNativeWebView;
+  webViewInstance?: ReactNativeWebView;
   constructor(webViewInstance: ReactNativeWebView) {
     this.webViewInstance = webViewInstance;
   }
 
   sendMessage(messageEvent: string, value?: unknown) {
-    this.webViewInstance.postMessage(
+    this.webViewInstance?.postMessage(
       JSON.stringify({ event: messageEvent, value })
     )
   }
@@ -26,6 +24,7 @@ export class MessageManager {
       
       switch (message.event) {
         case MessageEventType.Auth: {
+          if (document.cookie) return;
           alert(`네이티브에서 쿠키 복원: ${message.value}`);
           document.cookie = message.value as string;
           break;

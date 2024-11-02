@@ -2,16 +2,17 @@
 
 import { useMessageManager } from '@/components/MessageContext';
 import { platformResolver } from '@/lib/PlatformResolver';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessageEventType } from 'message-type/message-type';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 
 import { Button } from 'ui/components';
-import Input from 'ui/src/Input';
-import Typography from 'ui/src/Typography';
-
-
+import {Input} from 'ui/components';
+import {Typography} from 'ui/components';
 
 const requestLogin = async (id: string, pw: string) => {
   return fetch(process.env.NEXT_PUBLIC_API_URL+'/signin', {
@@ -59,16 +60,16 @@ export default function Login() {
       }
     }).catch(err => messageManager?.sendMessage(MessageEventType.Log, (err as Error).message))
   }
-  const [username, setUsername] = useState('');
+
   const { isWebView } = platformResolver(navigator.userAgent.toLowerCase());
 
   useEffect(() => {
     checkValidity().then(async res => {
       if (!isWebView) return;
       messageManager?.sendMessage(MessageEventType.Log, res.status)
-      if (res.ok) {
+      if (res.ok) 
         router.replace('/list',);
-      } else setUsername('')
+      
 
     })
   }, [checkValidity])
@@ -93,12 +94,14 @@ export default function Login() {
         placeholder='포탈 비밀번호'
         masked={!pwVisible}
         rightIcon={
-        <svg onClick={() => {
-          setPwVisible(prev => !prev);
-          pwRef.current?.focus()
-        }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-          <path d="M12 4C6.477 4 0 9.477 0 16s6.477 12 12 12 12-9.477 12-12S17.523 4 12 4zm0 18a8 8 0 100-16 8 8 0 000 16zm-.75-11.25h1.5v-1.5h-1.5v1.5zm0-3h1.5v-1.5h-1.5v1.5zm0-3h1.5v-1.5h-1.5v1.5zm0-3h1.5v-1.5h-1.5v1.5zm0 3h1.5v1.5h-1.5v-1.5zm0 3h1.5v1.5h-1.5v-1.5zm0 3h1.5v1.5h-1.5v-1.5z"/>
-        </svg>
+          <FontAwesomeIcon
+          icon={pwVisible ? faEye : faEyeSlash} 
+          onClick={() => {
+            setPwVisible(prev => !prev);
+            pwRef.current?.focus()
+          }}
+          />
+    
         }
       />
 

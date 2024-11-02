@@ -1,16 +1,18 @@
-'use client';
+"use client";
 
+import { usePlatform } from '@/hooks/usePlatform';
 import { MessageManager } from '@/lib/MessageManager';
-import { usePlatformResolver } from '@/lib/PlatformResolver';
+
 import { MessageEventType } from 'message-type/message-type';
 import { usePathname } from 'next/navigation';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-const MessageContext = createContext<MessageManager | undefined>(undefined);
+export const MessageContext = createContext<MessageManager | undefined>(undefined);
 
 export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+    const {os, isWebView} = usePlatform();
     const [messageManager, setMessageManager] = useState<MessageManager>(new MessageManager(window.ReactNativeWebView));
-    const {os, isWebView} = usePlatformResolver();
+    
   
     useEffect(() => {
       if (!isWebView) return;
@@ -45,12 +47,3 @@ export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({ childre
     </MessageContext.Provider>
   );
 };
-
-export const useMessageManager = () => {
-  const context = useContext(MessageContext);
-  if (context === undefined) {
-    throw new Error('useMessageManager must be used within a MessageProvider');
-  }
-  return context;
-};
-

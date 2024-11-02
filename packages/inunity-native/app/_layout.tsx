@@ -73,6 +73,7 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+  
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -82,7 +83,8 @@ export default function RootLayout() {
           name="detail"
           options={{ header: (props) => <Header /> }}
         />
-        <Stack.Screen name="index" options={{headerShown: false}}  />
+        <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+
         <Stack.Screen name="list" options={{headerShown: false}}  />
       </Stack>
     </ThemeProvider>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { UserProfile } from './UserProfile';
 import { useMenu } from './contexts/MenuContext';
-import Typography from './Typography'
+import { Typography } from './Typography';
+
 
 
 // Colors

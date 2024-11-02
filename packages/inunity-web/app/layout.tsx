@@ -11,6 +11,9 @@ export const metadata: Metadata = {
 import { Inter } from 'next/font/google' // 해당 폰트의 함수를 사용합니다.
 
 const inter = Inter({ subsets: ['latin'] }) // 변수를 선언하고, 함수의 인자로 스타일을 지정합니다.
+import {config} from "@fortawesome/fontawesome-svg-core";
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false;
 
 export default function RootLayout({
   children,
@@ -23,8 +26,9 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
       </head>
       <body
-        className={inter.className}
+        className={`${inter.className} h-dvh`}
       >
+
         <Providers>
         {children}
         </Providers>
