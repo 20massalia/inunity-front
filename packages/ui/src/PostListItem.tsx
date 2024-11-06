@@ -1,10 +1,9 @@
-import React from 'react';
+"use client";
+
+import React, { useContext } from 'react';
 import { UserProfile } from './UserProfile';
-import { useMenu } from './contexts/MenuContext';
 import { Typography } from './Typography';
-
-
-
+import { useMenu } from './contexts/MenuContext';
 // Colors
 const COLORS = {
   background: 'bg-white',
@@ -25,8 +24,8 @@ export interface PostListItemProps {
   likes: number;
   bookmarks: number;
   postId: string;
-  toggleLike: (postId: string) => void;
-  toggleBookmark: (postId: string) => void;
+  toggleLike?: (postId: string) => void;
+  toggleBookmark?: (postId: string) => void;
   isLiked: boolean;
   isBookmarked: boolean;
 }
@@ -37,7 +36,7 @@ const PostListItem: React.FC<PostListItemProps> = ({ name, department, content, 
   const isMenuOpen = openMenuId === name;
   const setIsMenuOpen = (value: boolean) => setOpenMenuId(value ? name : null);
   return (
-    <div className={`w-full max-w-md h-auto ${COLORS.background}  flex-col justify-center items-start inline-flex`}>
+    <div className={`w-full max-w-md h-auto ${COLORS.background} px-4 py-3 flex-col justify-center items-start inline-flex`}>
       <UserProfile
         profileImage={''}
         name={name}
@@ -60,7 +59,7 @@ const PostListItem: React.FC<PostListItemProps> = ({ name, department, content, 
         <div className={`justify-start items-center flex`}>
           <div className={`flex items-center gap-2`} onClick={(e) => {
             e.stopPropagation();
-            toggleLike(postId)
+            toggleLike?.(postId)
           }}
           >
             <svg
@@ -79,7 +78,7 @@ const PostListItem: React.FC<PostListItemProps> = ({ name, department, content, 
         <div className={`justify-start items-center flex`}>
           <div className={`flex items-center gap-2`} onClick={(e) => {
             e.stopPropagation();
-            toggleBookmark(postId);
+            toggleBookmark?.(postId);
           }}
           >
             <svg

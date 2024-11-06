@@ -3,17 +3,19 @@
 import { useRouter } from 'next/navigation';
 import styles from '../Frame.module.css';
 
-import { platformResolver, usePlatformResolver } from '@/lib/PlatformResolver';
+
 import { MessageEventType } from 'message-type/message-type';
 import { Typography, UserProfile } from 'ui/components';
 import { useQuery } from '@tanstack/react-query';
 import PostListItem from 'ui/src/PostListItem';
 import { Metadata } from 'next';
-import { useMessageManager } from '@/components/MessageContext';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faEdit, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react';
+import { usePlatform } from '@/hooks/usePlatform';
+import { useMessageManager } from '@/hooks/useMessageManager';
 
 const fetchList = async () => {
   return fetch(process.env.NEXT_PUBLIC_API_URL + '/list', {
@@ -39,7 +41,7 @@ export default function List() {
       return (await res.json()) as Post[];
     }),
   })
-  const { isWebView } = usePlatformResolver();
+  const { isWebView } = usePlatform();
   useEffect(() => {
     const onScroll = () => {
       const scrollPosition = window.scrollY;
