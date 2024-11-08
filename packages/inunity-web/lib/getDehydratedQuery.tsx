@@ -13,15 +13,18 @@ export default async function getDehydratedQuery<
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey
 >(args: FetchQueryOptions<TQueryFnData, TError, TData, TQueryKey>) {
+  // Client 생성 (캐시 데이터들 저장하는 곳)
   const queryClient = new QueryClient();
+  // Client에다가 데이터 불러와서 저장 
   await queryClient.prefetchQuery(args);
+  // Client 직렬화
   const { queries, mutations } = dehydrate(queryClient);
 
   const [dehydratedQuery] = queries.filter(
     (query) =>
       query.queryHash === (args.queryHash ?? JSON.stringify(args.queryKey))
   );
-  console.log(queries, args.queryKey, dehydratedQuery)
+
 
   return {
     ...dehydratedQuery,

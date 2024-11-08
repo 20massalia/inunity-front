@@ -38,11 +38,14 @@ function isLightColor(hex: string): boolean {
 }
 
 export default function Index() {
-  const webViewRef = useRef<WebView>(null);
+
   const [cookie, setCookie] = useState<string | null>(null);
   const [isWebViewLoading, setIsWebViewLoading] = useState(true);
-  const messageManager = useMessageManager(webViewRef);
+  const webView = useWebView();
+  const messageManager = useMessageManager(webView.webViewRef);
+
   useEffect(() => {
+
     if (!isWebViewLoading)
     AuthManager.getCredentialFromStorage().then((cookie) => {
       messageManager.sendMessage({ event: MessageEventType.Auth, value: cookie });
@@ -52,12 +55,11 @@ export default function Index() {
 
   const [themeColor, setThemeColor] = useState('#ffffff');
 
-  const webView = useWebView();
   return (
     <SafeAreaView style={{backgroundColor: themeColor}}>
       <View style={{height:'100%',}}>
       <WebView
-        ref={webViewRef}
+        ref={webView.webViewRef}
         
         injectedJavaScriptBeforeContentLoaded={`
           if (!document.cookie)
@@ -66,7 +68,10 @@ export default function Index() {
 
           `}
         source={{
-          uri: `${process.env.EXPO_PUBLIC_WEB_URL}/${webView.url}`,
+          uri: `${process.env.EXPO_PUBLIC_WEB_URL}/`,
+        }}
+        onNavigationStateChange={({url})=> {
+          webView.setUrl(new URL(url).pathname);
         }}
         userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
         sharedCookiesEnabled

@@ -9,11 +9,20 @@ import Card from "ui/src/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faPerson, faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 
+import { useEffect } from "react";
+import { useMessageManager } from "../MessageContext";
+import { MessageEventType, NavigationEvent } from "message-type/message-type";
+
 
 
 export default function HomeContainer() {
     // ViewModel 이용
-    const { posts, schedules } = useHomeViewModel();
+    const { posts, schedules, likePost, bookmarkPost } = useHomeViewModel();
+    const messageManager = useMessageManager()
+
+    useEffect(() => {
+        messageManager?.log('HomeContainer initialized!')
+    }, [messageManager])
 
     return <div className=" bg-white flex-col justify-between items-start inline-flex">
 
@@ -37,7 +46,7 @@ export default function HomeContainer() {
                 </div>
                 {
                     schedules.data?.map(schedule =>
-                        <OutlinedListItem text={schedule.name} description={`${schedule.dateStart.toDateString()} - ${schedule.dateEnd?.toDateString()}`} />
+                        <OutlinedListItem key={schedule.name} text={schedule.name} description={`${schedule.dateStart.toDateString()} - ${schedule.dateEnd?.toDateString()}`} />
                     )
 
                 }
@@ -52,7 +61,7 @@ export default function HomeContainer() {
                 </div>
             </div>
 
-            <div className="self-stretch p-4 justify-start items-start gap-4 inline-flex">
+            <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
                 <Card />
 
 
@@ -63,7 +72,12 @@ export default function HomeContainer() {
                 </div>
                 {
                     posts.data?.map(post =>
+
                         <PostListItem
+                        onClick={() => {
+                            messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
+                        }}
+                        key={post.postId}
                             name={post.name}
                             department={post.department}
                             content={post.content}
@@ -72,9 +86,9 @@ export default function HomeContainer() {
                             bookmarks={post.bookmarks}
                             postId={post.postId}
                             toggleLike={function (postId: string): void {
-                                console.log(`Like toggled for post ${postId}`);
+                                likePost.mutate(postId)
                             }} toggleBookmark={function (postId: string): void {
-                                console.log(`Bookmark toggled for post ${postId}`);
+                                bookmarkPost.mutate(postId)
                             }} isLiked={post.isLiked} isBookmarked={post.isBookmarked} />
 
                     )

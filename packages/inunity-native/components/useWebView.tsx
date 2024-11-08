@@ -1,15 +1,19 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useRef } from "react";
+import WebView from "react-native-webview";
 
 export type WebViewContextType = {
-    url: string,
-    setUrl: (url:string) => void;
+  webViewRef: React.RefObject<WebView>;
+  url: string;
+  setUrl: (url: string) => void;
   }
 
   
-const WebViewContext = createContext<WebViewContextType>({ url: '/', setUrl: () => {} })
-export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
+  const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
+  
+  export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
   const [url, setUrl] = useState('/');
-  return <WebViewContext.Provider value={{ url: url!, setUrl }}>
+  const webViewRef = useRef(null);
+  return <WebViewContext.Provider value={{ webViewRef, url, setUrl  }}>
     {children}
   </WebViewContext.Provider>
 }

@@ -15,7 +15,8 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faEdit, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react';
 import { usePlatform } from '@/hooks/usePlatform';
-import { useMessageManager } from '@/hooks/useMessageManager';
+import { useMessageManager } from '@/components/MessageContext';
+
 
 const fetchList = async () => {
   return fetch(process.env.NEXT_PUBLIC_API_URL + '/list', {
@@ -108,6 +109,7 @@ export default function List() {
               else router.push('detail')
             }}>
             <PostListItem
+            
               name={item.author}
               department={item.authorOrg}
               content={item.content}

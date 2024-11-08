@@ -1,3 +1,5 @@
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 
@@ -82,9 +84,7 @@ export const UserProfile = ({
             e.stopPropagation()
             onToggleMenu()
           }}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`${SIZES.menuIcon} ${COLORS.menuIcon}`}>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-            </svg>
+         <FontAwesomeIcon icon={faEllipsisVertical} fontSize={24}/>
           </button>
           {isMenuOpen && actions && actions.length > 0 && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
