@@ -4,10 +4,10 @@ import { faBookmark, faEllipsisVertical, faHeart, faList } from "@fortawesome/fr
 
 export default function Card() {
     return <div className="w-[300px] p-3 bg-white rounded border border-black/10 flex-col justify-start items-start inline-flex">
-    <img className="h-32 relative" src="https://via.placeholder.com/276x128" />
+    <img className="h-32 relative" />
     <div className="self-stretch  pt-4 bg-white flex-col justify-start items-start gap-2 flex">
         <div className="justify-start items-center gap-2 inline-flex">
-            <img className="w-5 h-5 relative rounded-[360px]" src="https://via.placeholder.com/20x20" />
+            <img className="w-5 h-5 relative rounded-[360px]" />
             <div className="text-black/50 text-base font-bold ">학사관리팀</div>
             <div className="text-black/50 text-[15px] font-extrabold  leading-tight">·</div>
             <div className="text-black/50 text-base font-bold ">1일 전</div>

@@ -9,7 +9,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 export const MessageContext = createContext<MessageManager | undefined>(undefined);
 
-export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { os, isWebView } = usePlatform();
   const [messageManager, setMessageManager] = useState<MessageManager | null>(null);
   const router = useRouter()
