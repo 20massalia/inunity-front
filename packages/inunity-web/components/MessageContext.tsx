@@ -3,7 +3,7 @@
 import { usePlatform } from "@/hooks/usePlatform";
 import { MessageManager } from "@/lib/MessageManager";
 
-import { MessageEventType, NavigationEvent, PageEvent } from 'message-type/message-type';
+import { MessageEventType, NavigationEvent } from 'message-type/message-type';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
@@ -30,9 +30,6 @@ export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children })
       manager.onMessageReceived(event, {
         [MessageEventType.Navigation]: (data: NavigationEvent) => {
           router.replace(data.path);
-        },
-        [MessageEventType.Page]: (data: PageEvent) => {
-          alert(JSON.stringify(data.value));
         }
       })
     };
@@ -65,4 +62,8 @@ export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children })
       {children}
     </MessageContext.Provider>
   );
+};
+
+export const useMessageManager = () => {
+  return useContext(MessageContext);
 };

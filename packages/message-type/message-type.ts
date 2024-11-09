@@ -8,29 +8,9 @@ export  enum MessageEventType {
   Page = "page"
 }
 
-export enum PostDetailPageEventType {
-  SubmitComment = "submit_comment"
-}
-export type PageEventType = PostDetailPageEventType;
-export type PageEventMap = PostDetailPageEventType;
-export type CommentPayload = {
-  value: string;
-  isAnonymous: boolean;
-};
-
-export type PostDetailPageEventMap = {
-  [PostDetailPageEventType.SubmitComment]: CommentPayload;
-};
-
-export type PageEvent = {
-  event: PageEventType;
-  value: PageEventMap;
-}
-
 type EventMap = {
   [MessageEventType.Navigation]: NavigationEvent;
   [MessageEventType.ThemeColor]: string;
-  [MessageEventType.Page]: PageEvent;
   
   // 다른 이벤트 타입들에 대한 매핑...
 }
@@ -44,7 +24,7 @@ export interface NavigationEvent {
   params?: Record<string, unknown>
 }
 
-export interface Message<T extends MessageEventType> {
+export interface Message<T extends MessageEventType = any> {
   event: T;
-  value: EventMap[T];
+  value: T extends keyof EventMap ? EventMap[T] : unknown;
 }

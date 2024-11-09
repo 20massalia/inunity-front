@@ -2,17 +2,23 @@ import React, { createContext, useContext, useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Tabs } from 'expo-router';
 import { WebViewProvider, useWebView } from '../../components/useWebView'
+import { useMessageManager } from '@/lib/MessageManager';
+import { MessageEventType, NavigationEvent } from 'message-type/message-type';
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 
-const CustomTabBar = ({ state, descriptors, navigation }) => {
+const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const webView = useWebView();
+  const messageManager = useMessageManager(webView.webViewRef);
+
   return (
     <View style={{ flexDirection: 'row' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const label = options.tabBarLabel || options.title || route.name;
+        const label =options.title || route.name;
 
-        const url = route.params?.pathname;
-        const isFocused = url === webView.url;
+        const url = (route.params as {pathname?: string}).pathname;
+        console.log(url, webView.url)
+        const isFocused = url === webView.url
 
         const onPress = () => {
           const event = navigation.emit({
@@ -25,8 +31,11 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             // 여기서 라우팅 대신 원하는 동작을 수행합니다
             console.log(`Tab ${label} pressed`);
 
-            if (url)
-              webView.setUrl(url)
+            if (url) {
+              messageManager.sendMessage({event: MessageEventType.Navigation, value: {path: url} as NavigationEvent})
+              // webView.setUrl(url)
+            }
+              
             // 예: 특정 함수 호출 또는 상태 변경
           }
         };

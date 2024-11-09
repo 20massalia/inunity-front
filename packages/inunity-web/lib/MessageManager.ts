@@ -1,6 +1,6 @@
 import { CustomMessageListenerType, Message, MessageEventType } from "message-type/message-type";
 
-function isMessage<T extends MessageEventType>(obj: any ): obj is Message<T> {
+function isMessage<T extends MessageEventType>(obj: any): obj is Message<T> {
   return (
     obj &&
     typeof obj === 'object' &&
@@ -27,7 +27,7 @@ export class MessageManager {
     this.webViewInstance = webViewInstance;
   }
 
-  sendMessage(messageEvent: string, value?: unknown) {
+  sendMessage(messageEvent: MessageEventType, value?: unknown) {
     this.webViewInstance?.postMessage(
       JSON.stringify({ event: messageEvent, value })
     );
@@ -67,6 +67,7 @@ export class MessageManager {
       break;
     }
     default: {
+      throw new Error('올바르지 않은 이벤트!');
     }
   }
 
