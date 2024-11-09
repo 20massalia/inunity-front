@@ -6,7 +6,7 @@ import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessageEventType } from 'message-type/message-type';
-import { Metadata } from 'next';
+
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 
@@ -35,10 +35,6 @@ const checkValidity = async () => {
   })
 }
 
-export const medatdata: Metadata = {
-  
-
-}
 
 export default function Login() {
   const [form, setForm] = useState({ id: '', pw: '' })
@@ -47,7 +43,7 @@ export default function Login() {
   const router = useRouter();
 
   const onSubmit = async () => {
-    messageManager.log('sending login request')
+    messageManager?.log('sending login request')
     requestLogin(form.id, form.pw).then(res => {
       messageManager?.sendMessage(MessageEventType.Log, res.ok)
       if (res) {

@@ -15,7 +15,7 @@ const config: Config = {
         'disabled-bg': '#D9D9D9',
         placeholder: 'rgba(0,0,0,0.5)',
         unselected: 'rgba(0,0,0,0.04)',
-        success: '2CF500',
+        success: '#2CF500',
         background: "var(--background)",
         foreground: "var(--foreground)",
       },

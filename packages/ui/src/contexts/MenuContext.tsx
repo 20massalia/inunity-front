@@ -7,7 +7,7 @@ interface MenuContextType {
   setOpenMenuId: (id: string | null) => void;
 }
 
-const MenuContext = createContext<MenuContextType | undefined>(undefined);
+export const MenuContext = createContext<MenuContextType | undefined>(undefined);
 
 export const MenuProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -32,7 +32,7 @@ export const MenuProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   );
 };
 
-export const useMenu = () => {
+export function useMenu () {
   const context = useContext(MenuContext);
   if (context === undefined) {
     throw new Error('useMenu must be used within a MenuProvider');

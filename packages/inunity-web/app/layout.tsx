@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "ui/styles/globals.css";
-import Providers from "@/components/Providers";
+import Providers from '@/components/Providers'
+
 
 
 export const metadata: Metadata = {
@@ -26,12 +27,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
       </head>
       <body
-        className={`${inter.className} h-dvh`}
+        className={`${inter.className} h-real-screen`}
       >
 
         <Providers>
         {children}
         </Providers>
+        
       </body>
     </html>
   );

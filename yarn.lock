@@ -7313,6 +7313,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inunity-front@workspace:."
   dependencies:
+    "@fortawesome/fontawesome-svg-core": "npm:^6.6.0"
+    "@fortawesome/free-solid-svg-icons": "npm:^6.6.0"
+    "@fortawesome/react-fontawesome": "npm:^0.2.2"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-native: "npm:0.74.5"
@@ -7362,9 +7365,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inunity-web@workspace:packages/inunity-web"
   dependencies:
-    "@fortawesome/fontawesome-svg-core": "npm:^6.6.0"
-    "@fortawesome/free-solid-svg-icons": "npm:^6.6.0"
-    "@fortawesome/react-fontawesome": "npm:^0.2.2"
     "@tanstack/query-broadcast-client-experimental": "npm:^5.59.13"
     "@tanstack/react-query": "npm:^5.59.16"
     "@tanstack/react-query-devtools": "npm:^5.59.15"
@@ -7380,6 +7380,9 @@ __metadata:
     typescript: "npm:^5"
     ui: "workspace:^"
   peerDependencies:
+    "@fortawesome/fontawesome-svg-core": "*"
+    "@fortawesome/free-solid-svg-icons": "*"
+    "@fortawesome/react-fontawesome": "*"
     react: "*"
     react-dom: "*"
   languageName: unknown
@@ -12913,6 +12916,9 @@ __metadata:
     tailwindcss: "npm:^3.4.14"
     typescript: "npm:^4.9.0"
   peerDependencies:
+    "@fortawesome/fontawesome-svg-core": "*"
+    "@fortawesome/free-solid-svg-icons": "*"
+    "@fortawesome/react-fontawesome": "*"
     react: "*"
   languageName: unknown
   linkType: soft

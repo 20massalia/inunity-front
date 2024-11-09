@@ -1,3 +1,3 @@
-export * from './colors.ts';
-export * from './typography.ts';
+export * from './colors';
+export * from './typography';
 
