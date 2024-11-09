@@ -13,7 +13,7 @@ import {
 import WebView from "react-native-webview";
 import { ThemedText } from "@/components/ThemedText";
 import AuthManager from "@/lib/AuthManager";
-import { Message, MessageEventType } from "message-type/message-type";
+import { Message, MessageEventType, PostDetailPageEventType } from "message-type/message-type";
 import { parseMessage, handleMessage } from "@/lib/MessageManager";
 
 
@@ -32,56 +32,68 @@ export default function Detail() {
     webViewRef.current?.postMessage(JSON.stringify(message));
   };
 
+  const [comment, setComment] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(true);
+  const write = () => sendMessage({
+    event: MessageEventType.Page,
+    value: {
+      event: PostDetailPageEventType.SubmitComment,
+      value: { text: comment, isAnonymous}
+    }
+  })
+
   return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-        style={{flex: 1}}
-      >
-        <View style={{ flex: 1, }}>
-          <WebView
-            ref={webViewRef}
-            injectedJavaScriptBeforeContentLoaded={`document.cookie=${cookie}`}
-            source={{
-              uri: `${process.env.EXPO_PUBLIC_WEB_URL}/detail`,
-            }}
-            userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
-            sharedCookiesEnabled
-            onMessage={(event) => {
-              const message = parseMessage(event.nativeEvent.data);
-              handleMessage(message, {
-                [MessageEventType.Navigation]: () => {
-                  router.push("/find");
-                },
-              });
-            }}
-          ></WebView>
-      
-        </View>
-        <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
-            <View style={styles.anonymityWrapper}>
-              <View style={styles.selectedStateWrapper}>
-                <View style={styles.checkboxesFlexBox}>
-                  <View style={[styles.stateLayer, styles.checkboxesFlexBox]}>
-                    <View style={styles.container} />
-                  </View>
-                </View>
-                <ThemedText style={[styles.anonymityText, styles.textTypo]}>
-                  익명
-                </ThemedText>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      style={{ flex: 1 }}
+    >
+      <View style={{ flex: 1, }}>
+        <WebView
+          ref={webViewRef}
+          injectedJavaScriptBeforeContentLoaded={`document.cookie=${cookie}`}
+          source={{
+            uri: `${process.env.EXPO_PUBLIC_WEB_URL}/detail`,
+          }}
+          userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
+          sharedCookiesEnabled
+          onMessage={(event) => {
+            const message = parseMessage(event.nativeEvent.data);
+            handleMessage(message, {
+              [MessageEventType.Navigation]: () => {
+                router.push("/find");
+              },
+            });
+          }}
+        ></WebView>
+
+      </View>
+      <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
+        <View style={styles.anonymityWrapper}>
+          <View style={styles.selectedStateWrapper}>
+            <View style={styles.checkboxesFlexBox}>
+              <View style={[styles.stateLayer, styles.checkboxesFlexBox]}>
+                <View style={styles.container} />
               </View>
-              <ThemedText style={[styles.submitText, styles.textTypo]}>
-                작성
-              </ThemedText>
             </View>
-            <View style={[styles.inputFieldWrapper, styles.inputFlexBox]}>
-              <TextInput
-                style={[styles.inputPlaceholderText, styles.textTypo]}
-                value="댓글을 작성하세요."
-              />
-            </View>
+            <ThemedText style={[styles.anonymityText, styles.textTypo]}>
+              익명
+            </ThemedText>
           </View>
-      </KeyboardAvoidingView>
+          <ThemedText onPress={write} style={[styles.submitText, styles.textTypo]}>
+            작성
+          </ThemedText>
+        </View>
+        <View style={[styles.inputFieldWrapper, styles.inputFlexBox]}>
+          <TextInput
+            style={[styles.inputPlaceholderText, styles.textTypo]}
+            value={comment}
+            onChangeText={setComment}
+            placeholder="댓글을 입력해주세요."
+          />
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
