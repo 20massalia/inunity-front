@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useRef, useState, useEffect } from "react";
-import { SafeAreaView, Platform, Button, View } from "react-native";
+import {  Platform, Button, View } from "react-native";
 import WebView from "react-native-webview";
 import * as SecureStore from "expo-secure-store";
 import AuthManager from "@/lib/AuthManager";

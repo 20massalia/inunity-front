@@ -3,37 +3,43 @@
 import { usePlatform } from "@/hooks/usePlatform";
 import { MessageManager } from "@/lib/MessageManager";
 
-import { MessageEventType, NavigationEvent } from 'message-type/message-type';
+import { MessageEventType, NavigationEvent, PageEvent, PageEventType } from 'message-type/message-type';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-export const MessageContext = createContext<MessageManager | undefined>(
-  undefined
-);
+export type MessageContextType = {
+  messageManager?: MessageManager;
+  pageEvent?: PageEvent<PageEventType>;
+}
+
+export const MessageContext = createContext<MessageContextType>({});
 
 export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { os, isWebView } = usePlatform();
   const [messageManager, setMessageManager] = useState<MessageManager | null>(null);
-  const router = useRouter()
+  const router = useRouter();
 
+  const [pageEvent, setPageEvent] = useState<PageEvent<PageEventType>>();
 
   useEffect(() => {
-
     if (!isWebView) return;
 
     // hydration이 완료된 후 실행됩니다.
     const manager = new MessageManager(window.ReactNativeWebView);
     setMessageManager(manager);
-
+    
     const onMessageReceived = (event: MessageEvent) => {
       // 메시지 처리 로직
       manager.onMessageReceived(event, {
         [MessageEventType.Navigation]: (data: NavigationEvent) => {
           router.replace(data.path);
+        },
+        [MessageEventType.Page]: (data: PageEvent<PageEventType>) => {
+          setPageEvent(data);
         }
       })
     };
-
+    
     if (os === 'ios')
       window.addEventListener('message', onMessageReceived);
     else if (os === 'android')
@@ -50,15 +56,14 @@ export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children })
 
   useEffect(() => {
     messageManager?.sendMessage(MessageEventType.ThemeColor, document.querySelector('meta[name="theme-color"]')?.getAttribute('content'));
-  }, [pathname])
+  }, [messageManager, pathname])
 
   if (!messageManager) {
     return <>{children}</>;
   }
 
-
   return (
-    <MessageContext.Provider value={messageManager}>
+    <MessageContext.Provider value={{messageManager, pageEvent}}>
       {children}
     </MessageContext.Provider>
   );

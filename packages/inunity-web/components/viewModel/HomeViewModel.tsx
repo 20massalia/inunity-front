@@ -11,7 +11,7 @@ export type ScheduleDto = {
 
 export type HomeViewModel = {
     schedules: UseQueryResult<ScheduleDto[]>
-    posts: UseQueryResult<PostListItemProps[]>
+    posts: UseQueryResult<PostListItemProps[]>;
     likePost: UseMutationResult<void, Error, string, unknown>
     bookmarkPost: UseMutationResult<void, Error, string, unknown>
 }

@@ -9,25 +9,33 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Pressable,
-  SafeAreaView,
-} from "react-native";
+import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const Header = () => {
+// Todo: change Background color by category
   return (
-    <SafeAreaView style={{ backgroundColor: "#002874" }}>
-      <View style={{ backgroundColor: "#002874", flexDirection: "row", justifyContent: 'space-between', padding: 10 }}>
-        <Ionicons name="chevron-back" size={30} color={"white"} onPress={() => router.back()} />
+    <SafeAreaView style={{ backgroundColor: "#ffffff" }}>
+      <StatusBar style="dark"  />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          padding: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: '#EFF3F4'
+        }}
+      >
+        <Ionicons
+          name="chevron-back"
+          size={30}
+          onPress={() => router.back()}
+        />
         <View>
           <Text style={[styles.departmentName, styles.noticeTitleTypo]}>
             컴퓨터공학부
@@ -36,8 +44,7 @@ const Header = () => {
             공지사항
           </Text>
         </View>
-        <Ionicons name='menu' size={30} color={"white"} />
-
+        <Ionicons name="menu" size={30}  />
       </View>
     </SafeAreaView>
   );
@@ -45,21 +52,20 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   noticeTitleTypo: {
-  textAlign: "center",
-  color: "#fff",
-  fontFamily: "Inter-ExtraBold",
-  fontWeight: "800"
+    textAlign: "center",
+    color: "black",
+    fontFamily: "Inter-ExtraBold",
+    fontWeight: "800",
   },
   departmentName: {
-  fontSize: 10
+    fontSize: 10,
   },
   noticeTitle: {
-  fontSize: 16
+    fontSize: 16,
   },
-  });
+});
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -73,20 +79,21 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="+not-found" />
-        <Stack.Screen
-          name="detail"
-          options={{ header: (props) => <Header /> }}
-        />
-        <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+    <SafeAreaProvider >
+      <ThemeProvider value={DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="+not-found" />
+          <Stack.Screen
+            name="detail"
+            options={{ header: (props) => <Header /> }}
+          />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-        <Stack.Screen name="list" options={{headerShown: false}}  />
-      </Stack>
-    </ThemeProvider>
+          <Stack.Screen name="list" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }

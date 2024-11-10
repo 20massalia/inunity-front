@@ -1,9 +1,7 @@
 import { router } from "expo-router";
 import { useRef, useState, useEffect } from "react";
-import { SafeAreaView, Platform, Button, View } from "react-native";
+import { Platform, Button, View } from "react-native";
 import WebView from "react-native-webview";
-import * as SecureStore from "expo-secure-store";
-import { ThemedText } from "@/components/ThemedText";
 import AuthManager from "@/lib/AuthManager";
 import { Message, MessageEventType, NavigationEvent } from "message-type/message-type";
 import { handleMessage, parseMessage } from "@/lib/MessageManager";
@@ -19,7 +17,7 @@ export default function List() {
     });
   }, []);
 
-  const sendMessage = (message: Message) => {
+  const sendMessage = (message: Message<any>) => {
     webViewRef.current?.postMessage(JSON.stringify(message));
   };
 

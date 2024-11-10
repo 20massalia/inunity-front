@@ -1,7 +1,6 @@
 import { router } from "expo-router";
 import { useRef, useState, useEffect } from "react";
 import {
-  SafeAreaView,
   Platform,
   Button,
   View,
@@ -15,6 +14,7 @@ import { ThemedText } from "@/components/ThemedText";
 import AuthManager from "@/lib/AuthManager";
 import { Message, MessageEventType, PostDetailPageEventType } from "message-type/message-type";
 import { parseMessage, handleMessage } from "@/lib/MessageManager";
+import { StatusBar } from "expo-status-bar";
 
 
 
@@ -28,7 +28,7 @@ export default function Detail() {
     });
   }, []);
 
-  const sendMessage = (message: Message) => {
+  const sendMessage = (message: Message<any>) => {
     webViewRef.current?.postMessage(JSON.stringify(message));
   };
 
@@ -45,7 +45,7 @@ export default function Detail() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 120 : 0}
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1, }}>

@@ -11,20 +11,20 @@ import { faBell, faPerson, faSearch, faUser } from "@fortawesome/free-solid-svg-
 
 import { useEffect } from "react";
 import { useMessageManager } from "../MessageContext";
-import { MessageEventType, NavigationEvent } from "message-type/message-type";
+import { MessageEventType, NavigationEvent, PostDetailPageEventType } from "message-type/message-type";
 
 
 
 export default function HomeContainer() {
     // ViewModel 이용
     const { posts, schedules, likePost, bookmarkPost } = useHomeViewModel();
-    const messageManager = useMessageManager()
+    const {messageManager} = useMessageManager()
 
     useEffect(() => {
         messageManager?.log('HomeContainer initialized!')
     }, [messageManager])
 
-    return <div className="w-full bg-white flex-col justify-between items-start inline-flex">
+    return <div className="w-full max-w-md bg-white flex-col justify-between items-start inline-flex">
 
         <div className="flex w-full flex-row justify-between p-5">
             title
