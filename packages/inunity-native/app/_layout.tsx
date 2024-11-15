@@ -9,13 +9,38 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { StyleSheet, View, Text, Image, Pressable } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { registerDevMenuItems } from 'expo-dev-menu';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+export let webViewUrl = process.env.EXPO_PUBLIC_WEB_URL;
+
+const devMenuItems = [
+  {
+    name: 'Set WebView URL',
+    callback: () => {
+      Alert.prompt(
+        "디버그 메뉴",
+        "WebView URL을 입력해주세요.",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: (value) => {
+            webViewUrl = value;
+          } }
+        ],
+      );    },
+  },
+];
+
+registerDevMenuItems(devMenuItems);
 
 const Header = () => {
 // Todo: change Background color by category

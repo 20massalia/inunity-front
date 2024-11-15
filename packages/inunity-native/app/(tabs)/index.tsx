@@ -13,6 +13,7 @@ import { router } from "expo-router";
 import { WebViewProvider, useWebView } from "../../components/useWebView";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
+import { webViewUrl } from "../_layout";
 
 function isLightColor(hex: string): boolean {
   // Remove the hash at the start if it's there
@@ -71,7 +72,7 @@ export default function Index() {
           window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
           `}
           source={{
-            uri: `${process.env.EXPO_PUBLIC_WEB_URL}/`,
+            uri: `${webViewUrl}/`,
           }}
           onNavigationStateChange={({ url }) => {
             webView.setUrl(new URL(url).pathname);
