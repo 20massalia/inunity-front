@@ -10,9 +10,11 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { StyleSheet, View, Text, Image, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisV, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -44,7 +46,7 @@ const Header = () => {
             공지사항
           </Text>
         </View>
-        <Ionicons name="menu" size={30}  />
+        <Ionicons name="menu-sharp" size={30}  />
       </View>
     </SafeAreaView>
   );

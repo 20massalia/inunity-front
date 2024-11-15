@@ -1,6 +1,7 @@
 "use client";
 import { useMessageManager } from "@/components/MessageContext";
 import styles from "./Detail.module.css";
+
 import {
   CommentPayload,
   PostDetailPageEventType,
@@ -31,7 +32,7 @@ export function usePostDetailViewModel() {
 
 export const Viewer = () => {
   return (
-    <Typography className="text-black" variant="body">
+    <Typography className="text-black">
       2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에
       신청하시기 바랍니다.
       <br />
@@ -59,67 +60,49 @@ export default function Detail() {
     }
   }, [pageEvent, submitComment]);
   return (
-      <div className="flex flex-col bg-white text-black">
-        <div className="flex flex-col gap-3 px-5">
-          <UserProfile
-            profileImage={""}
-            name={post.name}
-            introduction={post.department}
-            id={post.name}
-            isMenuOpen={false}
-            onToggleMenu={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-          />
-          <Viewer />
-        </div>
-        <div className={styles.commentArea}>
-          <div className={styles.commentTitle}>
-            <div className={styles.departmentName}>댓글</div>
-            <div className={styles.commentCount}>2</div>
-          </div>
-          <div className={styles.commentList}>
-            <div className={styles.commentItem}>
-              <div className={styles.commentProfile}>
-                <div className={styles.commenterInfoWrapper}>
-                  <div className={styles.commenterNameWrapper}>
-                    <div className={styles.departmentName}>익명1</div>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.commentTextWrapper}>
-                <div className={styles.postText}>드랍하고 싶어요 ㅠㅠ</div>
-                <div className={styles.commentTimestamp}>
-                  2024. 06. 10. 09:00
-                </div>
-              </div>
-            </div>
-            <div className={styles.divider}>
-              <div className={styles.divider1} />
-            </div>
-            <div className={styles.commentItem}>
-              <div className={styles.commentProfile}>
-                <div className={styles.commenterInfoWrapper}>
-                  <div className={styles.commenterNameWrapper}>
-                    <div className={styles.departmentName}>미룬이</div>
-                    <div
-                      className={styles.commenterDepartment}
-                    >{`컴퓨터공학부 `}</div>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.commentTextWrapper}>
-                <div className={styles.postText}>
-                  포기 할 과목을 못잡았어요 ㅠㅠ
-                </div>
-                <div className={styles.commentTimestamp}>
-                  2024. 06. 10. 09:00
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.spacer1} />
+    <div className="flex flex-col bg-white text-black">
+      <div className="flex flex-col gap-3 px-5">
+        <UserProfile
+          profileImage={""}
+          name={post.name}
+          introduction={post.department}
+          id={post.name}
+          isMenuOpen={false}
+          onToggleMenu={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
+        <Viewer />
       </div>
+      <div className={styles.commentArea}>
+        <div className={styles.commentTitle}>
+          <Typography variant="HeadingLargeBold">댓글</Typography>
+          <Typography variant="HeadingNormalBold">2</Typography>
+        </div>
+        <div className={styles.commentList}>
+          <div className={styles.commentItem}>
+            <UserProfile
+              profileImage={""}
+              name={post.name}
+              introduction={post.department}
+              id={post.name}
+              isMenuOpen={false}
+              onToggleMenu={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
+              <Typography>드랍하고 싶어요 ㅠㅠ</Typography>
+              <Typography variant="LabelNormalRegular" className="inline text-end">
+                2024. 06. 10. 09:00
+              </Typography>
+          </div>
+          <div className={styles.divider}>
+            <div className={styles.divider1} />
+          </div>
+        
+        </div>
+      </div>
+      <div className={styles.spacer1} />
+    </div>
   );
 }

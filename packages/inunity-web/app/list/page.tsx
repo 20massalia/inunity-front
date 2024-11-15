@@ -96,8 +96,8 @@ export default function List() {
             </div>
           </div>
           <div ref={titlesRef} className="flex flex-col gap-2">
-            <Typography ref={titleRef} variant='h5'>컴퓨터공학부</Typography>
-            <Typography ref={subTitleRef} variant='h1'>공지사항</Typography>
+            <Typography ref={titleRef} variant='HeadingSmallBold'>컴퓨터공학부</Typography>
+            <Typography ref={subTitleRef} variant='HeadingNormalBold'>공지사항</Typography>
           </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ export default function List() {
           !isLoading &&
           data?.map(item => <div key={item.content} className={styles.postListItem}
             onClick={() => {
-              if (isWebView) messageManager?.sendMessage(MessageEventType.Navigation, { path: 'detail' })
+              if (isWebView) messageManager?.messageManager?.sendMessage(MessageEventType.Navigation, { path: 'detail' })
               else router.push('detail')
             }}>
             <PostListItem

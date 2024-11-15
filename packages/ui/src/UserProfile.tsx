@@ -44,11 +44,11 @@ export const UserProfile = ({
         </div>
         <div className="flex-col justify-start items-start inline-flex">
           
-          <Typography className="text-black" variant="subtitle1">
+          <Typography variant="HeadingNormalBold">
             {name}
           </Typography>
           <div className="justify-start items-center gap-1 inline-flex">
-            <Typography variant="body" className="text-body">
+            <Typography className="text-body">
               {introduction}
             </Typography>
           </div>
