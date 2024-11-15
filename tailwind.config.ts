@@ -14,6 +14,7 @@ const config: Config = {
         'disabled-text': '#626262',
         'disabled-bg': '#D9D9D9',
         black: '#0F1419',
+        'black-50': 'rgba(0,0,0,0.5)',
         body: '#3B3F43',
         placeholder: 'rgba(0,0,0,0.5)',
         unselected: 'rgba(0,0,0,0.04)',
@@ -24,7 +25,18 @@ const config: Config = {
       height: {
         'real-screen': 'calc(var(--vh) * 100)',
       },
-
+      fontSize: {
+        'h-xl': '2rem',
+        'h-lg': '1.5rem',
+        'h-no': '1.125rem',
+        'h-sm': '1rem',
+        'p-lg': '1.125rem',
+        'p-no': '0.875rem',
+        'p-sm': '0.75rem',
+        'l-lg': '1rem',
+        'l-no': '0.875rem',
+        'l-sm': '0.75rem'
+      }
     },
   },
   plugins: [],
