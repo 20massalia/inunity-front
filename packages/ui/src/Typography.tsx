@@ -55,9 +55,9 @@ const variantClasses: Record<TypographyVariant, string> = {
 export const Typography = React.forwardRef<HTMLElement, TypographyProps>((props, ref) => {
   const { variant = 'ParagraphNormalRegular', children, className = '' } = props;
   const Element = variant.startsWith('Heading') ? 'h2' : 'p';
-  const classes = `${variantClasses[variant]} ${className}`;
+  const classes = `${variantClasses[variant]} select-none  ${className} `;
 
-  return React.createElement(Element, { ref: ref, className: classes }, children);
+  return React.createElement(Element, { ref: ref, className: classes, style:{ 'WebkitUserSelect': 'none'} }, children);
 });
 
 Typography.displayName = 'Typography';

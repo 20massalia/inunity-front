@@ -7,13 +7,11 @@ import {
   PostDetailPageEventType,
 } from "message-type/message-type";
 import { useEffect } from "react";
-import { Typography, UserProfile } from "ui";
+import { Typography, useMenu, UserProfile } from "ui";
 
 export function usePostDetailViewModel() {
-  const submitComment = (payload: CommentPayload) => {
-    alert(`Comment payload received: ${payload.text}, ${payload.isAnonymous ? '익명입니다.' : '익명이 아닙니다.'}`)
-    return true;
-  };
+  const submitComment = (payload: CommentPayload) => {};
+
   const post = {
     name: "김정아",
     department: "컴퓨터공학부",
@@ -25,9 +23,18 @@ export function usePostDetailViewModel() {
     isLiked: false,
     isBookmarked: false,
   };
+  const comments = [
+    {
+      name: "김정아",
+      department: "컴퓨터공학부",
+      date: "2023-08-15",
+      content: "드랍하고 싶어요 ㅠㅠ",
+    },
+  ];
   return {
     submitComment,
     post,
+    comments,
   };
 }
 
@@ -52,7 +59,8 @@ export const Viewer = () => {
 
 export default function Detail() {
   const { messageManager, pageEvent } = useMessageManager();
-  const { submitComment, post } = usePostDetailViewModel();
+  const { submitComment, post, comments } = usePostDetailViewModel();
+  const {openMenuId, setOpenMenuId} = useMenu();
 
   useEffect(() => {
     if (!pageEvent) return;
@@ -62,45 +70,59 @@ export default function Detail() {
   }, [pageEvent, submitComment]);
   return (
     <div className="flex flex-col bg-white text-black">
-      <div className="flex flex-col gap-3 px-5">
+      <div className="flex flex-col gap-3 p-5">
         <UserProfile
           profileImage={""}
           name={post.name}
           introduction={post.department}
           id={post.name}
-          isMenuOpen={false}
-          onToggleMenu={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          isMenuOpen={openMenuId == `post_${post.name}`}
+          onToggleMenu={() => setOpenMenuId(`post_${post.name}`)}
+          actions={[
+            {label: '수정', onClick: () => {}},
+            {label: '삭제', onClick: () => {}},
+            {label: '신고', onClick: () => {}},
+            {label: '차단', onClick: () => {}},
+          ]}
         />
         <Viewer />
       </div>
       <div className={styles.commentArea}>
         <div className={styles.commentTitle}>
-          <Typography variant="HeadingLargeBold">댓글</Typography>
+          <Typography variant="HeadingLargeBold">댓글&nbsp;</Typography>
           <Typography variant="HeadingNormalBold">2</Typography>
         </div>
         <div className={styles.commentList}>
-          <div className={styles.commentItem}>
-            <UserProfile
-              profileImage={""}
-              name={post.name}
-              introduction={post.department}
-              id={post.name}
-              isMenuOpen={false}
-              onToggleMenu={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-            />
-              <Typography>드랍하고 싶어요 ㅠㅠ</Typography>
-              <Typography variant="LabelNormalRegular" className="inline text-end">
-                2024. 06. 10. 09:00
-              </Typography>
-          </div>
-          <div className={styles.divider}>
-            <div className={styles.divider1} />
-          </div>
-        
+          {comments.map((comment) => (
+            <>
+              <div className={styles.commentItem} key={comment.content}>
+                <UserProfile
+                  profileImage={""}
+                  name={comment.name}
+                  introduction={comment.department}
+                  id={comment.name}
+                  isMenuOpen={openMenuId == `comments_${comment.name}`}
+                  onToggleMenu={() => setOpenMenuId(`comments_${comment.name}`)}
+                  actions={[
+                    {label: '수정', onClick: () => {}},
+                    {label: '삭제', onClick: () => {}},
+                    {label: '신고', onClick: () => {}},
+                    {label: '차단', onClick: () => {}},
+                  ]}
+                />
+                <Typography>{comment.content}</Typography>
+                <Typography
+                  variant="LabelNormalRegular"
+                  className="inline text-end"
+                >
+                  {comment.date}
+                </Typography>
+              </div>
+              <div className={styles.divider}>
+                <div className={styles.divider1} />
+              </div>
+            </>
+          ))}
         </div>
       </div>
       <div className={styles.spacer1} />

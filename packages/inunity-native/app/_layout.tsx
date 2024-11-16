@@ -9,17 +9,27 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { StyleSheet, View, Text, Image, Pressable, Alert } from "react-native";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Pressable,
+  Alert,
+  TouchableHighlight,
+  Platform,
+  SafeAreaView,
+} from "react-native";
+import { FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { registerDevMenuItems } from 'expo-dev-menu';
+import { registerDevMenuItems } from "expo-dev-menu";
 import { Slot } from "expo-router";
 
 // Import your global CSS file
-import "../globals.css"
-import { verifyInstallation } from "nativewind";
+import "../globals.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MenuView } from "@react-native-menu/menu";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -27,47 +37,42 @@ export let webViewUrl = process.env.EXPO_PUBLIC_WEB_URL;
 
 const devMenuItems = [
   {
-    name: 'Set WebView URL',
+    name: "Set WebView URL",
     callback: () => {
-      Alert.prompt(
-        "디버그 메뉴",
-        "WebView URL을 입력해주세요.",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: (value) => {
+      Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: (value) => {
             webViewUrl = value;
-          } }
-        ],
-      );    },
+          },
+        },
+      ]);
+    },
   },
 ];
 
 registerDevMenuItems(devMenuItems);
 
 const Header = () => {
-// Todo: change Background color by category
+  // Todo: change Background color by category
   return (
-
-    <SafeAreaView style={{ backgroundColor: "#ffffff" }}>
-      <StatusBar style="dark"  />
+    <SafeAreaView style={{ backgroundColor: "white" }}>
+      <StatusBar style="dark" />
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           padding: 10,
           borderBottomWidth: 1,
-          borderBottomColor: '#EFF3F4'
+          borderBottomColor: "#EFF3F4",
         }}
       >
-        <Ionicons
-          name="chevron-back"
-          size={30}
-          onPress={() => router.back()}
-        />
+        <Ionicons name="chevron-back" size={30} onPress={() => router.back()} />
         <View>
           <Text style={[styles.departmentName, styles.noticeTitleTypo]}>
             컴퓨터공학부
@@ -76,7 +81,67 @@ const Header = () => {
             공지사항
           </Text>
         </View>
-        <Ionicons name="menu-sharp" size={30}  />
+        <MenuView
+          onPressAction={({ nativeEvent }) => {
+            console.warn(JSON.stringify(nativeEvent));
+          }}
+          actions={[
+            {
+              id: "edit",
+              title: "수정",
+              image: Platform.select({
+                ios: "pencil",
+                android: "ic_menu_edit",
+              }),
+            },
+            {
+              id: "delete",
+              title: "삭제",
+              attributes: {
+                destructive: true,
+              },
+              image: Platform.select({
+                ios: "trash",
+                android: "ic_menu_delete",
+              }),
+            },
+            {
+              id: "report",
+              title: "신고",
+              attributes: {
+                destructive: true,
+              },
+              image: Platform.select({
+                ios: "light.beacon.max",
+                android: "ic_menu_delete",
+              }),
+            },
+            {
+              id: "block",
+              title: "차단",
+              image: Platform.select({
+                ios: "hand.raised",
+                android: "ic_menu_share",
+              }),
+            },
+            {
+              id: "share",
+              title: "공유",
+              image: Platform.select({
+                ios: "square.and.arrow.up",
+                android: "ic_menu_share",
+              }),
+            },
+          ]}
+          shouldOpenOnLongPress={false}
+        >
+          <View
+            // onPress={() => {}}
+            className="aspect-square flex items-center"
+          >
+            <FontAwesome6 name="ellipsis-vertical" size={30} />
+          </View>
+        </MenuView>
       </View>
     </SafeAreaView>
   );
@@ -111,29 +176,23 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  verifyInstallation();
-
 
   return (
-    <SafeAreaProvider >
+    <SafeAreaProvider>
       <GestureHandlerRootView>
+        <ThemeProvider value={DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="+not-found" />
+            <Stack.Screen
+              name="detail"
+              options={{ header: (props) => <Header /> }}
+            />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-      
-      <ThemeProvider value={DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="+not-found" />
-          <Stack.Screen
-            name="detail"
-            options={{ header: (props) => <Header /> }}
-          />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
-          <Stack.Screen name="list" options={{ headerShown: false }} />
-        </Stack>
-       
-      </ThemeProvider>
+            <Stack.Screen name="list" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
-

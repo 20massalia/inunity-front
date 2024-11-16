@@ -2829,6 +2829,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-menu/menu@npm:^1.1.6":
+  version: 1.1.6
+  resolution: "@react-native-menu/menu@npm:1.1.6"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/faa4f9ce320ca6dc23e4b002fbad088caaeea88d8b7480288b04df2b0489f70a20e73a60436bf88e5762b29e8613696bb9feb39d1b48fe24ebc38eba615dee0c
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.74.87":
   version: 0.74.87
   resolution: "@react-native/assets-registry@npm:0.74.87"
@@ -7780,6 +7790,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.2"
+    "@react-native-menu/menu": "npm:^1.1.6"
     "@react-navigation/native": "npm:^6.0.2"
     "@types/jest": "npm:^29.5.12"
     "@types/react": "npm:~18.2.45"
