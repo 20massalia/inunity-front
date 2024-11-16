@@ -1,4 +1,5 @@
 import {
+  faCheck,
   faEllipsis,
   faEllipsisVertical,
   faUser,
@@ -20,7 +21,7 @@ export interface UserProfileProps {
     icon?: React.ReactNode;
     onClick: () => void;
   }>;
-  /** Unique identifier for each UserProfile */
+  isVerified?: boolean;
   id: string;
   isMenuOpen: boolean;
   onToggleMenu: () => void;
@@ -34,6 +35,7 @@ export const UserProfile = ({
   actions,
   id,
   isMenuOpen,
+  isVerified,
   onToggleMenu,
 }: UserProfileProps) => {
   return (
@@ -49,7 +51,7 @@ export const UserProfile = ({
         <div className="flex-col justify-start items-start inline-flex">
           <Typography variant="HeadingNormalBold">{name}</Typography>
           <div className="justify-start items-center gap-1 inline-flex">
-            <Typography className="text-body">{introduction}</Typography>
+            <Typography className="text-body">{introduction}</Typography> {isVerified && <FontAwesomeIcon icon={faCheck} className="text-primary"/>}
           </div>
         </div>
       </div>
