@@ -19,6 +19,7 @@ import { Slot } from "expo-router";
 // Import your global CSS file
 import "../globals.css"
 import { verifyInstallation } from "nativewind";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -115,6 +116,9 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider >
+      <GestureHandlerRootView>
+
+      
       <ThemeProvider value={DefaultTheme}>
         <Stack>
           <Stack.Screen name="+not-found" />
@@ -128,6 +132,7 @@ export default function RootLayout() {
         </Stack>
        
       </ThemeProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }

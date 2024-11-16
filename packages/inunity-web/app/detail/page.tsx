@@ -11,6 +11,7 @@ import { Typography, UserProfile } from "ui";
 
 export function usePostDetailViewModel() {
   const submitComment = (payload: CommentPayload) => {
+    alert(`Comment payload received: ${payload.text}, ${payload.isAnonymous ? '익명입니다.' : '익명이 아닙니다.'}`)
     return true;
   };
   const post = {

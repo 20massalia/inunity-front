@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Platform,
   Button,
@@ -15,6 +15,9 @@ import AuthManager from "@/lib/AuthManager";
 import { Message, MessageEventType, PostDetailPageEventType } from "message-type/message-type";
 import { parseMessage, handleMessage } from "@/lib/MessageManager";
 import { StatusBar } from "expo-status-bar";
+import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { NativeInput } from "@/components/NativeInput";
+import NativeCheckBox from "@/components/NativeCheckBox";
 
 
 
@@ -71,15 +74,7 @@ export default function Detail() {
       <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
         <View style={styles.anonymityWrapper}>
           <View style={styles.selectedStateWrapper}>
-            <View style={styles.checkboxesFlexBox}>
-              <View className="flex justify-between flex-row">
-                <ThemedText>hi</ThemedText>
-                <ThemedText>hi2</ThemedText>
-              </View>
-              <View style={[styles.stateLayer, styles.checkboxesFlexBox]}>
-                <View style={styles.container} />
-              </View>
-            </View>
+           <NativeCheckBox checked={isAnonymous} setChecked={setIsAnonymous}/>
             <ThemedText style={[styles.anonymityText, styles.textTypo]}>
               익명
             </ThemedText>
@@ -88,14 +83,11 @@ export default function Detail() {
             작성
           </ThemedText>
         </View>
-        <View style={[styles.inputFieldWrapper, styles.inputFlexBox]}>
-          <TextInput
-            style={[styles.inputPlaceholderText, styles.textTypo]}
+          <NativeInput
             value={comment}
-            onChangeText={setComment}
+            setValue={setComment}
             placeholder="댓글을 입력해주세요."
           />
-        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -145,6 +137,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     gap: 10,
     flexDirection: "row",
+    alignItems: 'center',
     overflow: "hidden",
   },
   submitText: {
