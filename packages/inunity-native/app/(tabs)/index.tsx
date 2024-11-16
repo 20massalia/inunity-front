@@ -62,7 +62,6 @@ export default function Index() {
   const [themeColor, setThemeColor] = useState('#ffffff');
 
   return (
-    <SafeAreaView style={{ backgroundColor: themeColor }}>
       <View style={{ height: "100%" }}>
         <WebView
           ref={webView.webViewRef}
@@ -72,7 +71,7 @@ export default function Index() {
           window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
           `}
           source={{
-            uri: `${webViewUrl}/`,
+            uri: `${webViewUrl}/list`,
           }}
           onNavigationStateChange={({ url }) => {
             webView.setUrl(new URL(url).pathname);
@@ -105,6 +104,5 @@ export default function Index() {
           }}
         ></WebView>
       </View>
-    </SafeAreaView>
   );
 }
