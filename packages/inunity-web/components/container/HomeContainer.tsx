@@ -75,7 +75,7 @@ export default function HomeContainer() {
 
                         <PostListItem
                         onClick={() => {
-                            messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
+                            messageManager?.sendMessage(MessageEventType.Navigation, {path: '/post/1'} as NavigationEvent)
                         }}
                         key={post.postId}
                             name={post.name}

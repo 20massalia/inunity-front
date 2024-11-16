@@ -1,19 +1,19 @@
-import React, { ForwardedRef, PropsWithRef } from 'react';
+import React, { ForwardedRef, HTMLInputTypeAttribute, InputHTMLAttributes, PropsWithRef } from 'react';
 
-export interface InputProps {
+export type InputProps =  {
     value: string;
     setValue: (value: string) => void;
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
     placeholder?: string;
     masked?: boolean;
-}
+} & InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-    const { value, setValue, leftIcon, rightIcon, placeholder = "Input Placeholder", masked } = props;
+    const { value, setValue, leftIcon, rightIcon, placeholder = "Input Placeholder", masked, className } = props;
 
     return (
-        <div className="p-4 bg-black/5 rounded-2xl justify-start items-center gap-2 inline-flex">
+        <div className={`p-4 py-3 bg-black/5 rounded-2xl justify-start items-center gap-2 inline-flex ${className}`}>
             {leftIcon && <div className="w-6 h-6 relative">{leftIcon}</div>}
             <input
                 ref={ref}
