@@ -72,6 +72,10 @@ export default function Detail() {
         <View style={styles.anonymityWrapper}>
           <View style={styles.selectedStateWrapper}>
             <View style={styles.checkboxesFlexBox}>
+              <View className="flex justify-between flex-row">
+                <ThemedText>hi</ThemedText>
+                <ThemedText>hi2</ThemedText>
+              </View>
               <View style={[styles.stateLayer, styles.checkboxesFlexBox]}>
                 <View style={styles.container} />
               </View>

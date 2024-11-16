@@ -14,8 +14,11 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { registerDevMenuItems } from 'expo-dev-menu';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { Slot } from "expo-router";
+
+// Import your global CSS file
+import "../globals.css"
+import { verifyInstallation } from "nativewind";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -47,6 +50,7 @@ registerDevMenuItems(devMenuItems);
 const Header = () => {
 // Todo: change Background color by category
   return (
+
     <SafeAreaView style={{ backgroundColor: "#ffffff" }}>
       <StatusBar style="dark"  />
       <View
@@ -106,6 +110,8 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+  verifyInstallation();
+
 
   return (
     <SafeAreaProvider >
@@ -120,7 +126,9 @@ export default function RootLayout() {
 
           <Stack.Screen name="list" options={{ headerShown: false }} />
         </Stack>
+       
       </ThemeProvider>
     </SafeAreaProvider>
   );
 }
+

@@ -8,9 +8,15 @@
     "start": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run ios",
     "startsim": "EXPO_PUBLIC_WEB_URL=http://localhost:3000; yarn nextapp run dev & yarn nativeapp run ios"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "tailwindcss"
+      
+    ]
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
