@@ -1,6 +1,7 @@
 "use client";
 
 import { useMessageManager } from '@/components/MessageContext';
+import { useNativeRouter } from '@/hooks/useNativeRouter';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
@@ -39,8 +40,8 @@ const checkValidity = async () => {
 export default function Login() {
   const [form, setForm] = useState({ id: '', pw: '' })
   const edit = (field: string, value: string) => setForm(prev => ({ ...prev, [field]: value }));
-  const messageManager = useMessageManager();
-  const router = useRouter();
+  const {messageManager} = useMessageManager();
+  const router = useNativeRouter();
 
   const onSubmit = async () => {
     messageManager?.log('sending login request')
