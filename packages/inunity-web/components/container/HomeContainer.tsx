@@ -12,6 +12,8 @@ import { faBell, faPerson, faSearch, faUser } from "@fortawesome/free-solid-svg-
 import { useEffect } from "react";
 import { useMessageManager } from "../MessageContext";
 import { MessageEventType, NavigationEvent, PostDetailPageEventType } from "message-type/message-type";
+import { useRouter } from "next/navigation";
+import { useNativeRouter } from "@/hooks/useNativeRouter";
 
 
 
@@ -23,6 +25,8 @@ export default function HomeContainer() {
     useEffect(() => {
         messageManager?.log('HomeContainer initialized!')
     }, [messageManager])
+
+    const router = useNativeRouter();
 
     return <div className="w-full max-w-md bg-white flex-col justify-between items-start inline-flex">
 
@@ -75,7 +79,8 @@ export default function HomeContainer() {
 
                         <PostListItem
                         onClick={() => {
-                            messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
+                            // messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
+                            router.push('/detail')
                         }}
                         key={post.postId}
                             name={post.name}

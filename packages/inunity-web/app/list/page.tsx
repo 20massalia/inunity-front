@@ -16,6 +16,7 @@ import { faEdit, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react';
 import { usePlatform } from '@/hooks/usePlatform';
 import { useMessageManager } from '@/components/MessageContext';
+import { useNativeRouter } from '@/hooks/useNativeRouter';
 
 
 const fetchList = async () => {
@@ -32,7 +33,7 @@ type Post = { author: string; authorOrg: string; content: string; date: string; 
 
 
 export default function List() {
-  const router = useRouter();
+  const router = useNativeRouter();
 
   const messageManager = useMessageManager();
 
