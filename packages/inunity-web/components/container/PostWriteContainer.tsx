@@ -8,7 +8,7 @@ import Link from "next/link";
 const Editor = dynamic(() => import("../Editor"), { ssr: false });
 
 import { useState } from "react";
-import { Typography } from "ui";
+import { CheckBox, Typography } from "ui";
 import AppBar from "../AppBar";
 import { useRouter } from "next/navigation";
 
@@ -19,7 +19,7 @@ export default function PostWriteContainer({
 }) {
   const [data, setData] = useState<OutputData>();
   const router = useRouter();
-
+  const [isAnonymous, setIsAnonymous] = useState(true);
   return (
     <>
       <AppBar
@@ -38,7 +38,10 @@ export default function PostWriteContainer({
           </Typography>
         }
       />
-      <div className="h-full p-5">
+      <div className="flex-1 p-5 overflow-scroll">
+        <div className="flex flex-row justify-end">
+          <CheckBox checked={isAnonymous} setChecked={setIsAnonymous} />&nbsp;익명
+        </div>
         <Editor onChange={setData} data={data} holder="post-editor" />
       </div>
     </>

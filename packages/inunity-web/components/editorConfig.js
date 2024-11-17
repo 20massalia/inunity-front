@@ -14,7 +14,11 @@ import SimpleImage from '@editorjs/simple-image'
 export const EDITOR_TOOLS = {
   code: Code,
   paragraph: { class: Paragraph, inlineToolbar: true },
-
+  header: Header,
+  list: List,
+  quote: Quote,
+  table: Table,
+  inlineCode: InlineCode,
   image: {
     class: ImageTool,
     config: {

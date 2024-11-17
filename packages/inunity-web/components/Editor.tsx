@@ -1,4 +1,3 @@
-
 // This is my Editorjs component, better if make a seperate component and use it
 
 import React, { useEffect, useRef, useState } from "react";
@@ -19,13 +18,43 @@ function Editor({ data, onChange, holder }: EditorProps) {
     if (!ref.current) {
       const editor = new EditorJS({
         holder: holder,
-        placeholder: "Start writting here..",
+        placeholder: "글을 작성해볼까요..",
         tools: EDITOR_TOOLS,
         data,
         async onChange(api, event) {
           const content = await api.saver.save();
           // console.log(content, "sdfb");
           onChange(content);
+        },
+        i18n: {
+          messages: {
+            ui: {
+              toolbar: {
+                toolbox: {
+                  Add: "추가",
+                },
+              },
+            },
+            toolNames: {
+              Text: "텍스트",
+              Heading: "제목",
+              List: "리스트",
+              Warning: "경고",
+              Checklist: "체크리스트",
+              Image: '이미지',
+              "Unordered List": '리스트',
+              "Ordered List": "숫자 리스트",
+              Quote: "인용문",
+              Code: "코드",
+              Delimiter: "구분선",
+              Table: "표",
+              Link: "링크",
+              Marker: "마커",
+              Bold: "굵게",
+              Italic: "기울임",
+              InlineCode: "인라인 코드",
+            },
+          },
         },
       });
       ref.current = editor;
