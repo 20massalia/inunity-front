@@ -38,13 +38,15 @@ export default function Page() {
           className="self-stretch"
         />
         <div
-          className="flex flex-row overflow-x-scroll gap-2 self-stretch text-nowrap "
+          className="flex flex-row overflow-x-scroll gap-2 self-stretch text-nowrap pr-4"
           style={{
-            maskImage:
-              "linear-gradient(to right, black calc(100% - 50px), transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to right, black calc(100% - 50px), transparent 100%)",
-          }}
+            mask: `
+       linear-gradient(to right, 
+      rgba(0,0,0, 1) 0,   rgba(0,0,0, 1) 90%, 
+      rgba(0,0,0, 0) 100%, rgba(0,0,0, 0) 0
+  ) 100% 100% / 100% 100% repeat-x
+   `
+                    }}
         >
           <Chip
             checked={selectedTags.length == tags.length}
