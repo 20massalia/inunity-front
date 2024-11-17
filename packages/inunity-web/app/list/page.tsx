@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
 import { usePlatform } from "@/hooks/usePlatform";
 import { useMessageManager } from "@/components/MessageContext";
 
-const fetchList = async () => {
+export const fetchList = async () => {
   return [
     {
       author: "학과사무실",

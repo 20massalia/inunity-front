@@ -17,7 +17,7 @@ export function Chip({
     <div
       onClick={onClick ?? (() => setChecked(!checked))}
       style={{ backgroundColor: bgColor }}
-      className={`px-3 py-2 text-${checked ? 'white' : 'black'} rounded-full`}
+      className={`px-3 py-2  text-${checked ? 'white' : 'black'} rounded-full`}
     >
       {children}
     </div>

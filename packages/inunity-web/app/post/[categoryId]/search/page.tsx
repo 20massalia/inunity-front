@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchList } from "@/app/list/page";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -7,20 +8,44 @@ import { Input, Chip } from "ui";
 import PostListItem, { PostListItemProps } from "ui/src/PostListItem";
 
 export default function Page() {
-  const posts: PostListItemProps[] = [];
+  const posts: PostListItemProps[] = [
+    {
+      name: "학과사무실",
+      department: "컴퓨터공학부",
+      content: "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
+      date: "2024. 10. 07",
+      likes: 0,
+      bookmarks: 0,
+      postId: "",
+      isLiked: false,
+      isBookmarked: false
+    }
+  ];
   const [searchValue, setSearchValue] = useState("");
-  const tags = ["전공", "취업", "창업", "학과"];
+  const tags = ["전공", "취업", "창업", "학과", "학교", "응애"];
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   useEffect(() => {
-    console.log(selectedTags)
-  }, [selectedTags])
+    console.log(selectedTags);
+  }, [selectedTags]);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-dvh">
       {/* SearchBar Area Start */}
-      <div className="flex flex-col items-start ">
+      <div className="flex flex-col items-start gap-4 p-5 bg-white">
         <FontAwesomeIcon icon={faChevronLeft} />
-        <Input value={searchValue} setValue={setSearchValue} />
-        <div className="flex flex-row overflow-x-scroll">
+        <Input
+          value={searchValue}
+          setValue={setSearchValue}
+          className="self-stretch"
+        />
+        <div
+          className="flex flex-row overflow-x-scroll gap-2 self-stretch text-nowrap "
+          style={{
+            maskImage:
+              "linear-gradient(to right, black calc(100% - 50px), transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, black calc(100% - 50px), transparent 100%)",
+          }}
+        >
           <Chip
             checked={selectedTags.length == tags.length}
             setChecked={(checked) => {
@@ -37,7 +62,6 @@ export default function Page() {
               key={tag}
               checked={selectedTags.some((selectedTag) => selectedTag == tag)}
               setChecked={(checked) => {
-                console.log(checked)
                 // unselect item
                 if (!checked)
                   setSelectedTags((prev) =>
@@ -53,7 +77,7 @@ export default function Page() {
         </div>
       </div>
       {/* Post List Area Start */}
-      <div>
+      <div className="bg-gray-50 flex-1 gap-3 pt-3">
         {posts.map((post) => (
           <PostListItem key={post.name} {...post} />
         ))}
