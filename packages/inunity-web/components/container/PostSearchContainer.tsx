@@ -1,12 +1,13 @@
 "use client";
 
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Input, Chip } from "ui";
 import PostListItem, { PostListItemProps } from "ui/src/PostListItem";
 
-export default function PostSearchContainer() {
+export default function PostSearchContainer({categoryId}: {categoryId: string}) {
   const posts: PostListItemProps[] = [
     {
       name: "학과사무실",
@@ -88,15 +89,18 @@ export default function PostSearchContainer() {
   useEffect(() => {
     console.log(selectedTags);
   }, [selectedTags]);
+  const router = useRouter();
   return (
     <div className="h-full flex flex-col">
       {/* SearchBar Area Start */}
       <div className="flex flex-col items-start gap-4 p-5 bg-white">
-        <FontAwesomeIcon icon={faChevronLeft} />
+        <FontAwesomeIcon icon={faChevronLeft} onClick={router.back} />
         <Input
           value={searchValue}
           setValue={setSearchValue}
           className="self-stretch"
+          leftIcon={<FontAwesomeIcon icon={faSearch}/>}
+          placeholder="검색어를 입력해주세요."
         />
         <div
           className="flex flex-row overflow-x-scroll gap-2 self-stretch text-nowrap pr-4"

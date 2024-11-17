@@ -1,7 +1,11 @@
-'use client';
+"use client";
 
 import { usePlatform } from "@/hooks/usePlatform";
-import { faChevronLeft, faEdit, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faEdit,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { MessageEventType } from "message-type/message-type";
@@ -9,6 +13,7 @@ import router, { useRouter } from "next/navigation";
 import { Typography } from "ui";
 import PostListItem from "ui/src/PostListItem";
 import { useMessageManager } from "../MessageContext";
+import AppBar from "../AppBar";
 
 export const fetchList = async () => {
   return [
@@ -94,7 +99,7 @@ type Post = {
   comments: number;
 };
 
-export default function PostListContainer(){
+export default function PostListContainer({categoryId}: {categoryId: string}) {
   const router = useRouter();
 
   const messageManager = useMessageManager();
@@ -108,69 +113,59 @@ export default function PostListContainer(){
   });
   const { isWebView, os } = usePlatform();
 
-
-  return<>
-       <div
-          className={`flex bg-white w-full  text-black  border-b border-b-divider`}
-        >
-          <div className="px-4 py-3 flex flex-1 flex-col justify-between">
-            <div className="flex flex-row justify-between items-center">
-              <div className="relative">
-                <div className="absolute h-full flex items-center">
-                  <FontAwesomeIcon icon={faChevronLeft} fontSize={24} />
-                </div>
-              </div>
-              <div className="relative">
-                <div className="flex flex-col justify-center items-center">
-                  <Typography className="text-xs font-bold">
-                    컴퓨터공학부
-                  </Typography>
-                  <Typography variant="HeadingNormalBold">공지사항</Typography>
-                </div>
-              </div>
-              <div className="relative">
-                <div className="flex gap-3 absolute right-0 h-full items-center">
-                  <FontAwesomeIcon icon={faEdit} fontSize={24} />
-                  <FontAwesomeIcon icon={faSearch} fontSize={24} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col bg-gray-50 gap-3 h-[calc(100%-110px)] overflow-scroll">
-          {!isLoading &&
-            data?.map((item) => (
-              <div
-                key={item.content}
-                className=" "
-                onClick={() => {
-                  if (isWebView)
-                    messageManager?.messageManager?.sendMessage(
-                      MessageEventType.Navigation,
-                      { path: `/post/1/1` }
-                    );
-                  else router.push("/post/1/1");
+  return (
+    <>
+      <AppBar
+        title={
+          <>
+            <Typography className="text-xs font-bold">컴퓨터공학부</Typography>
+            <Typography variant="HeadingNormalBold">공지사항</Typography>
+          </>
+        }
+        leftIcon={<FontAwesomeIcon icon={faChevronLeft} fontSize={24} onClick={router.back} />}
+        rightIcon={
+          <>
+            <FontAwesomeIcon icon={faEdit} fontSize={24} onClick={() => router.push(`/post/${categoryId}/write`)}/>
+            <FontAwesomeIcon icon={faSearch} fontSize={24} onClick={() => router.push(`/post/${categoryId}/search`)} />
+          </>
+        }
+      />
+      
+      <div className="flex flex-col bg-gray-50 gap-3  overflow-scroll">
+        {!isLoading &&
+          data?.map((item) => (
+            <div
+              key={item.content}
+              className=" "
+              onClick={() => {
+                if (isWebView)
+                  messageManager?.messageManager?.sendMessage(
+                    MessageEventType.Navigation,
+                    { path: `/post/1/1` }
+                  );
+                else router.push("/post/1/1");
+              }}
+            >
+              <PostListItem
+                name={item.author}
+                department={item.authorOrg}
+                content={item.content}
+                date={item.date}
+                likes={item.likes}
+                bookmarks={item.comments}
+                postId={""}
+                toggleLike={function (postId: string): void {
+                  throw new Error("Function not implemented.");
                 }}
-              >
-                <PostListItem
-                  name={item.author}
-                  department={item.authorOrg}
-                  content={item.content}
-                  date={item.date}
-                  likes={item.likes}
-                  bookmarks={item.comments}
-                  postId={""}
-                  toggleLike={function (postId: string): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  toggleBookmark={function (postId: string): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  isLiked={false}
-                  isBookmarked={false}
-                />
-              </div>
-            ))}
-        </div>
-  </>
-} 
+                toggleBookmark={function (postId: string): void {
+                  throw new Error("Function not implemented.");
+                }}
+                isLiked={false}
+                isBookmarked={false}
+              />
+            </div>
+          ))}
+      </div>
+    </>
+  );
+}

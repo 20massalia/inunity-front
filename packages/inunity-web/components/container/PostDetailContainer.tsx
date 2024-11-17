@@ -2,9 +2,16 @@
 import { useMessageManager } from "@/components/MessageContext";
 import { useEffect } from "react";
 import { Typography, useMenu, UserProfile } from "ui";
-import {PostDetailPageEventType} from 'message-type/message-type'
+import { PostDetailPageEventType } from "message-type/message-type";
 import usePostDetailViewModel from "@/components/viewModel/PostDetailViewModel";
-
+import {
+  faChevronLeft,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import AppBar from "../AppBar";
+import { useRouter } from "next/navigation";
 
 export const Viewer = () => {
   return (
@@ -25,10 +32,10 @@ export const Viewer = () => {
   );
 };
 
-export default function PostDetailContainer() {
+export default function PostDetailContainer({categoryId, postId} : {categoryId: string; postId: string}) {
   const { messageManager, pageEvent } = useMessageManager();
   const { submitComment, post, comments } = usePostDetailViewModel();
-  const {openMenuId, setOpenMenuId} = useMenu();
+  const { openMenuId, setOpenMenuId } = useMenu();
 
   useEffect(() => {
     if (!pageEvent) return;
@@ -36,62 +43,84 @@ export default function PostDetailContainer() {
       submitComment(pageEvent.value);
     }
   }, [pageEvent, submitComment]);
+  const router = useRouter()
   return (
-    <div className="flex flex-col bg-gray-50 h-dvh text-black gap-2">
-      <div className="flex flex-col gap-3 p-5 bg-white">
-        <UserProfile
-          profileImage={""}
-          name={post.name}
-          introduction={post.department}
-          id={post.name}
-          isMenuOpen={openMenuId == `post_${post.name}`}
-          onToggleMenu={() => setOpenMenuId(`post_${post.name}`)}
-          actions={[
-            {label: '수정', onClick: () => {}},
-            {label: '삭제', onClick: () => {}},
-            {label: '신고', onClick: () => {}},
-            {label: '차단', onClick: () => {}},
-          ]}
-        />
-        <Viewer />
-      </div>
-      <div className='bg-white self-stretch flex flex-col items-start justify-start p-5 gap-3'>
-        <div className="flex flex-row items-center justify-center gap-1">
-          <Typography variant="HeadingLargeBold">댓글&nbsp;</Typography>
-          <Typography variant="HeadingNormalBold">2</Typography>
+    <>
+      <AppBar
+        title={
+          <>
+            <Typography className="text-xs font-bold">컴퓨터공학부</Typography>
+            <Typography variant="HeadingNormalBold">공지사항</Typography>
+          </>
+        }
+        leftIcon={
+            <FontAwesomeIcon icon={faChevronLeft} fontSize={24} onClick={router.back} />
+        }
+        rightIcon={
+          <>
+            <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" />
+          </>
+        }
+      />
+      <div className="flex flex-col bg-gray-50 h-full text-black gap-2">
+        <div className="flex flex-col gap-3 p-5 bg-white">
+          <UserProfile
+            profileImage={""}
+            name={post.name}
+            introduction={post.department}
+            id={post.name}
+            isMenuOpen={openMenuId == `post_${post.name}`}
+            onToggleMenu={() => setOpenMenuId(`post_${post.name}`)}
+            actions={[
+              { label: "수정", onClick: () => {} },
+              { label: "삭제", onClick: () => {} },
+              { label: "신고", onClick: () => {} },
+              { label: "차단", onClick: () => {} },
+            ]}
+          />
+          <Viewer />
         </div>
-        <div className="self-stretch flex flex-col items-start justify-start gap-3">
-
-          {comments.map((comment) => (
-            <>
-              <div className="flex flex-col justify-start self-stretch" key={comment.content}>
-                <UserProfile
-                  profileImage={""}
-                  name={comment.name}
-                  introduction={comment.department}
-                  id={comment.name}
-                  isMenuOpen={openMenuId == `comments_${comment.name}`}
-                  onToggleMenu={() => setOpenMenuId(`comments_${comment.name}`)}
-                  actions={[
-                    {label: '수정', onClick: () => {}},
-                    {label: '삭제', onClick: () => {}},
-                    {label: '신고', onClick: () => {}},
-                    {label: '차단', onClick: () => {}},
-                  ]}
-                />
-                <Typography>{comment.content}</Typography>
-                <Typography
-                  variant="LabelNormalRegular"
-                  className="inline text-end"
+        <div className="bg-white self-stretch flex flex-col items-start justify-start p-5 gap-3">
+          <div className="flex flex-row items-center justify-center gap-1">
+            <Typography variant="HeadingLargeBold">댓글&nbsp;</Typography>
+            <Typography variant="HeadingNormalBold">2</Typography>
+          </div>
+          <div className="self-stretch flex flex-col items-start justify-start gap-3">
+            {comments.map((comment) => (
+              <>
+                <div
+                  className="flex flex-col justify-start self-stretch"
+                  key={comment.content}
                 >
-                  {comment.date}
-                </Typography>
-              </div>
-           
-            </>
-          ))}
+                  <UserProfile
+                    profileImage={""}
+                    name={comment.name}
+                    introduction={comment.department}
+                    id={comment.name}
+                    isMenuOpen={openMenuId == `comments_${comment.name}`}
+                    onToggleMenu={() =>
+                      setOpenMenuId(`comments_${comment.name}`)
+                    }
+                    actions={[
+                      { label: "수정", onClick: () => {} },
+                      { label: "삭제", onClick: () => {} },
+                      { label: "신고", onClick: () => {} },
+                      { label: "차단", onClick: () => {} },
+                    ]}
+                  />
+                  <Typography>{comment.content}</Typography>
+                  <Typography
+                    variant="LabelNormalRegular"
+                    className="inline text-end"
+                  >
+                    {comment.date}
+                  </Typography>
+                </div>
+              </>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
