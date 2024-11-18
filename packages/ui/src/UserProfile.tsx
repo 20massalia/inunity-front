@@ -1,4 +1,5 @@
 import {
+  faCheck,
   faEllipsis,
   faEllipsisVertical,
   faUser,
@@ -20,7 +21,7 @@ export interface UserProfileProps {
     icon?: React.ReactNode;
     onClick: () => void;
   }>;
-  /** Unique identifier for each UserProfile */
+  isVerified?: boolean;
   id: string;
   isMenuOpen: boolean;
   onToggleMenu: () => void;
@@ -34,6 +35,7 @@ export const UserProfile = ({
   actions,
   id,
   isMenuOpen,
+  isVerified,
   onToggleMenu,
 }: UserProfileProps) => {
   return (
@@ -49,12 +51,25 @@ export const UserProfile = ({
         <div className="flex-col justify-start items-start inline-flex">
           <Typography variant="HeadingNormalBold">{name}</Typography>
           <div className="justify-start items-center gap-1 inline-flex">
-            <Typography className="text-body">{introduction}</Typography>
+            <Typography className="text-body">{introduction}</Typography> {isVerified && <FontAwesomeIcon icon={faCheck} className="text-primary"/>}
           </div>
         </div>
       </div>
-      {isMenuOpen && actions && actions.length > 0 && (
-            <div className="absolute right-0 mt-2 w-48 bg-[rgba(250,250,250,1)] rounded-xl shadow-2xl z-10">
+    
+      <div
+        className="w-6 h-6 relative flex justify-end"
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleMenu();
+        }}
+      >
+        <FontAwesomeIcon
+          icon={faEllipsisVertical}
+          fontSize={24}
+          color={"#7E7E7E"}
+        />
+          {isMenuOpen && actions && actions.length > 0 && (
+            <div className={`absolute right-0  mt-2 w-48 bg-[rgba(250,250,250,1)] rounded-xl shadow-2xl z-10`} style={{bottom: actions.length * -38}}>
               {actions.map((action, index) => (
                 <button
                   key={index}
@@ -72,18 +87,6 @@ export const UserProfile = ({
             </div>
           )}
 
-      <div
-        className="w-6 h-6 relative"
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggleMenu();
-        }}
-      >
-        <FontAwesomeIcon
-          icon={faEllipsisVertical}
-          fontSize={24}
-          color={"#7E7E7E"}
-        />
       </div>
     </div>
   );

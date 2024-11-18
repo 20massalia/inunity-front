@@ -184,7 +184,7 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="+not-found" />
             <Stack.Screen
-              name="detail"
+              name="post/[id]/index"
               options={{ header: (props) => <Header /> }}
             />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
