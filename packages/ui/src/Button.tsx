@@ -30,7 +30,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <div onClick={variant !== 'disabled' ? onClick : undefined} className={classes}>
-      <Typography variant='body' className="text-center text-white text-xl font-semibold  leading-9">{children}</Typography>
+      <Typography variant='ParagraphNormalRegular' className="text-center text-white text-xl font-semibold  leading-9">{children}</Typography>
 
     </div>
   );

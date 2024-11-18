@@ -72,7 +72,7 @@ export default function Index() {
           window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
           `}
           source={{
-            uri: `${webViewUrl}/`,
+            uri: `${webViewUrl}/notification`,
           }}
           onNavigationStateChange={({ url }) => {
             webView.setUrl(new URL(url).pathname);

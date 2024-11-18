@@ -1,3 +1,7 @@
+import SwipeableTabs from "@/components/SwipeableTabs";
+
 export default function Page() {
-    return <div></div>
+    return <SwipeableTabs
+    
+    />
 }
