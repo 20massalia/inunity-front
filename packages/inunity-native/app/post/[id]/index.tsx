@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useRef, useState, useEffect } from "react";
 import {
   Platform,
@@ -22,6 +22,8 @@ import NativeCheckBox from "@/components/NativeCheckBox";
 
 
 export default function Detail() {
+  const params = useLocalSearchParams();
+  const postId = params.id;
   const webViewRef = useRef<WebView>(null);
   const [cookie, setCookie] = useState<string | null>(null);
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function Detail() {
           ref={webViewRef}
           injectedJavaScriptBeforeContentLoaded={`document.cookie=${cookie}`}
           source={{
-            uri: `${process.env.EXPO_PUBLIC_WEB_URL}/detail`,
+            uri: `${process.env.EXPO_PUBLIC_WEB_URL}/post/1/${postId}`,
           }}
           userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
           sharedCookiesEnabled

@@ -13,7 +13,22 @@
       --foreground: #ededed;
     }
   }
-  
+  @layer base {
+    :root {
+      --color-primary: theme('colors.primary');
+        --color-primary: theme('colors.primary');
+        --color-disabled-text: theme('colors.disabled-text');
+        --color-disabled-bg: theme('colors.disabled-bg');
+        --color-black: theme('colors.black');
+        --color-black-50: theme('colors.black-50');
+        --color-body: theme('colors.body');
+        --color-placeholder: theme('colors.placeholder');
+        --color-unselected: theme('colors.unselected');
+        --color-success: theme('colors.success');
+        --color-background: var(--background);
+        --color-foreground: var(--foreground);
+    }
+  }
   
   body {
     color: var(--foreground);
