@@ -1,3 +1,4 @@
+import NotificationItem from "@/components/NotificationItem";
 import SwipeableTabs from "@/components/SwipeableTabs";
 import PostListItem from "ui/src/PostListItem";
 
@@ -15,15 +16,33 @@ export default function Page() {
         isBookmarked: false,
     }
   ];
-  const systemNotiList = [
+  const notifications = [
     {
-        id: 0,
-        title: '공지사항',
-        content: '(대충 메가폰을 들고) 공지사항입니다',
-        date: '2024-11-18 12:41',
-        read: false
+      id: 1,
+      title: '새로운 메시지가 도착했습니다',
+      content: '홍길동님이 새로운 메시지를 보냈습니다.',
+      time: '방금 전',
+      isRead: false,
+      type: 'message'
+    },
+    {
+      id: 2, 
+      title: '시스템 업데이트 알림',
+      content: '새로운 버전이 업데이트 되었습니다.',
+      time: '1시간 전',
+      isRead: true,
+      type: 'system'
+    },
+    {
+      id: 3,
+      title: '새로운 팔로워',
+      content: '김철수님이 회원님을 팔로우하기 시작했습니다.',
+      time: '2시간 전',
+      isRead: false,
+      type: 'social'
     }
   ];
+
   return (
     <>
       <SwipeableTabs
@@ -36,7 +55,9 @@ export default function Page() {
           {
             id: 1,
             title: "시스템",
-            content: systemNotiList.map(noti => <PostListItem key={noti.id} name="시스템" department="" content={`${noti.title}\n${noti.content}`} date={noti.date} postId={noti.id.toString()}/>),
+            content: <div className="p-2 gap-3 flex flex-col">
+              {notifications.map(noti => <NotificationItem key={noti.id} notification={noti}/>)}
+            </div>,
           },
         
         ]}
