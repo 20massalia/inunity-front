@@ -20,15 +20,23 @@ pacakges
 yarn install # 의존성 설치
 ```
 아래 스크립트를 이용해 실행할 수 있습니다.
-- `yarn nextapp`: next 앱을 단독으로 실행합니다.
-- `yarn nativeapp`: 네이티브 앱 만을 단독으로 실행합니다.
-- `yarn start`: 두 앱을 동시에 실행합니다.
+- `yarn nextapp run dev`: next 앱을 단독으로 실행합니다.
+
+- Metro 번들러만 실행하기
+- `yarn nativeapp start`: 네이티브 단을 빌드하지 않고 Metro 번들러만을 실행합니다.
+
+- `yarn nativeapp run ios`: development build를 생성하고, Metro 번들러를 실행합니다.
+- `yarn start`: 두 앱을 동시에 실행합니다. (next는 개밥서버, 네이티브는 iOS development build)
+- `yarn startsim`: `yarn start`를 웹뷰 URL을 `localhost`로 고정하고 실행합니다. iOS 시뮬레이터 환경에서 구동을 위한 기능입니다.
 ```json
-  "scripts": {
-    "nextapp": "yarn workspace inunity-web run dev",
-    "nativeapp": "yarn workspace inunity-native run ios",
-    "start": "yarn nextapp & yarn nativeapp"
-  },
+    "nextapp": "yarn workspace inunity-web",
+    "nativeapp": "yarn workspace inunity-native ",
+    "start": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run ios",
+    "startsim": "EXPO_PUBLIC_WEB_URL=http://localhost:3000; yarn nextapp run dev & yarn nativeapp run ios"
+
+    // inunity-native/pacakge.json
+    "android": "expo run:android --device",
+    "ios": "expo run:ios --device",
 ```
 ### 웹뷰 URL
 이 앱은 React Native 와 WebView 상의 react가 유기적으로 동작합니다. 따라서 정상적인 테스트/이용을 위해 웹뷰 URL을 지정해주어야 합니다. 이는 `EXPO_PUBLIC_WEB_URL` 환경변수를 지정해줌으로서 가능합니다. 아래는 설정하는 두 방법을 소개합니다. 
@@ -42,6 +50,10 @@ EXPO_PUBLIC_WEB_URL=http://192.168.1.146:3000 # next.js 서버를 구동하는 �
 ```bash
 export EXPO_PUBLIC_WEB_URL=http://192.168.1.146:3000; yarn start
 ```
+3. 네이티브 빌드 없이 Expo 서버만 실행하기
+
+   무슨 이유인지는 모르겠지만, Expo 서버만 실행했을 때 env가 주입이 안되는 것 같아요. 그래서 아래와 같이 따로 지정해주어야 합니다.
+   `EXPO_PUBLIC_WEB_URL=http://localhost:3000 yarn nativeapp start;`
 ### API URL
 현재 테스트에 사용하고 있는 쿠키 인증 서버가 있습니다.
 

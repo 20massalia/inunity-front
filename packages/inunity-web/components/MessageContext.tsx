@@ -32,7 +32,7 @@ export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children })
       // 메시지 처리 로직
       manager.onMessageReceived(event, {
         [MessageEventType.Navigation]: (data: NavigationEvent) => {
-          router.replace(data.path);
+          router.replace(data.path, {scroll: false});
         },
         [MessageEventType.Page]: (data: PageEvent<PageEventType>) => {
           setPageEvent(data);
