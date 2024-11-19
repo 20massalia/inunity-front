@@ -1,11 +1,7 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { View } from "react-native";
 import { GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler";
-
-export type CheckBoxProps = {
-  checked: boolean;
-  setChecked: ((updator: boolean) => void) 
-};
+import { CheckBoxProps } from "ui";
 
 export default function NativeCheckBox({ checked, setChecked }: CheckBoxProps) {
   return (

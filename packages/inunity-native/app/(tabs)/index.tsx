@@ -62,7 +62,6 @@ export default function Index() {
   const [themeColor, setThemeColor] = useState('#ffffff');
 
   return (
-    <SafeAreaView style={{ backgroundColor: themeColor }}>
       <View style={{ height: "100%" }}>
         <WebView
           ref={webView.webViewRef}
@@ -74,7 +73,7 @@ export default function Index() {
           source={{
             uri: `${webViewUrl}/notification`,
           }}
-          onNavigationStateChange={({ url }) => {
+          onNavigationStateChange={({ url, navigationType }) => {
             webView.setUrl(new URL(url).pathname);
           }}
           userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
@@ -105,6 +104,5 @@ export default function Index() {
           }}
         ></WebView>
       </View>
-    </SafeAreaView>
   );
 }
