@@ -14,8 +14,8 @@ export default function AppBar({
   rightIcon,
 }: {
   title: React.ReactNode;
-  leftIcon: React.ReactNode;
-  rightIcon: React.ReactNode;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }) {
   return (
     <div

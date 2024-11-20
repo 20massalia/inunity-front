@@ -1,4 +1,6 @@
+import NotificationListContainer from "@/components/container/NotificationListContainer";
 import NotificationItem from "@/components/NotificationItem";
+import SafeAreaView from "@/components/SafeAreaView";
 import SwipeableTabs from "@/components/SwipeableTabs";
 import PostListItem from "ui/src/PostListItem";
 
@@ -44,26 +46,8 @@ export default function Page() {
   ];
 
   return (
-    <>
-      <SwipeableTabs
-        tabs={[
-          {
-            id: 0,
-            title: "게시판",
-            content: <div className="p-5 gap-3 flex flex-col">
-            {boardNotiList.map((post, idx) => <NotificationItem key={post.postId} notification={{title: '게시판에 새로운 글이 등록됐어요.', content: post.content, id: idx, isRead: false, time: post.date}}/>)}
-          </div>
-          },
-          {
-            id: 1,
-            title: "시스템",
-            content: <div className="p-5 gap-3 flex flex-col">
-              {notifications.map(noti => <NotificationItem key={noti.id} notification={noti}/>)}
-            </div>,
-          },
-        
-        ]}
-      ></SwipeableTabs>
-    </>
+    <SafeAreaView>
+      <NotificationListContainer boardNotiList={boardNotiList} systemNotiList={notifications}/>
+    </SafeAreaView>
   );
 }

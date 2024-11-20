@@ -34,7 +34,7 @@ export default function HomeContainer() {
             title
             <div className="flex gap-3">
                 <FontAwesomeIcon fontSize={24} icon={faSearch} />
-                <FontAwesomeIcon fontSize={24} icon={faBell} />
+                <FontAwesomeIcon fontSize={24} icon={faBell} onClick={() => router.push('/notification')} />
                 <FontAwesomeIcon fontSize={24} icon={faUser} />
             </div>
         </div>
@@ -80,7 +80,7 @@ export default function HomeContainer() {
                         <PostListItem
                         onClick={() => {
                             // messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
-                            router.push('/detail')
+                            router.push('/post/1/1')
                         }}
                         key={post.postId}
                             name={post.name}

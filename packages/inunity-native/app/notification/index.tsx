@@ -45,8 +45,8 @@ function isLightColor(hex: string): boolean {
 export default function Index() {
   const [cookie, setCookie] = useState<string | null>(null);
   const [isWebViewLoading, setIsWebViewLoading] = useState(true);
-  const webView = useWebView();
-  const messageManager = useMessageManager(webView.webViewRef);
+  const webViewRef = useRef(null);
+  const messageManager = useMessageManager(webViewRef);
 
   useEffect(() => {
     if (!isWebViewLoading)
@@ -59,52 +59,50 @@ export default function Index() {
       });
   }, [isWebViewLoading]);
 
-  const [themeColor, setThemeColor] = useState('#ffffff');
+  const [themeColor, setThemeColor] = useState("#ffffff");
 
   return (
-      <View style={{ height: "100%" }}>
-        <WebView
-          ref={webView.webViewRef}
-          injectedJavaScriptBeforeContentLoaded={`
+    <View style={{ height: "100%" }}>
+      <WebView
+        ref={webViewRef}
+        injectedJavaScriptBeforeContentLoaded={`
           if (!document.cookie)
             document.cookie=${cookie};
           window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
           `}
-          source={{
-            uri: `${webViewUrl}`,
-          }}
-          onNavigationStateChange={({ url, navigationType }) => {
-            webView.setUrl(new URL(url).pathname);
-          }}
-          userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
-          sharedCookiesEnabled
-          onLoadStart={() => setIsWebViewLoading(true)}
-          onLoadEnd={() => setIsWebViewLoading(false)}
-          onMessage={(event) => {
-            const message = parseMessage(event.nativeEvent.data);
+        source={{
+          uri: `${webViewUrl}/notification`,
+        }}
+        userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
+        sharedCookiesEnabled
+        onLoadStart={() => setIsWebViewLoading(true)}
+        onLoadEnd={() => setIsWebViewLoading(false)}
+        onMessage={(event) => {
+          const message = parseMessage(event.nativeEvent.data);
 
-            handleMessage(message, {
-              [MessageEventType.Login]: () => {
-                router.push("/list");
-              },
-              [MessageEventType.Navigation]: () => {
-                const navigation = message.value as NavigationEvent;
-                if (navigation === -1) router.back();
-                else 
-                  router.push({
-                    pathname: navigation.path as any,
-                    params: navigation.params as any,
-                  });
-              },
-              [MessageEventType.ThemeColor]: () => {
-                const color = message.value as string
-                if (!new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).test(color)) return;
-                setThemeColor(color);
-                setStatusBarStyle(isLightColor(color) ? 'dark' : 'light')
-              },
-            });
-          }}
-        ></WebView>
-      </View>
+          handleMessage(message, {
+            [MessageEventType.Login]: () => {
+              router.push("/list");
+            },
+            [MessageEventType.Navigation]: () => {
+              const navigation = message.value as NavigationEvent;
+              if (navigation === -1) router.back();
+              else 
+                router.push({
+                  pathname: navigation.path as any,
+                  params: navigation.params as any,
+                });
+            },
+            [MessageEventType.ThemeColor]: () => {
+              const color = message.value as string;
+              if (!new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).test(color))
+                return;
+              setThemeColor(color);
+              setStatusBarStyle(isLightColor(color) ? "dark" : "light");
+            },
+          });
+        }}
+      ></WebView>
+    </View>
   );
 }

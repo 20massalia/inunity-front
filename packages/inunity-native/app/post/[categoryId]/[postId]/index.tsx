@@ -9,11 +9,10 @@ import {
   handleMessage,
 } from "@/lib/MessageManager";
 import { MessageEventType, NavigationEvent } from "message-type/message-type";
-import { router } from "expo-router";
-import { WebViewProvider, useWebView } from "../../components/useWebView";
+import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
-import { webViewUrl } from "../_layout";
+import { webViewUrl } from "@/app/_layout";
 
 function isLightColor(hex: string): boolean {
   // Remove the hash at the start if it's there
@@ -42,11 +41,14 @@ function isLightColor(hex: string): boolean {
   return brightness > 186;
 }
 
-export default function Index() {
+export default function Page() {
   const [cookie, setCookie] = useState<string | null>(null);
   const [isWebViewLoading, setIsWebViewLoading] = useState(true);
-  const webView = useWebView();
-  const messageManager = useMessageManager(webView.webViewRef);
+  const webViewRef = useRef(null);
+  const messageManager = useMessageManager(webViewRef);
+  const { categoryId, postId } = useLocalSearchParams<{ categoryId: string; postId: string}>();
+  
+
 
   useEffect(() => {
     if (!isWebViewLoading)
@@ -64,17 +66,17 @@ export default function Index() {
   return (
       <View style={{ height: "100%" }}>
         <WebView
-          ref={webView.webViewRef}
+          ref={webViewRef}
           injectedJavaScriptBeforeContentLoaded={`
           if (!document.cookie)
             document.cookie=${cookie};
           window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
           `}
           source={{
-            uri: `${webViewUrl}`,
+            uri: `${webViewUrl}/notification/setting`,
           }}
           onNavigationStateChange={({ url, navigationType }) => {
-            webView.setUrl(new URL(url).pathname);
+            if (navigationType == 'backforward') router.back();
           }}
           userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
           sharedCookiesEnabled

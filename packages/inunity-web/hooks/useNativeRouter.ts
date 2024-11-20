@@ -11,11 +11,15 @@ export function useNativeRouter() {
 
   const customPush = useCallback((url:string) => {
     messageManager?.sendMessage(MessageEventType.Navigation, {path: url})
-    
   }, [messageManager]);
+
+  const customBack = useCallback(() => {
+    messageManager?.sendMessage(MessageEventType.Navigation, -1);
+  }, [messageManager])
 
   return {
     ...router,
-    push: customPush
+    push: customPush,
+    back: customBack
   };
 }
