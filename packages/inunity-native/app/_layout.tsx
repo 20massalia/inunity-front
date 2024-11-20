@@ -181,17 +181,16 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <GestureHandlerRootView>
         <ThemeProvider value={DefaultTheme}>
-          <Stack>
+          <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="+not-found" />
-            <Stack.Screen
-              name="post/[id]/index"
-              options={{ header: (props) => <Header /> }}
-            />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="post/[categoryId]/index" />
+            <Stack.Screen name="post/[categoryId]/write" />
+            <Stack.Screen name="post/[categoryId]/[postId]/index" />
+            <Stack.Screen name="(tabs)" />
 
-            <Stack.Screen name="list" options={{ headerShown: false }} />
-            <Stack.Screen name="notification/index" options={{ headerShown: false }} />
-            <Stack.Screen name="notification/setting" options={{ headerShown: false }} />
+            <Stack.Screen name="list" />
+            <Stack.Screen name="notification/index" />
+            <Stack.Screen name="notification/setting" />
           </Stack>
         </ThemeProvider>
       </GestureHandlerRootView>
