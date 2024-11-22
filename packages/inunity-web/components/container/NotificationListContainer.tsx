@@ -19,7 +19,7 @@ export default function NotificationListContainer({
   return (
     <>
       <AppBar
-        title={<Typography variant="HeadingNormalBold">알림</Typography>}
+        center={<Typography variant="HeadingNormalBold">알림</Typography>}
         leftIcon={<FontAwesomeIcon icon={faChevronLeft} onClick={() => router.back()} />}
         rightIcon={<FontAwesomeIcon icon={faGear} onClick={() => router.push('/notification/setting')} />}
       />

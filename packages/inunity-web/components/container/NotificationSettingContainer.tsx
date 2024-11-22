@@ -20,7 +20,7 @@ export default function NotificationSettingContainer() {
   return (
     <>
       <AppBar
-        title={<Typography variant="HeadingNormalBold">알림 설정</Typography>}
+        center={<Typography variant="HeadingNormalBold">알림 설정</Typography>}
         leftIcon={<FontAwesomeIcon icon={faChevronLeft} onClick={() => router.back()} />}
       />
       <div className="p-5 flex flex-col gap-3">

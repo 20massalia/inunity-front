@@ -53,9 +53,9 @@ const PostListItem: React.FC<PostListItemProps> = ({ name, department, content, 
           { label: 'Report Post', onClick: () => console.log('Report Post clicked') }
         ]}
       />
-      <Typography variant="body" className={`self-stretch ${COLORS.content}`}>{content}</Typography>
+      <Typography variant="ParagraphNormalRegular" className={`self-stretch ${COLORS.content}`}>{content}</Typography>
       <div className={`self-stretch pt-4 pb-6 justify-end items-start gap-1 inline-flex`}>
-        <Typography variant="body" className={COLORS.date}>{date}</Typography>
+        <Typography variant="ParagraphNormalRegular" className={COLORS.date}>{date}</Typography>
       </div>
       <div className={`self-stretch h-px border ${COLORS.border}`}></div>
       <div className={`pl-2 pt-2 justify-start items-start inline-flex gap-2`}>
@@ -67,7 +67,7 @@ const PostListItem: React.FC<PostListItemProps> = ({ name, department, content, 
           >
               <FontAwesomeIcon icon={faHeart} className={`w-6 ${isLiked ? 'text-blue-500' : 'text-black'} cursor-pointer`}
             />
-            <Typography variant="caption" className={`${COLORS.stats} ${isLiked ? 'text-blue-500' : 'text-black'}`}>
+            <Typography variant="ParagraphNormalRegular" className={`${COLORS.stats} ${isLiked ? 'text-blue-500' : 'text-black'}`}>
               {likes}
             </Typography>
           </div>
@@ -81,7 +81,7 @@ const PostListItem: React.FC<PostListItemProps> = ({ name, department, content, 
             <FontAwesomeIcon icon={faBookmark} className={`w-6 ${isBookmarked ? 'text-blue-500' : 'text-black'} cursor-pointer`}
             />
 
-            <Typography variant="caption" className={`${COLORS.stats} ${isBookmarked ? 'text-blue-500' : 'text-black'}`}>
+            <Typography variant="ParagraphNormalRegular" className={`${COLORS.stats} ${isBookmarked ? 'text-blue-500' : 'text-black'}`}>
               {bookmarks}
             </Typography>
           </div>
