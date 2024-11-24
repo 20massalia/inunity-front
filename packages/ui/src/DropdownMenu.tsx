@@ -11,7 +11,7 @@ export function DropdownMenu({
 }: {
   menuId: string;
   actions: { label: string; icon?: React.ReactNode; onClick: () => void }[];
-  scrollContainerRef: React.RefObject<HTMLDivElement>;
+  scrollContainerRef?: React.RefObject<HTMLDivElement>;
 }) {
   const { openMenuId, setOpenMenuId } = useMenu();
   const [menuPosition, setMenuPosition] = useState<"bottom" | "top">("bottom");
@@ -56,7 +56,7 @@ export function DropdownMenu({
 
   // Prevent scroll on external container when menu is open
   useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
+    const scrollContainer = scrollContainerRef?.current ?? document;
 
     const preventScroll = (e: Event) => {
       if (isMenuOpen) {

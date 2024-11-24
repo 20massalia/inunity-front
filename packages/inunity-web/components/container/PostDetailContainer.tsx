@@ -14,6 +14,7 @@ import AppBar from "../AppBar";
 import { useRouter } from "next/navigation";
 import BlockParser from "editor-react-parser";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
+import { DropdownMenu } from "ui/src/DropdownMenu";
 
 export const Viewer = () => {
   const editorJsData = {
@@ -88,7 +89,13 @@ export default function PostDetailContainer({
         }
         rightIcon={
           <>
-            <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" />
+          <DropdownMenu menuId={"post_detail_appbar"} actions={[
+              { label: "수정", onClick: () => {} },
+              { label: "삭제", onClick: () => {} },
+              { label: "신고", onClick: () => {} },
+              { label: "차단", onClick: () => {} },
+          ]} />
+            {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}
           </>
         }
       />

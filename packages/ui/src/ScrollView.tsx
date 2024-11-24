@@ -6,6 +6,7 @@ import { ScrollContext } from "./contexts/ScrollContext";
 
 export type ScrollViewProps = {
   className?: string;
+  
 };
 export const ScrollView: React.FC<React.PropsWithChildren<ScrollViewProps>> = ({
   children,
