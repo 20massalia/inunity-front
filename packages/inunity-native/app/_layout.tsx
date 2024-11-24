@@ -30,6 +30,7 @@ import { Slot } from "expo-router";
 import "../globals.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MenuView } from "@react-native-menu/menu";
+import { WebViewProvider } from "@/components/useWebView";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -180,19 +181,21 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView>
-        <ThemeProvider value={DefaultTheme}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="+not-found" />
-            <Stack.Screen name="post/[categoryId]/index" />
-            <Stack.Screen name="post/[categoryId]/write" />
-            <Stack.Screen name="post/[categoryId]/[postId]/index" />
-            <Stack.Screen name="(tabs)" />
+        <WebViewProvider>
+          <ThemeProvider value={DefaultTheme}>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="+not-found" />
+              <Stack.Screen name="post/[categoryId]/index" />
+              <Stack.Screen name="post/[categoryId]/write" />
+              <Stack.Screen name="post/[categoryId]/[postId]/index" />
+              <Stack.Screen name="(tabs)" />
 
-            <Stack.Screen name="list" />
-            <Stack.Screen name="notification/index" />
-            <Stack.Screen name="notification/setting" />
-          </Stack>
-        </ThemeProvider>
+              <Stack.Screen name="list" />
+              <Stack.Screen name="notification/index" />
+              <Stack.Screen name="notification/setting" />
+            </Stack>
+          </ThemeProvider>
+        </WebViewProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

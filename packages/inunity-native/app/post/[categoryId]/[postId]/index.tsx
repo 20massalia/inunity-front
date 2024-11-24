@@ -1,112 +1,161 @@
-import { useRef, useState, useEffect } from "react";
-import { Platform, Button, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useRef, useState, useEffect } from "react";
+import {
+  Platform,
+  Button,
+  View,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Image,
+  TextInput,
+} from "react-native";
 import WebView from "react-native-webview";
-
+import { ThemedText } from "@/components/ThemedText";
 import AuthManager from "@/lib/AuthManager";
 import {
-  useMessageManager,
-  parseMessage,
-  handleMessage,
-} from "@/lib/MessageManager";
-import { MessageEventType, NavigationEvent } from "message-type/message-type";
-import { router, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { setStatusBarStyle, StatusBar } from "expo-status-bar";
-import { webViewUrl } from "@/app/_layout";
+  Message,
+  MessageEventType,
+  PostDetailPageEventType,
+} from "message-type/message-type";
+import { parseMessage, handleMessage } from "@/lib/MessageManager";
+import { StatusBar } from "expo-status-bar";
+import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { NativeInput } from "@/components/NativeInput";
+import NativeCheckBox from "@/components/NativeCheckBox";
+import CustomWebView from "@/components/CustomWebView";
 
-function isLightColor(hex: string): boolean {
-  // Remove the hash at the start if it's there
-  hex = hex.replace(/^#/, "");
-
-  // Parse the hex color
-  let r: number, g: number, b: number;
-  if (hex.length === 3) {
-    // If the hex is in shorthand form (e.g., #fff)
-    r = parseInt(hex[0] + hex[0], 16);
-    g = parseInt(hex[1] + hex[1], 16);
-    b = parseInt(hex[2] + hex[2], 16);
-  } else if (hex.length === 6) {
-    // If the hex is in full form (e.g., #ffffff)
-    r = parseInt(hex.slice(0, 2), 16);
-    g = parseInt(hex.slice(2, 4), 16);
-    b = parseInt(hex.slice(4, 6), 16);
-  } else {
-    throw new Error("Invalid hex color format");
-  }
-
-  // Calculate brightness using the luminance formula
-  const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
-
-  // Return true if the brightness is greater than a certain threshold (e.g., 186)
-  return brightness > 186;
-}
-
-export default function Page() {
-  const [cookie, setCookie] = useState<string | null>(null);
-  const [isWebViewLoading, setIsWebViewLoading] = useState(true);
-  const webViewRef = useRef(null);
-  const messageManager = useMessageManager(webViewRef);
-  const { categoryId, postId } = useLocalSearchParams<{ categoryId: string; postId: string}>();
+export default function Detail() {
+  const { postId, categoryId } = useLocalSearchParams<{
+    postId: string;
+    categoryId: string;
+  }>();
+  const webViewRef = useRef<WebView>(null);
   
 
+  const sendMessage = (message: Message<any>) => {
+    webViewRef.current?.postMessage(JSON.stringify(message));
+  };
 
-  useEffect(() => {
-    if (!isWebViewLoading)
-      AuthManager.getCredentialFromStorage().then((cookie) => {
-        messageManager.sendMessage({
-          event: MessageEventType.Auth,
-          value: cookie,
-        });
-        setCookie(cookie);
-      });
-  }, [isWebViewLoading]);
-
-  const [themeColor, setThemeColor] = useState('#ffffff');
+  const [comment, setComment] = useState("");
+  const [isAnonymous, setIsAnonymous] = useState(true);
+  const write = () =>
+    sendMessage({
+      event: MessageEventType.Page,
+      value: {
+        event: PostDetailPageEventType.SubmitComment,
+        value: { text: comment, isAnonymous },
+      },
+    });
 
   return (
-      <View style={{ height: "100%" }}>
-        <WebView
-          ref={webViewRef}
-          injectedJavaScriptBeforeContentLoaded={`
-          if (!document.cookie)
-            document.cookie=${cookie};
-          window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
-          `}
-          source={{
-            uri: `${webViewUrl}/post/${categoryId}/${postId}`,
-          }}
-          onNavigationStateChange={({ url, navigationType }) => {
-            if (navigationType == 'backforward') router.back();
-          }}
-          userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
-          sharedCookiesEnabled
-          onLoadStart={() => setIsWebViewLoading(true)}
-          onLoadEnd={() => setIsWebViewLoading(false)}
-          onMessage={(event) => {
-            const message = parseMessage(event.nativeEvent.data);
-
-            handleMessage(message, {
-              [MessageEventType.Login]: () => {
-                router.push("/list");
-              },
-              [MessageEventType.Navigation]: () => {
-                const navigation = message.value as NavigationEvent;
-                if (navigation === -1) router.back();
-                else 
-                  router.push({
-                    pathname: navigation.path as any,
-                    params: navigation.params as any,
-                  });
-              },
-              [MessageEventType.ThemeColor]: () => {
-                const color = message.value as string
-                if (!new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).test(color)) return;
-                setThemeColor(color);
-                setStatusBarStyle(isLightColor(color) ? 'dark' : 'light')
-              },
-            });
-          }}
-        ></WebView>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 120 : 0}
+      style={{ flex: 1 }}
+    >
+      <View style={{ flex: 1 }}>
+        <CustomWebView initialPathname={`/post/${categoryId}/${postId}`} />
       </View>
+      <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
+        <View style={styles.anonymityWrapper}>
+          <View style={styles.selectedStateWrapper}>
+            <NativeCheckBox checked={isAnonymous} setChecked={setIsAnonymous} />
+            <ThemedText style={[styles.anonymityText, styles.textTypo]}>
+              익명
+            </ThemedText>
+          </View>
+          <ThemedText
+            onPress={write}
+            style={[styles.submitText, styles.textTypo]}
+          >
+            작성
+          </ThemedText>
+        </View>
+        <NativeInput
+          value={comment}
+          setValue={setComment}
+          placeholder="댓글을 입력해주세요."
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  inputFlexBox: {
+    alignSelf: "stretch",
+    overflow: "hidden",
+  },
+  checkboxesFlexBox: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textTypo: {
+    textAlign: "left",
+    fontFamily: "Inter-Medium",
+    fontWeight: "500",
+    fontSize: 12,
+  },
+  container: {
+    borderRadius: 2,
+    backgroundColor: "#65558f",
+    width: 18,
+    height: 18,
+    zIndex: 0,
+  },
+  checkSmallIcon: {
+    position: "absolute",
+    marginTop: -12,
+    marginLeft: -12,
+    top: "50%",
+    left: "50%",
+    width: 24,
+    height: 24,
+    zIndex: 1,
+  },
+  stateLayer: {
+    borderRadius: 100,
+    flexDirection: "row",
+  },
+  anonymityText: {
+    color: "#000",
+  },
+  selectedStateWrapper: {
+    paddingTop: 8,
+    paddingBottom: 5,
+    gap: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  submitText: {
+    color: "#007aff",
+  },
+  anonymityWrapper: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    overflow: "hidden",
+    alignSelf: "stretch",
+  },
+  inputPlaceholderText: {
+    color: "#494949",
+    width: "100%",
+  },
+  inputFieldWrapper: {
+    borderRadius: 50,
+    backgroundColor: "#f4f4f4",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flexDirection: "row",
+    overflow: "hidden",
+  },
+  commentInputContainer: {
+    backgroundColor: "#fff",
+    width: "100%",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingBottom: 30,
+    overflow: "hidden",
+  },
+});

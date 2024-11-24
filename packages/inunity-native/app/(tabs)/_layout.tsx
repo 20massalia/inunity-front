@@ -61,7 +61,6 @@ const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
 
 export default function TabLayout() {
   return (
-    <WebViewProvider>
       <Tabs
         screenOptions={{
           headerShown: false,
@@ -72,6 +71,5 @@ export default function TabLayout() {
         <Tabs.Screen name="board" options={{ title: 'Board' }} initialParams={{ pathname: '/board' }} />
         {/* <Tabs.Screen name="board" options={{ title: 'Settings' }} /> */}
       </Tabs>
-    </WebViewProvider>
   );
 }

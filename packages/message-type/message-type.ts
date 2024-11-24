@@ -34,7 +34,7 @@ type EventMap = Partial<{
   [MessageEventType.Navigation]: NavigationEvent;
 }
 
-export type Message<T extends MessageEventType> = {
+export type Message<T extends MessageEventType = any> = {
   event: T;
   value: T extends keyof EventMap ? EventMap[T] : unknown;
 }

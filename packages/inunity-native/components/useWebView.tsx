@@ -5,6 +5,8 @@ export type WebViewContextType = {
   webViewRef: React.RefObject<WebView>;
   url: string;
   setUrl: (url: string) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
   }
 
   
@@ -13,7 +15,8 @@ export type WebViewContextType = {
   export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
   const [url, setUrl] = useState('/');
   const webViewRef = useRef(null);
-  return <WebViewContext.Provider value={{ webViewRef, url, setUrl  }}>
+  const [isLoading, setIsLoading] = useState(true)
+  return <WebViewContext.Provider value={{ webViewRef, url, setUrl, isLoading, setIsLoading  }}>
     {children}
   </WebViewContext.Provider>
 }
