@@ -5,8 +5,10 @@
   "scripts": {
     "nextapp": "yarn workspace inunity-web",
     "nativeapp": "yarn workspace inunity-native ",
-    "start": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run ios",
-    "startsim": "EXPO_PUBLIC_WEB_URL=http://localhost:3000; yarn nextapp run dev & yarn nativeapp run ios"
+    "run-ios": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run ios",
+    "run-ios-sim": "EXPO_PUBLIC_WEB_URL=http://localhost:3000; yarn nextapp run dev & yarn nativeapp run ios",
+    "start": "yarn nextapp run dev & EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000 yarn nativeapp start",
+    "startsim": "yarn nextapp run dev & EXPO_PUBLIC_WEB_URL=http://localhost:3000 yarn nativeapp start"
   },
   "workspaces": {
     "packages": [
@@ -17,8 +19,8 @@
     ]
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.0",
+    "@fortawesome/free-solid-svg-icons": "^6.7.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

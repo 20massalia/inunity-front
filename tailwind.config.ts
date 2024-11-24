@@ -16,6 +16,7 @@ const config: Config = {
         black: '#0F1419',
         divider: '#EFF3F4',
         'black-50': 'rgba(0,0,0,0.5)',
+        danger: '#FF3131',
         body: '#3B3F43',
         placeholder: 'rgba(0,0,0,0.5)',
         unselected: 'rgba(0,0,0,0.04)',

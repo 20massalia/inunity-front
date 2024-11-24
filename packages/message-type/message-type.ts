@@ -43,7 +43,9 @@ export type CustomMessageListenerType = Partial<{
   [K in MessageEventType]: (value: K extends keyof EventMap ? EventMap[K] : unknown) => void
 }>;
 
-export interface NavigationEvent {
+export interface NavigationParam {
   path: string;
   params?: Record<string, unknown>
 }
+
+export type NavigationEvent = NavigationParam | -1;
