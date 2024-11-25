@@ -73,7 +73,7 @@ export default function Page() {
           window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
           `}
           source={{
-            uri: `${webViewUrl}/notification/setting`,
+            uri: `${webViewUrl}/post/${categoryId}/${postId}`,
           }}
           onNavigationStateChange={({ url, navigationType }) => {
             if (navigationType == 'backforward') router.back();

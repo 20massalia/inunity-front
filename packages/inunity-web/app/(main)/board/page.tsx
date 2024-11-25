@@ -16,8 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { Input, Typography } from "ui";
-import Divider from "ui/src/Divider";
+import { Divider, Input, Typography } from "ui";
 
 export type SimpleListItemType = "button" | "toggle" | "text";
 export type SimpleListItemProps = {

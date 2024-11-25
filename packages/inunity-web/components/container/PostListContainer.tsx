@@ -116,7 +116,7 @@ export default function PostListContainer({categoryId}: {categoryId: string}) {
   return (
     <>
       <AppBar
-        title={
+        center={
           <>
             <Typography className="text-xs font-bold">컴퓨터공학부</Typography>
             <Typography variant="HeadingNormalBold">공지사항</Typography>
