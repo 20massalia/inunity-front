@@ -1,10 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import PostListItem from "ui/src/PostListItem";
 import useHomeViewModel from "../viewModel/HomeViewModel";
 import OutlinedListItem from "ui/src/OutlinedListItem";
-import { ScrollView, Typography } from "ui";
+import { PostListItem, ScrollView, Typography, useMenu } from "ui";
 import Card from "ui/src/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,12 +15,6 @@ import {
 
 import { useEffect } from "react";
 import { useMessageManager } from "../MessageContext";
-import {
-  MessageEventType,
-  NavigationEvent,
-  PostDetailPageEventType,
-} from "message-type/message-type";
-import { useRouter } from "next/navigation";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "../AppBar";
 
@@ -43,6 +36,7 @@ export default function HomeContainer() {
   }, [messageManager]);
 
   const router = useNativeRouter();
+  const {openMenuId, setOpenMenuId} = useMenu();
 
   return (
     <>
@@ -134,6 +128,10 @@ export default function HomeContainer() {
               }}
               isLiked={post.isLiked}
               isBookmarked={post.isBookmarked}
+              isMenuOpened={openMenuId == `post_${post.postId}`}
+              setMenuOpened={function (opened: boolean): void {
+                setOpenMenuId(opened ? `post_${post.postId}` : null)
+              }}
             />
           ))}
         </div>

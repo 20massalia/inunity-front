@@ -1,6 +1,7 @@
 import HomeContainer from "@/components/container/HomeContainer";
 import SafeAreaView from "@/components/SafeAreaView";
 import { NoticeDto } from "@/components/viewModel/HomeViewModel";
+import { PostListDto } from "@/components/viewModel/PostListViewModel";
 import getDehydratedQuery from "@/lib/getDehydratedQuery";
 import { Hydration } from "@/lib/Hydration";
 import { PostListItemProps } from "ui";
@@ -48,15 +49,15 @@ export default async function Page() {
     },
   });
   //
-  const postQuery = await getDehydratedQuery<PostListItemProps[]>({
+  const postQuery = await getDehydratedQuery<PostListDto[]>({
     queryKey: ["posts"],
     queryFn: () => {
       // mocked function
       return [
         {
           title: 'this is title',
-          name: "author",
-          department: "CS",
+          author: "author",
+          authorOrg: "CS",
           content: "this is test post",
           date: "2023-08-15",
           likes: 12,
