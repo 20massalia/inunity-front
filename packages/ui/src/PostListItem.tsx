@@ -19,6 +19,8 @@ const COLORS = {
 };
 
 export interface PostListItemProps {
+  title: string;
+  avatarUrl?: string;
   name: string;
   department: string;
   content: string;
@@ -34,7 +36,7 @@ export interface PostListItemProps {
 }
 
 
-const PostListItem: React.FC<PostListItemProps> = ({ name, department, content, date, likes, bookmarks, postId, toggleLike, toggleBookmark, isLiked, isBookmarked, onClick }) => {
+const PostListItem: React.FC<PostListItemProps> = ({title, name, department, content, date, likes, bookmarks, postId, toggleLike, toggleBookmark, isLiked, isBookmarked, onClick }) => {
   const { openMenuId, setOpenMenuId } = useMenu();
   const isMenuOpen = openMenuId === name;
   const setIsMenuOpen = (value: boolean) => setOpenMenuId(value ? name : null);

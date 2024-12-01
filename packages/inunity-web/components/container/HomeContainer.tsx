@@ -27,7 +27,15 @@ import AppBar from "../AppBar";
 
 export default function HomeContainer() {
   // ViewModel 이용
-  const { posts, schedules, likePost, bookmarkPost } = useHomeViewModel();
+  const {
+    posts,
+    schedules,
+    notices,
+    likePost,
+    notifications,
+    toggleBookmarkPost,
+    toggleBookmarkNotice,
+  } = useHomeViewModel();
   const { messageManager } = useMessageManager();
 
   useEffect(() => {
@@ -43,11 +51,18 @@ export default function HomeContainer() {
         rightIcon={
           <div className="flex gap-3">
             <FontAwesomeIcon fontSize={24} icon={faSearch} />
-            <FontAwesomeIcon
-              fontSize={24}
-              icon={faBell}
-              onClick={() => router.push("/notification")}
-            />
+            <div className="relative">
+              <FontAwesomeIcon
+                fontSize={24}
+                icon={faBell}
+                onClick={() => router.push("/notification")}
+              />
+              {(notifications.data?.length ?? 0) > 0 && (
+                <div className=" absolute -bottom-2 -right-2 w-5 h-5 bg-red-600 rounded-full flex justify-center items-center text-white">
+                  {notifications.data?.length}
+                </div>
+              )}
+            </div>
             <FontAwesomeIcon fontSize={24} icon={faUser} />
           </div>
         }
@@ -77,18 +92,34 @@ export default function HomeContainer() {
         </div>
 
         <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
-          <Card />
+          {notices.data?.map((notice) => (
+            <Card
+              key={notice.content}
+              title={notice.title}
+              content={notice.content}
+              author={notice.author}
+              fromUpdate={notice.date}
+              isBookmarked={notice.isBookmarked}
+              onToggleBookmark={() => {
+                toggleBookmarkNotice.mutate(notice.postId);
+              }}
+            />
+          ))}
         </div>
         <div className="self-stretch  flex-col justify-start items-start flex">
-          <Typography variant="HeadingXLargeBold" className="px-4">인기 게시글</Typography>
+          <Typography variant="HeadingXLargeBold" className="px-4">
+            인기 게시글
+          </Typography>
           {posts.data?.map((post) => (
             <PostListItem
+              title={post.title}
               onClick={() => {
                 // messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
                 router.push("/post/1/1");
               }}
               key={post.postId}
               name={post.name}
+              avatarUrl={post.avatarUrl}
               department={post.department}
               content={post.content}
               date={post.date}
@@ -99,7 +130,7 @@ export default function HomeContainer() {
                 likePost.mutate(postId);
               }}
               toggleBookmark={function (postId: string): void {
-                bookmarkPost.mutate(postId);
+                toggleBookmarkPost.mutate(postId);
               }}
               isLiked={post.isLiked}
               isBookmarked={post.isBookmarked}
@@ -107,6 +138,6 @@ export default function HomeContainer() {
           ))}
         </div>
       </ScrollView>
-      </>
-        );
+    </>
+  );
 }
