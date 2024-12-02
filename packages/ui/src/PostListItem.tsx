@@ -84,7 +84,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
       />
       <Typography
         variant="ParagraphNormalRegular"
-        className={`self-stretch ${COLORS.content}`}
+        className={`self-stretch ${COLORS.content} line-clamp-2 overflow-hidden text-wrap text-ellipsis`}
       >
         {content}
       </Typography>

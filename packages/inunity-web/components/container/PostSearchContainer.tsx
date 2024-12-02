@@ -4,7 +4,7 @@ import { faChevronLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Input, Chip, PostListItem, useMenu } from "ui";
+import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
 import { PostListDto } from "../viewModel/PostListViewModel";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import usePostSearchViewModel from "../viewModel/PostSearchViewModel";
@@ -24,7 +24,7 @@ export default function PostSearchContainer({
     posts,
   } = usePostSearchViewModel();
 
-  const {openMenuId, setOpenMenuId} = useMenu();
+  const { openMenuId, setOpenMenuId } = useMenu();
   return (
     <div className="h-full flex flex-col">
       {/* SearchBar Area Start */}
@@ -79,20 +79,20 @@ export default function PostSearchContainer({
         </div>
       </div>
       {/* Post List Area Start */}
-      <div className="bg-gray-50 h-full gap-3 pt-3 overflow-y-scroll">
+      <ScrollView className="bg-gray-50 gap-3 pt-3">
         {posts.data?.map((post) => (
           <PostListItem
             name={post.author}
             department={post.authorOrg}
             isMenuOpened={openMenuId == `post_${post.postId}`}
             setMenuOpened={function (opened: boolean): void {
-              setOpenMenuId(opened ? `post_${post.postId}` : null)
+              setOpenMenuId(opened ? `post_${post.postId}` : null);
             }}
             key={post.postId}
             {...post}
           />
         ))}
-      </div>
+      </ScrollView>
     </div>
   );
 }

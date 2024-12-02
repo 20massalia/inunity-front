@@ -90,11 +90,11 @@ export default function PostDetailContainer({
         rightIcon={
           <>
           <DropdownMenu menuId={"post_detail_appbar"} actions={[
-              { label: "수정", onClick: () => {} },
-              { label: "삭제", onClick: () => {} },
-              { label: "신고", onClick: () => {} },
-              { label: "차단", onClick: () => {} },
-          ]} />
+              { label: "수정", onClick: () => { } },
+              { label: "삭제", onClick: () => { } },
+              { label: "신고", onClick: () => { } },
+              { label: "차단", onClick: () => { } },
+            ]} />
             {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}
           </>
         }

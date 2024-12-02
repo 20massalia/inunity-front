@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { MessageEventType } from "message-type/message-type";
-import { Typography, PostListItem, useMenu } from "ui";
+import { PostListItem, ScrollView, Typography, useMenu } from "ui";
 import { useMessageManager } from "../MessageContext";
 import AppBar from "../AppBar";
 import usePostListViewModel from "../viewModel/PostListViewModel";
@@ -23,10 +23,10 @@ export default function PostListContainer({
   const router = useNativeRouter();
 
   const messageManager = useMessageManager();
-  const { posts } = usePostListViewModel();
+  const { posts, toggleLike, toggleBookmark } = usePostListViewModel();
 
   const { isWebView, os } = usePlatform();
-  // const { openMenuId, setOpenMenuId } = useMenu();
+  const { openMenuId, setOpenMenuId } = useMenu();
 
   return (
     <>
@@ -45,7 +45,7 @@ export default function PostListContainer({
           />
         }
         rightIcon={
-          <>
+          <div className="flex gap-2 text-black">
             <FontAwesomeIcon
               icon={faEdit}
               fontSize={24}
@@ -56,11 +56,11 @@ export default function PostListContainer({
               fontSize={24}
               onClick={() => router.push(`/post/${categoryId}/search`)}
             />
-          </>
+          </div>
         }
       />
 
-      <div className="flex flex-col bg-gray-50 gap-3  overflow-scroll">
+      <ScrollView className="gap-2">
         {!posts.isLoading &&
           posts.data?.map((item) => (
             <div
@@ -84,24 +84,22 @@ export default function PostListContainer({
                 bookmarks={item.bookmarks}
                 postId={item.postId}
                 toggleLike={function (postId: string): void {
-                  throw new Error("Function not implemented.");
+                  toggleLike.mutate(postId);
                 }}
                 toggleBookmark={function (postId: string): void {
-                  throw new Error("Function not implemented.");
+                  toggleBookmark.mutate(postId);
                 }}
                 isLiked={item.isLiked}
                 isBookmarked={item.isBookmarked}
                 title={item.title}
-                isMenuOpened={false}
-                setMenuOpened={() => {}}
-                // isMenuOpened={openMenuId == `post_${item.postId}`}
-                // setMenuOpened={(opened) => {
-                //   setOpenMenuId(opened ? `post_${item.postId}` : null);
-                // }}
+                isMenuOpened={openMenuId == `post_${item.postId}`}
+                setMenuOpened={(opened) => {
+                  setOpenMenuId(opened ? `post_${item.postId}` : null);
+                }}
               />
             </div>
           ))}
-      </div>
+      </ScrollView>
     </>
   );
 }

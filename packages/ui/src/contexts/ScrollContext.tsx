@@ -21,7 +21,7 @@ export const ScrollContext = createContext<ScrollContextType | undefined>(
 export function useScrollView() {
   const context = useContext(ScrollContext);
   if (context === undefined) {
-    throw new Error("useMenu must be used within a MenuProvider");
+    throw new Error("useScrollView must be used within a ScrollView");
   }
   return context;
 }
