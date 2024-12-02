@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0038D200259A40E09FAE0845 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5344F5366C214B479BFEC6E6 /* noop-file.swift */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		396DFC35FD40482EAA3967DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FDD10A97F5B9483384F505F5 /* GoogleService-Info.plist */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		5A0362EE48416705162C6D95 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5344526AE8F357BB8B8D898A /* PrivacyInfo.xcprivacy */; };
-		823F30087AC728B621C30387 /* Pods_inunitynative.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFA208DB20A40AF525634315 /* Pods_inunitynative.framework */; };
-		99AD2278A54F4607B321199F /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4DD3DF0064CD688C751EE /* noop-file.swift */; };
+		748158E38E20C97954534A44 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 15D56FB04EC1262F1A2B0860 /* PrivacyInfo.xcprivacy */; };
+		9658655E6362AC549E8F2177 /* Pods_inunitynative.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB14084B8E27AA043C197E09 /* Pods_inunitynative.framework */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		C0665046896D4C1D95313B2D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7E1E7E974CA47F2A2FDA367 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,17 +26,17 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = inunitynative/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = inunitynative/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = inunitynative/main.m; sourceTree = "<group>"; };
-		3CB4DD3DF0064CD688C751EE /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "inunitynative/noop-file.swift"; sourceTree = "<group>"; };
-		5344526AE8F357BB8B8D898A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = inunitynative/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		15D56FB04EC1262F1A2B0860 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = inunitynative/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		178B607814C346FCB653D6CC /* inunitynative-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "inunitynative-Bridging-Header.h"; path = "inunitynative/inunitynative-Bridging-Header.h"; sourceTree = "<group>"; };
+		5344F5366C214B479BFEC6E6 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "inunitynative/noop-file.swift"; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-inunitynative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-inunitynative.debug.xcconfig"; path = "Target Support Files/Pods-inunitynative/Pods-inunitynative.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-inunitynative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-inunitynative.release.xcconfig"; path = "Target Support Files/Pods-inunitynative/Pods-inunitynative.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = inunitynative/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AFA208DB20A40AF525634315 /* Pods_inunitynative.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_inunitynative.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		E355A2F384D44312A66C61ED /* inunitynative-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "inunitynative-Bridging-Header.h"; path = "inunitynative/inunitynative-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F7E1E7E974CA47F2A2FDA367 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "inunitynative/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-inunitynative/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		FB14084B8E27AA043C197E09 /* Pods_inunitynative.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_inunitynative.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDD10A97F5B9483384F505F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "inunitynative/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				823F30087AC728B621C30387 /* Pods_inunitynative.framework in Frameworks */,
+				9658655E6362AC549E8F2177 /* Pods_inunitynative.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,10 +61,10 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				F7E1E7E974CA47F2A2FDA367 /* GoogleService-Info.plist */,
-				3CB4DD3DF0064CD688C751EE /* noop-file.swift */,
-				E355A2F384D44312A66C61ED /* inunitynative-Bridging-Header.h */,
-				5344526AE8F357BB8B8D898A /* PrivacyInfo.xcprivacy */,
+				FDD10A97F5B9483384F505F5 /* GoogleService-Info.plist */,
+				5344F5366C214B479BFEC6E6 /* noop-file.swift */,
+				178B607814C346FCB653D6CC /* inunitynative-Bridging-Header.h */,
+				15D56FB04EC1262F1A2B0860 /* PrivacyInfo.xcprivacy */,
 			);
 			name = inunitynative;
 			sourceTree = "<group>";
@@ -73,7 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				AFA208DB20A40AF525634315 /* Pods_inunitynative.framework */,
+				FB14084B8E27AA043C197E09 /* Pods_inunitynative.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -150,14 +150,14 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "inunitynative" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				43801B0A0DEFF3CF29B8F8F5 /* [Expo] Configure project */,
+				F2FB345124F887C2CCB3FE99 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				0CF996A0CB86D3BEF0D2FB2D /* [CP] Embed Pods Frameworks */,
-				5C0161A2640C60A67C2047B1 /* [CP-User] [RNFB] Core Configuration */,
+				8CC0D75362EE70888536B8E9 /* [CP] Embed Pods Frameworks */,
+				590735F35E4E90A9EC34A442 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -207,8 +207,8 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				C0665046896D4C1D95313B2D /* GoogleService-Info.plist in Resources */,
-				5A0362EE48416705162C6D95 /* PrivacyInfo.xcprivacy in Resources */,
+				396DFC35FD40482EAA3967DF /* GoogleService-Info.plist in Resources */,
+				748158E38E20C97954534A44 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,44 +252,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0CF996A0CB86D3BEF0D2FB2D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-inunitynative/Pods-inunitynative-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-inunitynative/Pods-inunitynative-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		43801B0A0DEFF3CF29B8F8F5 /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-inunitynative/expo-configure-project.sh\"\n";
-		};
-		5C0161A2640C60A67C2047B1 /* [CP-User] [RNFB] Core Configuration */ = {
+		590735F35E4E90A9EC34A442 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -344,6 +307,43 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-inunitynative/Pods-inunitynative-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8CC0D75362EE70888536B8E9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-inunitynative/Pods-inunitynative-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-inunitynative/Pods-inunitynative-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F2FB345124F887C2CCB3FE99 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-inunitynative/expo-configure-project.sh\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -354,7 +354,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				99AD2278A54F4607B321199F /* noop-file.swift in Sources */,
+				0038D200259A40E09FAE0845 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +369,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = inunitynative/inunitynative.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JFM39N7Z6U;
+				DEVELOPMENT_TEAM = VZY6JC8VH5;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -389,7 +389,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = org.inu.inunity;
-				PRODUCT_NAME = "inunitynative";
+				PRODUCT_NAME = inunitynative;
 				SWIFT_OBJC_BRIDGING_HEADER = "inunitynative/inunitynative-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -406,7 +406,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = inunitynative/inunitynative.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JFM39N7Z6U;
+				DEVELOPMENT_TEAM = VZY6JC8VH5;
 				INFOPLIST_FILE = inunitynative/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -421,7 +421,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = org.inu.inunity;
-				PRODUCT_NAME = "inunitynative";
+				PRODUCT_NAME = inunitynative;
 				SWIFT_OBJC_BRIDGING_HEADER = "inunitynative/inunitynative-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -499,10 +499,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -571,10 +568,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

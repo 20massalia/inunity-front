@@ -30,6 +30,7 @@ import { Slot } from "expo-router";
 import "../globals.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MenuView } from "@react-native-menu/menu";
+import useNotification from "@/hooks/useNotification";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -172,6 +173,8 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useNotification();
 
    if (!loaded) {
     return null;
