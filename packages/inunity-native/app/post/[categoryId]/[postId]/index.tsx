@@ -23,14 +23,15 @@ import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { NativeInput } from "@/components/NativeInput";
 import NativeCheckBox from "@/components/NativeCheckBox";
 import CustomWebView from "@/components/CustomWebView";
+import { useWebView } from "@/components/useWebView";
 
 export default function Detail() {
   const { postId, categoryId } = useLocalSearchParams<{
     postId: string;
     categoryId: string;
   }>();
-  const webViewRef = useRef<WebView>(null);
-  
+
+  const { webViewRef } = useWebView();
 
   const sendMessage = (message: Message<any>) => {
     webViewRef.current?.postMessage(JSON.stringify(message));
@@ -50,7 +51,7 @@ export default function Detail() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 120 : 0}
+      // keyboardVerticalOffset={Platform.OS === "ios" ? 120 : 0}
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1 }}>

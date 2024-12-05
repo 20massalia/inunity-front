@@ -60,11 +60,22 @@ export default function PostDetailContainer({
   postId: string;
 }) {
   const { messageManager, pageEvent } = useMessageManager();
-  const { submitComment, post, comments } = usePostDetailViewModel();
+  const {
+    submitComment,
+    post,
+    comments,
+    deletePost,
+    reportPost,
+    blockUser,
+    editComment,
+    deleteComment,
+    reportComment,
+  } = usePostDetailViewModel();
   const { openMenuId, setOpenMenuId } = useMenu();
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
+    messageManager?.log('Page Event arrived: ', pageEvent?.value)
     if (!pageEvent) return;
     if (pageEvent?.event === PostDetailPageEventType.SubmitComment) {
       submitComment(pageEvent.value);
@@ -89,12 +100,18 @@ export default function PostDetailContainer({
         }
         rightIcon={
           <>
-          <DropdownMenu menuId={"post_detail_appbar"} actions={[
-              { label: "수정", onClick: () => { } },
-              { label: "삭제", onClick: () => { } },
-              { label: "신고", onClick: () => { } },
-              { label: "차단", onClick: () => { } },
-            ]} />
+            <DropdownMenu
+              menuId={"post_detail_appbar"}
+              actions={[
+                { label: "수정", onClick: () => {
+                  // Todo: 수정 페이지로 변경 요망
+                    router.push(`/post/${categoryId}/write`)
+                } },
+                { label: "삭제", onClick: () => deletePost.mutate(post.postId) },
+                { label: "신고", onClick: () => reportPost.mutate(post.postId) },
+                { label: "차단", onClick: () => blockUser.mutate(post.userId) },
+              ]}
+            />
             {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}
           </>
         }
@@ -108,12 +125,7 @@ export default function PostDetailContainer({
             id={post.name}
             isMenuOpen={openMenuId == `post_${post.name}`}
             onToggleMenu={() => setOpenMenuId(`post_${post.name}`)}
-            actions={[
-              { label: "수정", onClick: () => {} },
-              { label: "삭제", onClick: () => {} },
-              { label: "신고", onClick: () => {} },
-              { label: "차단", onClick: () => {} },
-            ]}
+          
           />
           <Viewer />
         </div>

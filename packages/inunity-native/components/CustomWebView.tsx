@@ -82,6 +82,9 @@ export default function CustomWebView({
             const pageEvent = message.value as PageEvent<any>;
             pageEventHandler?.(pageEvent);
           },
+          [MessageEventType.Log]: () => {
+            console.log(message.value)
+          }
         });
       }}
     ></WebView>

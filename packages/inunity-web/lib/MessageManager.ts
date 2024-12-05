@@ -37,8 +37,8 @@ export class MessageManager {
     );
   }
 
-  log(...messages: string[]) {
-    this.sendMessage(MessageEventType.Log, messages.join(" "));
+  log(...messages: any[]) {
+    this.sendMessage(MessageEventType.Log, messages.map(message => message?.toString()).join(" "));
   }
 
   // native -> web

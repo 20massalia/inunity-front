@@ -18,7 +18,7 @@ export interface UserProfileProps {
   /** 사용자 소개 */
   introduction: string;
   /** 드롭다운 메뉴 아이템 */
-  actions: {
+  actions?: {
     label: string;
     icon?: React.ReactNode;
     onClick: () => void;
@@ -27,7 +27,6 @@ export interface UserProfileProps {
   id: string;
   isMenuOpen: boolean;
   onToggleMenu: () => void;
-
 }
 
 /** 글, 댓글에서 사용자 프로필 컴포넌트 */
@@ -41,7 +40,7 @@ export const UserProfile = ({
   isVerified,
   onToggleMenu,
 }: UserProfileProps) => {
-  const {scrollContainerRef} = useScrollView();
+  const { scrollContainerRef } = useScrollView();
   return (
     <div className="pb-4 bg-white flex justify-between items-center gap-2 flex-row w-full">
       <div className="flex gap-2">
@@ -63,11 +62,13 @@ export const UserProfile = ({
         </div>
       </div>
 
-      <DropdownMenu
-        actions={actions}
-        menuId={`user_${name}}`}
-        scrollContainerRef={scrollContainerRef}
-      />
+      {actions && (
+        <DropdownMenu
+          actions={actions}
+          menuId={`user_${name}}`}
+          scrollContainerRef={scrollContainerRef}
+        />
+      )}
 
       {/* <div
         className="w-6 h-6 relative flex justify-end"
