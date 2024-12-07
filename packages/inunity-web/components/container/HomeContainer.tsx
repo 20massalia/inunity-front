@@ -3,8 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useHomeViewModel from "../viewModel/HomeViewModel";
 import OutlinedListItem from "ui/src/OutlinedListItem";
-import { PostListItem, ScrollView, Typography, useMenu } from "ui";
-import Card from "ui/src/Card";
+import { Card, ScrollView, Typography, useMenu } from "ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
@@ -36,7 +35,7 @@ export default function HomeContainer() {
   }, [messageManager]);
 
   const router = useNativeRouter();
-  const {openMenuId, setOpenMenuId} = useMenu();
+  const { openMenuId, setOpenMenuId } = useMenu();
 
   return (
     <>
@@ -89,7 +88,6 @@ export default function HomeContainer() {
           {notices.data?.map((notice) => (
             <Card
               key={notice.content}
-              title={notice.title}
               content={notice.content}
               author={notice.author}
               fromUpdate={notice.date}
@@ -97,6 +95,7 @@ export default function HomeContainer() {
               onToggleBookmark={() => {
                 toggleBookmarkNotice.mutate(notice.postId);
               }}
+              
             />
           ))}
         </div>
@@ -105,33 +104,28 @@ export default function HomeContainer() {
             인기 게시글
           </Typography>
           {posts.data?.map((post) => (
-            <PostListItem
-              title={post.title}
+            <Card
               onClick={() => {
                 // messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
                 router.push("/post/1/1");
               }}
               key={post.postId}
-              name={post.name}
+              author={post.author}
               avatarUrl={post.avatarUrl}
-              department={post.department}
+              authorDescription={post.authorOrg}
               content={post.content}
-              date={post.date}
-              likes={post.likes}
-              bookmarks={post.bookmarks}
-              postId={post.postId}
-              toggleLike={function (postId: string): void {
-                likePost.mutate(postId);
+              fromUpdate={post.date}
+              likeCount={post.likes}
+              bookmarkCount={post.bookmarks}
+              onLikeToggle={function (): void {
+                likePost.mutate(post.postId);
               }}
-              toggleBookmark={function (postId: string): void {
-                toggleBookmarkPost.mutate(postId);
+              onToggleBookmark={function (): void {
+                toggleBookmarkPost.mutate(post.postId);
               }}
               isLiked={post.isLiked}
               isBookmarked={post.isBookmarked}
-              isMenuOpened={openMenuId == `post_${post.postId}`}
-              setMenuOpened={function (opened: boolean): void {
-                setOpenMenuId(opened ? `post_${post.postId}` : null)
-              }}
+              variant="list"
             />
           ))}
         </div>

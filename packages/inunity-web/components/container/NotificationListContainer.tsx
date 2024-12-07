@@ -7,12 +7,13 @@ import AppBar from "../AppBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
+import { PostListDto } from "../viewModel/PostListViewModel";
 
 export default function NotificationListContainer({
   boardNotiList,
   systemNotiList,
 }: {
-  boardNotiList: PostListItemProps[];
+  boardNotiList: Notification[];
   systemNotiList: Notification[];
 }) {
   const router = useNativeRouter();
@@ -30,16 +31,10 @@ export default function NotificationListContainer({
             title: "게시판",
             content: (
               <div className="p-5 gap-3 flex flex-col">
-                {boardNotiList.map((post, idx) => (
+                {boardNotiList.map((noti, idx) => (
                   <NotificationItem
-                    key={post.postId}
-                    notification={{
-                      title: "게시판에 새로운 글이 등록됐어요.",
-                      content: post.content,
-                      id: idx,
-                      isRead: false,
-                      time: post.date,
-                    }}
+                    key={noti.id}
+                    notification={noti}
                   />
                 ))}
               </div>

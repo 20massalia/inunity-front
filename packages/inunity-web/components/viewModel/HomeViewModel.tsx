@@ -1,6 +1,7 @@
 import { Query, useMutation, UseMutationResult, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import { PostListItemProps } from "ui";
 import { Notification } from "../NotificationItem";
+import { PostListDto } from "./PostListViewModel";
 
 
 // 원래는 여기 있으면 안됨, 스케쥴 테스트용 dto
@@ -15,7 +16,7 @@ export type NoticeDto = Pick<PostListItemProps, 'content'|'isBookmarked'|'date'|
 export type HomeViewModel = {
     schedules: UseQueryResult<ScheduleDto[]>
     notices: UseQueryResult<NoticeDto[]>
-    posts: UseQueryResult<PostListItemProps[]>;
+    posts: UseQueryResult<PostListDto[]>;
     notifications: UseQueryResult<Notification[]>;
     likePost: UseMutationResult<void, Error, string, unknown>
     toggleBookmarkPost: UseMutationResult<void, Error, string, unknown>
@@ -28,7 +29,7 @@ export default function useHomeViewModel(): HomeViewModel {
     // queryFn이 없는 경우 이미 있는 값을 쓴다. (캐시)
     const schedules = useQuery<ScheduleDto[]>({ queryKey: ['schedules'] });
     const notices = useQuery<NoticeDto[]>({ queryKey: ['notices'] });
-    const posts = useQuery<PostListItemProps[]>({ queryKey: ['posts'], });
+    const posts = useQuery<PostListDto[]>({ queryKey: ['posts'], });
     const notifications = useQuery<Notification[]>({ queryKey: ['notifications'], });
 
     const likePost = useMutation({

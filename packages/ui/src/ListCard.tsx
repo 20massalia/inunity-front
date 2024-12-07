@@ -5,6 +5,9 @@ import { UserProfile } from "./UserProfile";
 import { Typography } from "./Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useMenu } from "./contexts/MenuContext";
+import { DropDownActionItem } from "./DropdownMenu";
+import { CardProps } from "./Card";
 // Colors
 const COLORS = {
   background: "bg-white",
@@ -17,54 +20,33 @@ const COLORS = {
   stats: "text-[#0f1419]",
 };
 
-export interface PostListItemProps {
-  title: string;
-  avatarUrl?: string;
-  name: string;
-  department: string;
-  content: string;
-  date: string;
-  likes: number;
-  bookmarks: number;
-  postId: string;
-  toggleLike?: (postId: string) => void;
-  toggleBookmark?: (postId: string) => void;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  onClick?: () => void;
-  isMenuOpened: boolean;
-  setMenuOpened: (opened: boolean) => void;
-}
 
-export const PostListItem: React.FC<PostListItemProps> = ({
-  title,
-  name,
-  department,
+export const ListCard: React.FC<CardProps> = ({
+  avatarUrl,
+  author,
+  authorDescription,
   content,
-  date,
-  likes,
-  bookmarks,
-  postId,
-  toggleLike,
-  toggleBookmark,
-  isLiked,
-  isBookmarked,
+  fromUpdate,
+  likeCount = 0,
+  bookmarkCount = 0,
+  isLiked = false,
+  isBookmarked = false,
+  onLikeToggle,
+  onToggleBookmark,
   onClick,
-  isMenuOpened: isMenuOpen,
-  setMenuOpened: setIsMenuOpen,
+  className = "",
+
 }) => {
-  // const isMenuOpen = isMenuOpened
-  // const setIsMenuOpen = (value: boolean) => 
-  return (
+    return (
     <div
       onClick={onClick}
-      className={` h-auto ${COLORS.background} px-4 py-3 flex-col justify-center items-start inline-flex self-stretch`}
+      className={` h-auto ${COLORS.background} px-4 py-3 flex-col justify-center items-start inline-flex self-stretch ${className}`}
     >
       <UserProfile
-        profileImage={""}
-        name={name}
-        introduction={department}
-        id={name}
+        profileImage={avatarUrl}
+        name={author}
+        introduction={authorDescription}
+        id={'test'}
         actions={[
           {
             label: "수정",
@@ -90,7 +72,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
         className={`self-stretch pt-4 pb-6 justify-end items-start gap-1 inline-flex`}
       >
         <Typography variant="ParagraphNormalRegular" className={COLORS.date}>
-          {date}
+          {fromUpdate}
         </Typography>
       </div>
       <div className={`self-stretch h-px border ${COLORS.border}`}></div>
@@ -100,7 +82,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
             className={`flex items-center gap-2`}
             onClick={(e) => {
               e.stopPropagation();
-              toggleLike?.(postId);
+              onLikeToggle?.();
             }}
           >
             <FontAwesomeIcon
@@ -115,7 +97,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
                 isLiked ? "text-blue-500" : "text-black"
               }`}
             >
-              {likes}
+              {likeCount}
             </Typography>
           </div>
         </div>
@@ -124,7 +106,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
             className={`flex items-center gap-2`}
             onClick={(e) => {
               e.stopPropagation();
-              toggleBookmark?.(postId);
+              onToggleBookmark();
             }}
           >
             <FontAwesomeIcon
@@ -140,7 +122,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
                 isBookmarked ? "text-blue-500" : "text-black"
               }`}
             >
-              {bookmarks}
+              {bookmarkCount}
             </Typography>
           </div>
         </div>

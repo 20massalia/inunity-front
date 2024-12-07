@@ -71,8 +71,6 @@ export default function PostDetailContainer({
     deleteComment,
     reportComment,
   } = usePostDetailViewModel();
-  const { openMenuId, setOpenMenuId } = useMenu();
-  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
     messageManager?.log('Page Event arrived: ', pageEvent?.value)
@@ -119,12 +117,10 @@ export default function PostDetailContainer({
       <ScrollView className="text-black gap-2">
         <div className="flex flex-col gap-3 p-5 bg-white ">
           <UserProfile
-            profileImage={""}
+            profileImage={'https://github.com/squidjiny.png'}
             name={post.name}
             introduction={post.department}
             id={post.name}
-            isMenuOpen={openMenuId == `post_${post.name}`}
-            onToggleMenu={() => setOpenMenuId(`post_${post.name}`)}
           
           />
           <Viewer />
@@ -146,10 +142,6 @@ export default function PostDetailContainer({
                     name={comment.name}
                     introduction={comment.department}
                     id={comment.name}
-                    isMenuOpen={openMenuId == `comments_${comment.name}`}
-                    onToggleMenu={() =>
-                      setOpenMenuId(`comments_${comment.name}`)
-                    }
                     actions={[
                       { label: "수정", onClick: () => {} },
                       { label: "삭제", onClick: () => {} },

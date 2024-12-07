@@ -7,9 +7,8 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useQuery } from "@tanstack/react-query";
 import { MessageEventType } from "message-type/message-type";
-import { PostListItem, ScrollView, Typography, useMenu } from "ui";
+import { Card,  ScrollView, Typography, useMenu } from "ui";
 import { useMessageManager } from "../MessageContext";
 import AppBar from "../AppBar";
 import usePostListViewModel from "../viewModel/PostListViewModel";
@@ -75,27 +74,21 @@ export default function PostListContainer({
                 else router.push("/post/1/1");
               }}
             >
-              <PostListItem
-                name={item.author}
-                department={item.authorOrg}
+              <Card
+                author={item.author}
+                authorDescription={item.authorOrg}
                 content={item.content}
-                date={item.date}
-                likes={item.likes}
-                bookmarks={item.bookmarks}
-                postId={item.postId}
-                toggleLike={function (postId: string): void {
-                  toggleLike.mutate(postId);
+                fromUpdate={item.date}
+                likeCount={item.likes}
+                bookmarkCount={item.bookmarks}
+                onLikeToggle={function (): void {
+                  toggleLike.mutate(item.postId);
                 }}
-                toggleBookmark={function (postId: string): void {
-                  toggleBookmark.mutate(postId);
+                onToggleBookmark={function (): void {
+                  toggleBookmark.mutate(item.postId);
                 }}
                 isLiked={item.isLiked}
                 isBookmarked={item.isBookmarked}
-                title={item.title}
-                isMenuOpened={openMenuId == `post_${item.postId}`}
-                setMenuOpened={(opened) => {
-                  setOpenMenuId(opened ? `post_${item.postId}` : null);
-                }}
               />
             </div>
           ))}

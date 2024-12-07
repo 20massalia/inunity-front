@@ -57,6 +57,7 @@ export default async function Page() {
         {
           title: 'this is title',
           author: "author",
+          avatarUrl: 'https://github.com/KimWash.png',
           authorOrg: "CS",
           content: "this is test post",
           date: "2023-08-15",

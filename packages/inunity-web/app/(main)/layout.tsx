@@ -12,14 +12,14 @@ export default function RootLayout({
 }>) {
     const heads = headers();
     const ua = userAgent({headers: heads}).ua
-    return <div className="h-full flex flex-col ">
-        <div className="flex-1 h-full overflow-scroll">
+    return <div className="h-dvh flex flex-col ">
+        <div className="flex-1 h-full overflow-hidden">
             {children}
         </div>    
 
         {
             platformResolver(ua).isWebView == false &&
-            <div className=" pt-1 px-2 pb-4 flex flex-row justify-center">
+            <div className=" pt-1 px-2 pb-4 flex flex-row justify-center ">
                 <NavItem icon={faHome} label={'홈'} route={'/'} />
                 <NavItem icon={faClipboardList} label={'게시판'} route={'/board'} />
                 <NavItem icon={faHeart} label={'팔로우'} route={'/follow'} />

@@ -3,17 +3,6 @@
 import { SimpleListItem } from "@/app/(main)/board/page";
 import {
   faSearch,
-  faClipboard,
-  faClipboardList,
-  faComments,
-  faBriefcase,
-  faHandHoldingHeart,
-  faExclamationTriangle,
-  faTrophy,
-  faBook,
-  faLaptopCode,
-  faMicrochip,
-  faSignal,
   IconName,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
