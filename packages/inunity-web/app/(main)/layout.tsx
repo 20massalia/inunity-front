@@ -12,6 +12,7 @@ export default function RootLayout({
 }>) {
     const heads = headers();
     const ua = userAgent({headers: heads}).ua
+    
     return <div className="h-full flex flex-col ">
         <div className="flex-1 h-full overflow-scroll">
             {children}

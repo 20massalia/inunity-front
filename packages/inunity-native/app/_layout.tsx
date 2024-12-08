@@ -6,7 +6,7 @@ import {
 import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-native-reanimated";
 
 import {
@@ -30,6 +30,7 @@ import { Slot } from "expo-router";
 import "../globals.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MenuView } from "@react-native-menu/menu";
+import useNotification from "@/hooks/useNotification";
 import { WebViewProvider } from "@/components/useWebView";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -174,9 +175,12 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
+  useNotification();
+
+   if (!loaded) {
     return null;
   }
+
 
   return (
     <SafeAreaProvider>
@@ -200,3 +204,4 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
+
