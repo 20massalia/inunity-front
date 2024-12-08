@@ -23,7 +23,6 @@ function Editor({ data, onChange, holder }: EditorProps) {
         data,
         async onChange(api, event) {
           const content = await api.saver.save();
-          // console.log(content, "sdfb");
           onChange(content);
         },
         i18n: {

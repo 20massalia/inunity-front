@@ -40,7 +40,6 @@ import { MessageProvider } from "./MessageContext";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
-
   return (
     <QueryClientProvider client={queryClient}>
 

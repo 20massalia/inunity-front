@@ -4,92 +4,27 @@ import { faChevronLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Input, Chip } from "ui";
-import PostListItem, { PostListItemProps } from "ui/src/PostListItem";
+import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
+import { PostListDto } from "../viewModel/PostListViewModel";
+import { useNativeRouter } from "@/hooks/useNativeRouter";
+import usePostSearchViewModel from "../viewModel/PostSearchViewModel";
 
-export default function PostSearchContainer({categoryId}: {categoryId: string}) {
-  const posts: PostListItemProps[] = [
-    {
-      name: "학과사무실",
-      department: "컴퓨터공학부",
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      likes: 0,
-      bookmarks: 0,
-      postId: "",
-      isLiked: false,
-      isBookmarked: false,
-    },
-    {
-      name: "학과사무실",
-      department: "컴퓨터공학부",
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      likes: 0,
-      bookmarks: 0,
-      postId: "",
-      isLiked: false,
-      isBookmarked: false,
-    },
-    {
-      name: "학과사무실",
-      department: "컴퓨터공학부",
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      likes: 0,
-      bookmarks: 0,
-      postId: "",
-      isLiked: false,
-      isBookmarked: false,
-    },
-    {
-      name: "학과사무실",
-      department: "컴퓨터공학부",
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      likes: 0,
-      bookmarks: 0,
-      postId: "",
-      isLiked: false,
-      isBookmarked: false,
-    },
-    {
-      name: "학과사무실",
-      department: "컴퓨터공학부",
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      likes: 0,
-      bookmarks: 0,
-      postId: "",
-      isLiked: false,
-      isBookmarked: false,
-    },
-    {
-      name: "학과사무실",
-      department: "컴퓨터공학부",
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      likes: 0,
-      bookmarks: 0,
-      postId: "",
-      isLiked: false,
-      isBookmarked: false,
-    },
+export default function PostSearchContainer({
+  categoryId,
+}: {
+  categoryId: string;
+}) {
+  const router = useNativeRouter();
+  const {
+    searchValue,
+    setSearchValue,
+    selectedTags,
+    setSelectedTags,
+    tags,
+    posts,
+  } = usePostSearchViewModel();
 
-  ];
-  const [searchValue, setSearchValue] = useState("");
-  const tags = ["전공", "취업", "창업", "학과", "학교", "응애"];
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  useEffect(() => {
-    console.log(selectedTags);
-  }, [selectedTags]);
-  const router = useRouter();
+  const { openMenuId, setOpenMenuId } = useMenu();
   return (
     <div className="h-full flex flex-col">
       {/* SearchBar Area Start */}
@@ -99,7 +34,7 @@ export default function PostSearchContainer({categoryId}: {categoryId: string}) 
           value={searchValue}
           setValue={setSearchValue}
           className="self-stretch"
-          leftIcon={<FontAwesomeIcon icon={faSearch}/>}
+          leftIcon={<FontAwesomeIcon icon={faSearch} />}
           placeholder="검색어를 입력해주세요."
         />
         <div
@@ -144,11 +79,20 @@ export default function PostSearchContainer({categoryId}: {categoryId: string}) 
         </div>
       </div>
       {/* Post List Area Start */}
-      <div className="bg-gray-50 h-full gap-3 pt-3 overflow-y-scroll">
-        {posts.map((post) => (
-          <PostListItem key={post.name} {...post} />
+      <ScrollView className="bg-gray-50 gap-3 pt-3">
+        {posts.data?.map((post) => (
+          <PostListItem
+            name={post.author}
+            department={post.authorOrg}
+            isMenuOpened={openMenuId == `post_${post.postId}`}
+            setMenuOpened={function (opened: boolean): void {
+              setOpenMenuId(opened ? `post_${post.postId}` : null);
+            }}
+            key={post.postId}
+            {...post}
+          />
         ))}
-      </div>
+      </ScrollView>
     </div>
   );
 }

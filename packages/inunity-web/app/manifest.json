@@ -1,0 +1,12 @@
+{
+  "name": "INUnity", 
+  "short_name": "INUnity", 
+  "start_url": "/",  
+  "scope": ".", 
+  "display": "standalone", 
+  "background_color": "#fff", 
+  "theme_color": "#fff", 
+  "description": "정보대 학생들을 하나로,", 
+  "dir": "ltr", 
+  "orientation": "portrait-primary"
+}

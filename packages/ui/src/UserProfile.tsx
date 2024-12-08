@@ -8,26 +8,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Typography } from "./Typography";
 import { useScrollView } from "./contexts/ScrollContext";
-import { DropdownMenu } from "./DropdownMenu";
+import { DropDownActionItem, DropdownMenu } from "./DropdownMenu";
+
 
 export interface UserProfileProps {
   /** 사용자 프로필 이미지 */
-  profileImage: string;
+  profileImage?: string;
   /** 사용자 이름 */
   name: string;
   /** 사용자 소개 */
-  introduction: string;
+  introduction?: string;
   /** 드롭다운 메뉴 아이템 */
-  actions: {
-    label: string;
-    icon?: React.ReactNode;
-    onClick: () => void;
-  }[];
+  actions?: DropDownActionItem[];
   isVerified?: boolean;
   id: string;
-  isMenuOpen: boolean;
-  onToggleMenu: () => void;
-
 }
 
 /** 글, 댓글에서 사용자 프로필 컴포넌트 */
@@ -37,17 +31,15 @@ export const UserProfile = ({
   introduction,
   actions,
   id,
-  isMenuOpen,
   isVerified,
-  onToggleMenu,
 }: UserProfileProps) => {
-  const {scrollContainerRef} = useScrollView();
+  const { scrollContainerRef } = useScrollView();
   return (
     <div className="pb-4 bg-white flex justify-between items-center gap-2 flex-row w-full">
       <div className="flex gap-2">
         <div className=" flex justify-center items-center rounded-full w-12 aspect-square">
           <img
-            src="https://github.com/squidjiny.png"
+            src={profileImage}
             className="rounded-full"
             style={{ WebkitUserSelect: "none" }}
           />
@@ -63,11 +55,13 @@ export const UserProfile = ({
         </div>
       </div>
 
-      <DropdownMenu
-        actions={actions}
-        menuId={`user_${name}}`}
-        scrollContainerRef={scrollContainerRef}
-      />
+      {actions && (
+        <DropdownMenu
+          actions={actions}
+          menuId={`user_${name}}`}
+          scrollContainerRef={scrollContainerRef}
+        />
+      )}
 
       {/* <div
         className="w-6 h-6 relative flex justify-end"

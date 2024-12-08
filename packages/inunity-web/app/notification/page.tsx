@@ -2,20 +2,17 @@ import NotificationListContainer from "@/components/container/NotificationListCo
 import NotificationItem from "@/components/NotificationItem";
 import SafeAreaView from "@/components/SafeAreaView";
 import SwipeableTabs from "@/components/SwipeableTabs";
-import PostListItem from "ui/src/PostListItem";
 
 export default function Page() {
   const boardNotiList = [
     {
-        name: "김정아",
-        department: "컴퓨터공학부",
-        content: "ㄹㅁㄴㅇㄹ먼ㄹㄴㅁㅇ람ㄴㅇ럼니ㅏㅇ러리ㅏ",
-        date: "2023-08-15",
-        likes: 12,
-        bookmarks: 5,
-        postId: "2",
-        isLiked: false,
-        isBookmarked: false,
+      id: 3,
+      title: "게시판에 새로운 글이 등록됐어요",
+      avatarUrl: undefined, // Optional and not provided in original data
+      content: "ㄹㅁㄴㅇㄹ먼ㄹㄴㅁㅇ람ㄴㅇ럼니ㅏㅇ러리ㅏ",
+      time: "방금 전",
+      isRead: false,
+      type: 'message'
     }
   ];
   const notifications = [
