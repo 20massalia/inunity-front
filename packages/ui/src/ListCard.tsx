@@ -20,7 +20,8 @@ const COLORS = {
   stats: "text-[#0f1419]",
 };
 
-export const ListCard: React.FC<CardProps<"list">> = ({
+
+export const ListCard: React.FC<CardProps> = ({
   avatarUrl,
   author,
   authorDescription,
@@ -34,8 +35,9 @@ export const ListCard: React.FC<CardProps<"list">> = ({
   onToggleBookmark,
   onClick,
   className = "",
+
 }) => {
-  return (
+    return (
     <div
       onClick={onClick}
       className={` h-auto ${COLORS.background} px-4 py-3 flex-col justify-center items-start inline-flex self-stretch ${className}`}
@@ -44,7 +46,7 @@ export const ListCard: React.FC<CardProps<"list">> = ({
         profileImage={avatarUrl}
         name={author}
         introduction={authorDescription}
-        id={"test"}
+        id={'test'}
         actions={[
           {
             label: "수정",

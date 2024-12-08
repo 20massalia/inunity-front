@@ -93,6 +93,50 @@ export default function usePostListViewModel() {
         return res as PostListDto[];
       }),
   });
+  const queryClient = useQueryClient();
 
-  return { posts };
+  const toggleLike = useMutation({
+    mutationFn: async (id: string) => {
+      // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
+      const prevPost = queryClient.getQueryData<PostListDto[]>(["posts"]);
+      queryClient.setQueryData(
+        ["posts"],
+        prevPost?.map((post) =>
+          post.postId === id
+            ? {
+                ...post,
+                isLiked: !post.isLiked,
+                likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+              }
+            : post
+        )
+      );
+      // Todo: Server
+      // ㅅ서버에서 변경 시도 . 실패/성공 둘다ㅣ 데이터 다시 가져옴
+      // queryClient.invalidateQueries();
+    },
+  });
+  const toggleBookmark = useMutation({
+    mutationFn: async (id: string) => {
+      // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
+      const prevPost = queryClient.getQueryData<PostListItemProps[]>(["posts"]);
+      queryClient.setQueryData(
+        ["posts"],
+        prevPost?.map((post) =>
+          post.postId === id
+            ? {
+                ...post,
+                isBookmarked: !post.isBookmarked,
+                bookmarks: post.isBookmarked
+                  ? post.bookmarks - 1
+                  : post.bookmarks + 1,
+              }
+            : post
+        )
+      );
+      // Todo: Server
+    },
+  });
+
+  return { posts, toggleLike, toggleBookmark };
 }

@@ -8,7 +8,6 @@ import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
 import { PostListDto } from "../viewModel/PostListViewModel";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import usePostSearchViewModel from "../viewModel/PostSearchViewModel";
-import PostCard from "@/widgets/post/PostCard";
 
 export default function PostSearchContainer({
   categoryId,
@@ -25,6 +24,7 @@ export default function PostSearchContainer({
     posts,
   } = usePostSearchViewModel();
 
+  const { openMenuId, setOpenMenuId } = useMenu();
   return (
     <div className="h-full flex flex-col">
       {/* SearchBar Area Start */}
@@ -34,7 +34,7 @@ export default function PostSearchContainer({
           value={searchValue}
           setValue={setSearchValue}
           className="self-stretch"
-          leftIcon={<FontAwesomeIcon icon={faSearch}/>}
+          leftIcon={<FontAwesomeIcon icon={faSearch} />}
           placeholder="검색어를 입력해주세요."
         />
         <div
@@ -81,11 +81,18 @@ export default function PostSearchContainer({
       {/* Post List Area Start */}
       <ScrollView className="bg-gray-50 gap-3 pt-3">
         {posts.data?.map((post) => (
-          <PostCard
+          <PostListItem
+            name={post.author}
+            department={post.authorOrg}
+            isMenuOpened={openMenuId == `post_${post.postId}`}
+            setMenuOpened={function (opened: boolean): void {
+              setOpenMenuId(opened ? `post_${post.postId}` : null);
+            }}
+            key={post.postId}
             {...post}
           />
         ))}
-      </div>
+      </ScrollView>
     </div>
   );
 }

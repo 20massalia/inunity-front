@@ -10,7 +10,7 @@ const Editor = dynamic(() => import("../Editor"), { ssr: false });
 import { useState } from "react";
 import { CheckBox, Typography } from "ui";
 import AppBar from "../AppBar";
-import { useRouter } from "next/navigation";
+import { useNativeRouter } from "@/hooks/useNativeRouter";
 
 export default function PostWriteContainer({
   categoryId,
@@ -18,16 +18,16 @@ export default function PostWriteContainer({
   categoryId: string;
 }) {
   const [data, setData] = useState<OutputData>();
-  const router = useRouter();
+  const router = useNativeRouter();
   const [isAnonymous, setIsAnonymous] = useState(true);
   return (
     <>
       <AppBar
         center={
-          <>
+          <div className="flex flex-col">
             <Typography className="text-xs font-bold">컴퓨터공학부</Typography>
             <Typography variant="HeadingNormalBold">공지사항</Typography>
-          </>
+          </div>
         }
         leftIcon={
             <FontAwesomeIcon icon={faChevronLeft} fontSize={24} onClick={router.back} />

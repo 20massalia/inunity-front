@@ -14,3 +14,7 @@
 node_modules
 .env
 .env.local
+packages/inunity-web/public
+
+GoogleService-Info.plist
+google-services.json

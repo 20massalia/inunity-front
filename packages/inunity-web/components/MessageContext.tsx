@@ -27,6 +27,7 @@ export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children })
     // hydration이 완료된 후 실행됩니다.
     const manager = new MessageManager(window.ReactNativeWebView);
     setMessageManager(manager);
+    manager.sendMessage(MessageEventType.Log, 'manager initialized')
     
     const onMessageReceived = (event: MessageEvent) => {
       // 메시지 처리 로직
@@ -46,6 +47,7 @@ export const MessageProvider: React.FC<React.PropsWithChildren> = ({ children })
     else if (os === 'android')
       document.addEventListener('message', onMessageReceived as EventListener);
 
+    manager.sendMessage(MessageEventType.Log, 'event listener attached')
     return () => {
       const obj = os === 'ios' ? window : document
       obj.removeEventListener('message', onMessageReceived as EventListener);

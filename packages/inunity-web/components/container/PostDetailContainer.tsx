@@ -60,11 +60,20 @@ export default function PostDetailContainer({
   postId: string;
 }) {
   const { messageManager, pageEvent } = useMessageManager();
-  const { submitComment, post, comments } = usePostDetailViewModel();
-  const { openMenuId, setOpenMenuId } = useMenu();
-  const scrollContainerRef = useRef(null);
+  const {
+    submitComment,
+    post,
+    comments,
+    deletePost,
+    reportPost,
+    blockUser,
+    editComment,
+    deleteComment,
+    reportComment,
+  } = usePostDetailViewModel();
 
   useEffect(() => {
+    messageManager?.log('Page Event arrived: ', pageEvent?.value)
     if (!pageEvent) return;
     if (pageEvent?.event === PostDetailPageEventType.SubmitComment) {
       submitComment(pageEvent.value);
@@ -89,12 +98,18 @@ export default function PostDetailContainer({
         }
         rightIcon={
           <>
-          <DropdownMenu menuId={"post_detail_appbar"} actions={[
-              { label: "수정", onClick: () => {} },
-              { label: "삭제", onClick: () => {} },
-              { label: "신고", onClick: () => {} },
-              { label: "차단", onClick: () => {} },
-          ]} />
+            <DropdownMenu
+              menuId={"post_detail_appbar"}
+              actions={[
+                { label: "수정", onClick: () => {
+                  // Todo: 수정 페이지로 변경 요망
+                    router.push(`/post/${categoryId}/write`)
+                } },
+                { label: "삭제", onClick: () => deletePost.mutate(post.postId) },
+                { label: "신고", onClick: () => reportPost.mutate(post.postId) },
+                { label: "차단", onClick: () => blockUser.mutate(post.userId) },
+              ]}
+            />
             {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}
           </>
         }
@@ -102,18 +117,11 @@ export default function PostDetailContainer({
       <ScrollView className="text-black gap-2">
         <div className="flex flex-col gap-3 p-5 bg-white ">
           <UserProfile
-            profileImage={""}
+            profileImage={'https://github.com/squidjiny.png'}
             name={post.name}
             introduction={post.department}
             id={post.name}
-            isMenuOpen={openMenuId == `post_${post.name}`}
-            onToggleMenu={() => setOpenMenuId(`post_${post.name}`)}
-            actions={[
-              { label: "수정", onClick: () => {} },
-              { label: "삭제", onClick: () => {} },
-              { label: "신고", onClick: () => {} },
-              { label: "차단", onClick: () => {} },
-            ]}
+          
           />
           <Viewer />
         </div>
@@ -134,10 +142,6 @@ export default function PostDetailContainer({
                     name={comment.name}
                     introduction={comment.department}
                     id={comment.name}
-                    isMenuOpen={openMenuId == `comments_${comment.name}`}
-                    onToggleMenu={() =>
-                      setOpenMenuId(`comments_${comment.name}`)
-                    }
                     actions={[
                       { label: "수정", onClick: () => {} },
                       { label: "삭제", onClick: () => {} },

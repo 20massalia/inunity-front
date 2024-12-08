@@ -4,13 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useMenu } from "./contexts/MenuContext";
 
+export interface DropDownActionItem {
+  label: string;
+  icon?: React.ReactNode;
+  onClick: () => void;
+}
+
 export function DropdownMenu({
   menuId,
   actions,
   scrollContainerRef,
 }: {
   menuId: string;
-  actions: { label: string; icon?: React.ReactNode; onClick: () => void }[];
+  actions: DropDownActionItem[];
   scrollContainerRef?: React.RefObject<HTMLDivElement>;
 }) {
   const { openMenuId, setOpenMenuId } = useMenu();
