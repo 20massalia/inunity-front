@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button, ToggleSwitch, Typography } from "ui";
 import { faChevronLeft, fas } from "@fortawesome/free-solid-svg-icons";
 import { IconName, library } from "@fortawesome/fontawesome-svg-core";
-import AppBar from "../../components/AppBar";
+import AppBar from "../../widgets/AppBar";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 
 library.add(fas);

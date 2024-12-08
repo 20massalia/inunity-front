@@ -1,6 +1,6 @@
 "use client";
 
-import { useMessageManager } from "@/components/MessageContext";
+import { useMessageManager } from "@/shared/ui/MessageContext";
 import { MessageEventType } from "message-type/message-type";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";

@@ -3,7 +3,7 @@
 import { MessageEventType } from "message-type/message-type";
 import Link, { LinkProps } from "next/link";
 import { useCallback } from "react";
-import { useMessageManager } from "./MessageContext";
+import { useMessageManager } from "../pages/MessageContext";
 
 export function NativeLink({ href, ...props }: LinkProps) {
   const { messageManager } = useMessageManager();

@@ -1,10 +1,10 @@
 import HomeContainer from "@/pages/HomeContainer";
-import SafeAreaView from "@/components/SafeAreaView";
-import { NoticeDto } from "@/components/viewModel/HomeViewModel";
-import { PostListDto } from "@/components/viewModel/PostListViewModel";
+import SafeAreaView from "@/widgets/SafeAreaView";
 import getDehydratedQuery from "@/lib/getDehydratedQuery";
-import { Hydration } from "@/lib/Hydration";
+import { Hydration } from "@/shared/ui/Hydration";
 import { PostListItemProps } from "ui";
+import NoticeDto from "@/entities/notice/model/NoticeDto";
+import PostDto from "@/entities/post/model/PostDto";
 
 //SSR 파트
 export default async function Page() {
@@ -49,7 +49,7 @@ export default async function Page() {
     },
   });
   //
-  const postQuery = await getDehydratedQuery<PostListDto[]>({
+  const postQuery = await getDehydratedQuery<PostDto[]>({
     queryKey: ["posts"],
     queryFn: () => {
       // mocked function

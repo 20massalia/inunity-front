@@ -3,17 +3,17 @@
 import { Card } from "ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import { PostListDto } from "@/components/viewModel/PostListViewModel";
+import PostDto from "@/entities/post/model/PostDto";
 
 // 이정도는 해도 되지 않을까?요?
 // 상위에서 개수대로 index 를 prop으로 넘겨서 여기서 데이터 꺼내먹는건 너무 오바지 않나?
-export default function PostCard({ ...item }: PostListDto) {
+export default function PostCard({ ...item }: PostDto) {
   
   const queryClient = useQueryClient();
   const toggleLike = useMutation({
     mutationFn: async (id: string) => {
       // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
-      const prevPost = queryClient.getQueryData<PostListDto[]>(["posts"]);
+      const prevPost = queryClient.getQueryData<PostDto[]>(["posts"]);
       queryClient.setQueryData(
         ["posts"],
         prevPost?.map((post) =>
@@ -35,7 +35,7 @@ export default function PostCard({ ...item }: PostListDto) {
   const toggleBookmark = useMutation({
     mutationFn: async (id: string) => {
       // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
-      const prevPost = queryClient.getQueryData<PostListDto[]>(["posts"]);
+      const prevPost = queryClient.getQueryData<PostDto[]>(["posts"]);
       queryClient.setQueryData(
         ["posts"],
         prevPost?.map((post) =>

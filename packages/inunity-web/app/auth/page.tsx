@@ -1,5 +1,5 @@
 import AuthContainer from "@/pages/auth/AuthContainer";
-import SafeAreaView from "@/components/SafeAreaView";
+import SafeAreaView from "@/widgets/SafeAreaView";
 
 export default function Page() {
   return (

@@ -1,5 +1,5 @@
 import BoardListContainer from "@/pages/board/BoardListContainer";
-import SafeAreaView from "@/components/SafeAreaView";
+import SafeAreaView from "@/widgets/SafeAreaView";
 import {
   faBook,
   faBriefcase,

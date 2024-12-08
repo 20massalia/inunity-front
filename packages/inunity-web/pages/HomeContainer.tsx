@@ -13,11 +13,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useEffect } from "react";
-import { useMessageManager } from "../components/MessageContext";
+import { useMessageManager } from "../shared/ui/MessageContext";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import AppBar from "../components/AppBar";
-import PostCard from "@/widgets/post/PostCard";
-import NoticeCard from "@/widgets/notice/NoticeCard";
+import AppBar from "../widgets/AppBar";
+import PostCard from "@/features/board/ui/PostCard";
+import NoticeCard from "@/features/notice/ui/NoticeCard";
 
 export default function HomeContainer() {
   // ViewModel 이용

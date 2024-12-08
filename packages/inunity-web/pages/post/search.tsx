@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import usePostSearchViewModel from "@/components/viewModel/PostSearchViewModel";
+import usePost from "@/entities/post/hooks/usePost";
 
 export default function PostSearchContainer({
   categoryId,
@@ -14,14 +14,11 @@ export default function PostSearchContainer({
   categoryId: string;
 }) {
   const router = useNativeRouter();
-  const {
-    searchValue,
-    setSearchValue,
-    selectedTags,
-    setSelectedTags,
-    tags,
-    posts,
-  } = usePostSearchViewModel();
+
+  const [searchValue, setSearchValue] = useState("");
+  const tags = ["전공", "취업", "창업", "학과", "학교", "응애"];
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const posts = usePost();
 
   const { openMenuId, setOpenMenuId } = useMenu();
   return (

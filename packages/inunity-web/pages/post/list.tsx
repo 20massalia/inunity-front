@@ -10,9 +10,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MessageEventType } from "message-type/message-type";
 import { Card,  ScrollView, Typography, useMenu } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import { useMessageManager } from "@/components/MessageContext";
-import AppBar from "@/components/AppBar";
-import usePostListViewModel from "@/components/viewModel/PostListViewModel";
+import { useMessageManager } from "@/shared/ui/MessageContext";
+import AppBar from "@/widgets/AppBar";
+import usePost from "@/entities/post/hooks/usePost";
+import PostCard from "@/features/board/ui/PostCard";
 
 export default function PostListContainer({
   categoryId,
@@ -22,7 +23,7 @@ export default function PostListContainer({
   const router = useNativeRouter();
 
   const messageManager = useMessageManager();
-  const { posts, toggleLike, toggleBookmark } = usePostListViewModel();
+  const posts = usePost();
 
   const { isWebView, os } = usePlatform();
   const { openMenuId, setOpenMenuId } = useMenu();
@@ -74,22 +75,7 @@ export default function PostListContainer({
                 else router.push("/post/1/1");
               }}
             >
-              <Card
-                author={item.author}
-                authorDescription={item.authorOrg}
-                content={item.content}
-                fromUpdate={item.date}
-                likeCount={item.likes}
-                bookmarkCount={item.bookmarks}
-                onLikeToggle={function (): void {
-                  toggleLike.mutate(item.postId);
-                }}
-                onToggleBookmark={function (): void {
-                  toggleBookmark.mutate(item.postId);
-                }}
-                isLiked={item.isLiked}
-                isBookmarked={item.isBookmarked}
-              />
+              <PostCard {...item}/>
             </div>
           ))}
       </ScrollView>

@@ -1,5 +1,5 @@
 import NotificationSettingContainer from "@/pages/notification/setting"
-import SafeAreaView from "@/components/SafeAreaView"
+import SafeAreaView from "@/widgets/SafeAreaView"
 import React from "react"
 
 export default function Page() {

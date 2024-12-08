@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
-import { EDITOR_TOOLS } from "./editorConfig";
+import { EDITOR_TOOLS } from "@/lib/editorConfig";
 type EditorProps = {
   data?: OutputData;
   onChange(val: OutputData): void;

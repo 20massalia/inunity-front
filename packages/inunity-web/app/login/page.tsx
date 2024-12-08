@@ -1,6 +1,6 @@
 "use client";
 
-import { useMessageManager } from '@/components/MessageContext';
+import { useMessageManager } from '@/shared/ui/MessageContext';
 import { useNativeRouter } from '@/hooks/useNativeRouter';
 import { platformResolver } from '@/lib/PlatformResolver';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';

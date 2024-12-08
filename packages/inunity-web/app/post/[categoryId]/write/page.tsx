@@ -1,5 +1,5 @@
 import PostWriteContainer from "@/page/PostWriteContainer";
-import SafeAreaView from "@/components/SafeAreaView";
+import SafeAreaView from "@/widgets/SafeAreaView";
 
 
 export default function Page({params}: {params: {categoryId: string}}) {

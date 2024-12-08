@@ -1,7 +1,6 @@
 import NotificationListContainer from "@/pages/notification/list";
-import NotificationItem from "@/components/NotificationItem";
-import SafeAreaView from "@/components/SafeAreaView";
-import SwipeableTabs from "@/components/SwipeableTabs";
+import NotificationItem from "@/features/notification/ui/NotificationItem";
+import SafeAreaView from "@/widgets/SafeAreaView";
 
 export default function Page() {
   const boardNotiList = [

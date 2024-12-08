@@ -1,5 +1,5 @@
-import NavItem from "@/components/NavItem";
-import SafeAreaView from "@/components/SafeAreaView";
+import NavItem from "@/widgets/NavItem";
+import SafeAreaView from "@/widgets/SafeAreaView";
 import { platformResolver } from "@/lib/PlatformResolver";
 import {
   faClipboardList,

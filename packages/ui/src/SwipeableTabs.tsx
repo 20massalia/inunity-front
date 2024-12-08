@@ -8,7 +8,7 @@ export type Tab = {
   content: React.ReactNode
 };
 
-const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
+export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
   const [activeTab, setActiveTab] = useState(0);
   const [touchStart, setTouchStart] = useState<number|null>(null);
   const [touchEnd, setTouchEnd] = useState<number|null>(null);
@@ -123,4 +123,3 @@ const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
   );
 };
 
-export default SwipeableTabs;

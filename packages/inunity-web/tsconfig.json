@@ -22,7 +22,7 @@
     },
     "allowSyntheticDefaultImports": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../../tailwind.config.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../../tailwind.config.ts", "../ui/src/SwipeableTabs.tsx"],
   "exclude": ["node_modules"],
   "references": [
     {"path": "../message-type"}
