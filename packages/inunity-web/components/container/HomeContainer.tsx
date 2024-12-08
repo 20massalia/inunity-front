@@ -24,10 +24,12 @@ import {
 import { useRouter } from "next/navigation";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "../AppBar";
+import PostCard from "@/widgets/post/PostCard";
+import NoticeCard from "@/widgets/notice/NoticeCard";
 
 export default function HomeContainer() {
   // ViewModel 이용
-  const { posts, schedules, likePost, bookmarkPost } = useHomeViewModel();
+  const { posts, schedules, notices, notifications } = useHomeViewModel();
   const { messageManager } = useMessageManager();
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function HomeContainer() {
           </div>
         }
       />
-      <ScrollView className="self-stretch grow shrink basis-0 bg-[#f8f8f8] flex-col justify-start items-start flex ">
+      <ScrollView className="bg-[#f8f8f8]  justify-start items-start flex ">
         <div className="self-stretch p-4 flex flex-col gap-2">
           <div className="self-stretch pt-6 pb-1 bg-[#f8f8f8] justify-between items-end inline-flex">
             <Typography variant="HeadingXLargeBold">학사 일정</Typography>
@@ -77,33 +79,14 @@ export default function HomeContainer() {
         </div>
 
         <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
-          <Card />
+          {notices.data?.map((notice) => (
+            <NoticeCard key={notice.postId} {...notice} />
+          ))}
         </div>
         <div className="self-stretch  flex-col justify-start items-start flex">
           <Typography variant="HeadingXLargeBold" className="px-4">인기 게시글</Typography>
           {posts.data?.map((post) => (
-            <PostListItem
-              onClick={() => {
-                // messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
-                router.push("/post/1/1");
-              }}
-              key={post.postId}
-              name={post.name}
-              department={post.department}
-              content={post.content}
-              date={post.date}
-              likes={post.likes}
-              bookmarks={post.bookmarks}
-              postId={post.postId}
-              toggleLike={function (postId: string): void {
-                likePost.mutate(postId);
-              }}
-              toggleBookmark={function (postId: string): void {
-                bookmarkPost.mutate(postId);
-              }}
-              isLiked={post.isLiked}
-              isBookmarked={post.isBookmarked}
-            />
+            <PostCard key={post.postId} {...post} />
           ))}
         </div>
       </ScrollView>

@@ -9,108 +9,19 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { MessageEventType } from "message-type/message-type";
-import router, { useRouter } from "next/navigation";
-import { Typography } from "ui";
-import PostListItem from "ui/src/PostListItem";
+import { Card, ScrollView, Typography, useMenu } from "ui";
 import { useMessageManager } from "../MessageContext";
 import AppBar from "../AppBar";
-
-export const fetchList = async () => {
-  return [
-    {
-      author: "학과사무실",
-      authorOrg: "컴퓨터공학부",
-      isVerified: true,
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      comments: 85,
-      likes: 1279,
-    },
-    {
-      author: "학과사무실",
-      authorOrg: "컴퓨터공학부",
-      isVerified: true,
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      comments: 85,
-      likes: 1279,
-    },
-    {
-      author: "학과사무실",
-      authorOrg: "컴퓨터공학부",
-      isVerified: true,
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      comments: 85,
-      likes: 1279,
-    },
-    {
-      author: "학과사무실",
-      authorOrg: "컴퓨터공학부",
-      isVerified: true,
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      comments: 85,
-      likes: 1279,
-    },
-    {
-      author: "학과사무실",
-      authorOrg: "컴퓨터공학부",
-      isVerified: true,
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      comments: 85,
-      likes: 1279,
-    },
-    {
-      author: "학과사무실",
-      authorOrg: "컴퓨터공학부",
-      isVerified: true,
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      comments: 85,
-      likes: 1279,
-    },
-    {
-      author: "학과사무실",
-      authorOrg: "컴퓨터공학부",
-      isVerified: true,
-      content:
-        "2024학년도 2학기 수강신청 포기제도를 아래와 같이 안내하오니 기간 내에 신청하시기 바랍니다.",
-      date: "2024. 10. 07",
-      comments: 85,
-      likes: 1279,
-    },
-  ];
-};
-
-type Post = {
-  author: string;
-  authorOrg: string;
-  content: string;
-  date: string;
-  likes: number;
-  comments: number;
-};
+import usePostListViewModel from "../viewModel/PostListViewModel";
+import { useNativeRouter } from "@/hooks/useNativeRouter";
+import PostCard from "@/widgets/post/PostCard";
 
 export default function PostListContainer({categoryId}: {categoryId: string}) {
   const router = useRouter();
 
   const messageManager = useMessageManager();
+  const { posts } = usePostListViewModel();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["list"],
-    queryFn: () =>
-      fetchList().then(async (res) => {
-        return (await res) as Post[];
-      }),
-  });
   const { isWebView, os } = usePlatform();
 
   return (
@@ -146,23 +57,7 @@ export default function PostListContainer({categoryId}: {categoryId: string}) {
                 else router.push("/post/1/1");
               }}
             >
-              <PostListItem
-                name={item.author}
-                department={item.authorOrg}
-                content={item.content}
-                date={item.date}
-                likes={item.likes}
-                bookmarks={item.comments}
-                postId={""}
-                toggleLike={function (postId: string): void {
-                  throw new Error("Function not implemented.");
-                }}
-                toggleBookmark={function (postId: string): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isLiked={false}
-                isBookmarked={false}
-              />
+              <PostCard {...item} />
             </div>
           ))}
       </div>

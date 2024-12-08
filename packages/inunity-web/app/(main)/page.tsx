@@ -49,10 +49,8 @@ export default async function Page() {
     },
   });
   return (
-    <SafeAreaView>
-      <Hydration queries={[scheduleQuery, postQuery]}>
+      <Hydration queries={[scheduleQuery, postQuery, noticesQuery]}>
         <HomeContainer />
       </Hydration>
-    </SafeAreaView>
   );
 }
