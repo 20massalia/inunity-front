@@ -1,4 +1,4 @@
-import PostWriteContainer from "@/components/container/PostWriteContainer";
+import PostWriteContainer from "@/page/PostWriteContainer";
 import SafeAreaView from "@/components/SafeAreaView";
 
 

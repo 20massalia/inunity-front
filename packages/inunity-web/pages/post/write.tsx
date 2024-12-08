@@ -5,11 +5,11 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-const Editor = dynamic(() => import("../Editor"), { ssr: false });
+const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 import { useState } from "react";
 import { CheckBox, Typography } from "ui";
-import AppBar from "../AppBar";
+import AppBar from "@/components/AppBar";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 
 export default function PostWriteContainer({

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import useHomeViewModel from "../viewModel/HomeViewModel";
+import useHomeViewModel from "../components/viewModel/HomeViewModel";
 import OutlinedListItem from "ui/src/OutlinedListItem";
 import { Card, ScrollView, Typography, useMenu } from "ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,9 +13,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useEffect } from "react";
-import { useMessageManager } from "../MessageContext";
+import { useMessageManager } from "../components/MessageContext";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import AppBar from "../AppBar";
+import AppBar from "../components/AppBar";
 import PostCard from "@/widgets/post/PostCard";
 import NoticeCard from "@/widgets/notice/NoticeCard";
 

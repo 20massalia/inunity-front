@@ -1,4 +1,4 @@
-import PostListContainer from "@/components/container/PostListContainer";
+import PostListContainer from "@/page/PostListContainer";
 import SafeAreaView from "@/components/SafeAreaView";
 
 export default function Page({ params }: { params: { categoryId: string } }) {

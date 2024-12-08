@@ -1,4 +1,4 @@
-import NotificationListContainer from "@/components/container/NotificationListContainer";
+import NotificationListContainer from "@/pages/notification/list";
 import NotificationItem from "@/components/NotificationItem";
 import SafeAreaView from "@/components/SafeAreaView";
 import SwipeableTabs from "@/components/SwipeableTabs";

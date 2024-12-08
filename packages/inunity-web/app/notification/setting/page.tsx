@@ -1,4 +1,4 @@
-import NotificationSettingContainer from "@/components/container/NotificationSettingContainer"
+import NotificationSettingContainer from "@/pages/notification/setting"
 import SafeAreaView from "@/components/SafeAreaView"
 import React from "react"
 

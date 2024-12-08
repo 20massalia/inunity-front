@@ -9,10 +9,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MessageEventType } from "message-type/message-type";
 import { Card,  ScrollView, Typography, useMenu } from "ui";
-import { useMessageManager } from "../MessageContext";
-import AppBar from "../AppBar";
-import usePostListViewModel from "../viewModel/PostListViewModel";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
+import { useMessageManager } from "@/components/MessageContext";
+import AppBar from "@/components/AppBar";
+import usePostListViewModel from "@/components/viewModel/PostListViewModel";
 
 export default function PostListContainer({
   categoryId,

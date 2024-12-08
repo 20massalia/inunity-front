@@ -1,13 +1,13 @@
 'use client';
 
 import { PostListItemProps, Typography } from "ui";
-import NotificationItem, { Notification } from "../NotificationItem";
-import SwipeableTabs from "../SwipeableTabs";
-import AppBar from "../AppBar";
+import NotificationItem, { Notification } from "../../components/NotificationItem";
+import SwipeableTabs from "../../components/SwipeableTabs";
+import AppBar from "../../components/AppBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import { PostListDto } from "../viewModel/PostListViewModel";
+import { PostListDto } from "../../components/viewModel/PostListViewModel";
 
 export default function NotificationListContainer({
   boardNotiList,

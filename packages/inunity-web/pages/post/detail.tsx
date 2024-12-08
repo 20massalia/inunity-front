@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import AppBar from "../AppBar";
+import AppBar from "@/components/AppBar";
 import { useRouter } from "next/navigation";
 import BlockParser from "editor-react-parser";
 import { useNativeRouter } from "@/hooks/useNativeRouter";

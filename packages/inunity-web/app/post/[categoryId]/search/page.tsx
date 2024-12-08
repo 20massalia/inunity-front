@@ -1,4 +1,4 @@
-import PostSearchContainer from "@/components/container/PostSearchContainer";
+import PostSearchContainer from "@/page/PostSearchContainer";
 import SafeAreaView from "@/components/SafeAreaView";
 
 export default function Page({ params }: { params: { categoryId: string } }) {

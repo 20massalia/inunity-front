@@ -1,4 +1,4 @@
-import HomeContainer from "@/components/container/HomeContainer";
+import HomeContainer from "@/pages/HomeContainer";
 import SafeAreaView from "@/components/SafeAreaView";
 import { NoticeDto } from "@/components/viewModel/HomeViewModel";
 import { PostListDto } from "@/components/viewModel/PostListViewModel";
@@ -37,13 +37,13 @@ export default async function Page() {
       // mocked function
       return [
         {
-          author: '작성자',
+          author: "작성자",
           isBookmarked: false,
-          date: '2024-01-01',
-          content: '대충 내용입니다.',
-          avatarUrl: '',
-          postId: '2',
-          title: '제목입니다.'
+          date: "2024-01-01",
+          content: "대충 내용입니다.",
+          avatarUrl: "",
+          postId: "2",
+          title: "제목입니다.",
         },
       ];
     },
@@ -55,9 +55,9 @@ export default async function Page() {
       // mocked function
       return [
         {
-          title: 'this is title',
+          title: "this is title",
           author: "author",
-          avatarUrl: 'https://github.com/KimWash.png',
+          avatarUrl: "https://github.com/KimWash.png",
           authorOrg: "CS",
           content: "this is test post",
           date: "2023-08-15",
@@ -75,5 +75,6 @@ export default async function Page() {
       <Hydration queries={[scheduleQuery, postQuery, noticesQuery]}>
         <HomeContainer />
       </Hydration>
+    </SafeAreaView>
   );
 }

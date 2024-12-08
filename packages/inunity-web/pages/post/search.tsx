@@ -5,9 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
-import { PostListDto } from "../viewModel/PostListViewModel";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import usePostSearchViewModel from "../viewModel/PostSearchViewModel";
+import usePostSearchViewModel from "@/components/viewModel/PostSearchViewModel";
 
 export default function PostSearchContainer({
   categoryId,
