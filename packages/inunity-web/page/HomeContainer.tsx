@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import useHomeViewModel from "../components/viewModel/HomeViewModel";
 import OutlinedListItem from "ui/src/OutlinedListItem";
 import { Card, ScrollView, Typography, useMenu } from "ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,17 +17,14 @@ import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "../widgets/AppBar";
 import PostCard from "@/features/board/ui/PostCard";
 import NoticeCard from "@/features/notice/ui/NoticeCard";
+import useHomeViewModel from "./useHomeViewModel";
 
 export default function HomeContainer() {
   // ViewModel 이용
   const {
     posts,
-    schedules,
     notices,
-    likePost,
     notifications,
-    toggleBookmarkPost,
-    toggleBookmarkNotice,
   } = useHomeViewModel();
   const { messageManager } = useMessageManager();
 
@@ -63,22 +59,7 @@ export default function HomeContainer() {
         }
       />
       <ScrollView className="bg-[#f8f8f8]  justify-start items-start flex ">
-        <div className="self-stretch p-4 flex flex-col gap-2">
-          <div className="self-stretch pt-6 pb-1 bg-[#f8f8f8] justify-between items-end inline-flex">
-            <Typography variant="HeadingXLargeBold">학사 일정</Typography>
-            <Typography variant="ParagraphNormalBold" className="text-primary">
-              모두 보기
-            </Typography>
-          </div>
-
-          {schedules.data?.map((schedule) => (
-            <OutlinedListItem
-              key={schedule.name}
-              text={schedule.name}
-              description={`${schedule.dateStart.toDateString()} - ${schedule.dateEnd?.toDateString()}`}
-            />
-          ))}
-        </div>
+   
         <div className="self-stretch px-4 pt-6 pb-1 bg-[#f8f8f8] justify-between items-end inline-flex">
           <Typography variant="HeadingXLargeBold">학과 공지</Typography>
           <Typography variant="ParagraphNormalBold" className="text-primary">
@@ -88,16 +69,8 @@ export default function HomeContainer() {
 
         <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
           {notices.data?.map((notice) => (
-            <Card
-              key={notice.content}
-              content={notice.content}
-              author={notice.author}
-              fromUpdate={notice.date}
-              isBookmarked={notice.isBookmarked}
-              onToggleBookmark={() => {
-                toggleBookmarkNotice.mutate(notice.postId);
-              }}
-              
+            <NoticeCard 
+            {...notice}
             />
           ))}
         </div>
@@ -106,29 +79,7 @@ export default function HomeContainer() {
             인기 게시글
           </Typography>
           {posts.data?.map((post) => (
-            <Card
-              onClick={() => {
-                // messageManager?.sendMessage(MessageEventType.Navigation, {path: '/detail'} as NavigationEvent)
-                router.push("/post/1/1");
-              }}
-              key={post.postId}
-              author={post.author}
-              avatarUrl={post.avatarUrl}
-              authorDescription={post.authorOrg}
-              content={post.content}
-              fromUpdate={post.date}
-              likeCount={post.likes}
-              bookmarkCount={post.bookmarks}
-              onLikeToggle={function (): void {
-                likePost.mutate(post.postId);
-              }}
-              onToggleBookmark={function (): void {
-                toggleBookmarkPost.mutate(post.postId);
-              }}
-              isLiked={post.isLiked}
-              isBookmarked={post.isBookmarked}
-              variant="list"
-            />
+            <PostCard {...post}/>
           ))}
         </div>
       </ScrollView>

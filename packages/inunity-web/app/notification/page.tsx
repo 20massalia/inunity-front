@@ -1,4 +1,4 @@
-import NotificationListContainer from "@/pages/notification/list";
+import NotificationListContainer from "@/page/notification/list";
 import NotificationItem from "@/features/notification/ui/NotificationItem";
 import SafeAreaView from "@/widgets/SafeAreaView";
 

@@ -53,8 +53,7 @@ export default function PostDetailContainer({
   postId: string;
 }) {
   const { messageManager, pageEvent } = useMessageManager();
-  const posts = usePost();
-  const post = posts.data?.[0]
+  const {data:post} = usePost();
   const comments = [
     {
       name: "김정아",

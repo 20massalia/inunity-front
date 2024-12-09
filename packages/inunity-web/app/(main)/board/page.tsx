@@ -1,4 +1,4 @@
-import BoardListContainer from "@/pages/board/BoardListContainer";
+import BoardListContainer from "@/page/board/BoardListContainer";
 import SafeAreaView from "@/widgets/SafeAreaView";
 import {
   faBook,
