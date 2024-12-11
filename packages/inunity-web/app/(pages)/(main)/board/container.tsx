@@ -1,6 +1,6 @@
 "use client";
 
-import { SimpleListItem } from "@/app/(main)/board/page";
+import { SimpleListItem } from "@/app/(pages)/(main)/board/page";
 import {
   faSearch,
   faClipboard,

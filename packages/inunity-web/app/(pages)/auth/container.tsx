@@ -1,7 +1,7 @@
 "use client";
 
 import { useFunnel } from "@use-funnel/browser";
-import * as Steps from "@/app/auth/steps";
+import * as Steps from "@/app/(pages)/auth/steps";
 
 type StepContextMap = {
   Welcome: Record<string, never>;

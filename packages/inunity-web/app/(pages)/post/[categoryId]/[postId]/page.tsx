@@ -1,5 +1,5 @@
 import getDehydratedQuery from "@/lib/getDehydratedQuery";
-import PostDetailContainer from "@/page/post/detail";
+import PostDetailContainer from "@/app/(pages)/post/[categoryId]/[postId]/container";
 import { Hydration } from "@/shared/ui/Hydration";
 import SafeAreaView from "@/widgets/SafeAreaView";
 

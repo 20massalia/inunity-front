@@ -1,4 +1,4 @@
-import HomeContainer from "@/page/HomeContainer";
+import HomeContainer from "@/app/(pages)/(main)/container";
 import SafeAreaView from "@/widgets/SafeAreaView";
 import getDehydratedQuery from "@/lib/getDehydratedQuery";
 import { Hydration } from "@/shared/ui/Hydration";

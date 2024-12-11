@@ -17,7 +17,7 @@ export default function AppBar({
       <div className="px-4 py-3 flex flex-1 flex-col justify-between">
         <div className="flex flex-row justify-between items-center">
           <div className="relative">
-            <div className="absolute h-full flex items-center">{leftIcon}</div>
+            <div className=" h-full flex items-center">{leftIcon}</div>
           </div>
           <div className="relative">
             <div className="flex flex-col justify-center items-center">
