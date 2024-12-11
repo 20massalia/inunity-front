@@ -14,6 +14,7 @@ import { useMessageManager } from "@/shared/ui/MessageContext";
 import AppBar from "@/widgets/AppBar";
 import usePost from "@/entities/post/hooks/usePost";
 import PostCard from "@/features/board/ui/PostCard";
+import usePosts from "@/entities/post/hooks/usePosts";
 
 export default function PostListContainer({
   categoryId,
@@ -23,18 +24,18 @@ export default function PostListContainer({
   const router = useNativeRouter();
 
   const messageManager = useMessageManager();
-  const posts = usePost();
+  const posts = usePosts();
 
   const { isWebView, os } = usePlatform();
   const { openMenuId, setOpenMenuId } = useMenu();
 
   return (
     <>
-      <AppBar
+         <AppBar
         center={
           <div className="flex flex-col">
-            <Typography className="text-xs font-bold">컴퓨터공학부</Typography>
-            <Typography variant="HeadingNormalBold">공지사항</Typography>
+            <Typography className="text-xs font-bold text-center">컴퓨터공학부</Typography>
+            <Typography variant="HeadingNormalBold" className="text-center">공지사항</Typography>
           </div>
         }
         leftIcon={
@@ -59,24 +60,10 @@ export default function PostListContainer({
           </div>
         }
       />
-
-      <ScrollView className="gap-2">
+      <ScrollView className="gap-2 ">
         {!posts.isLoading &&
           posts.data?.map((item) => (
-            <div
-              key={item.content}
-              className=" "
-              onClick={() => {
-                if (isWebView)
-                  messageManager?.messageManager?.sendMessage(
-                    MessageEventType.Navigation,
-                    { path: `/post/1/1` }
-                  );
-                else router.push("/post/1/1");
-              }}
-            >
-              <PostCard {...item}/>
-            </div>
+            <PostCard {...item}/>
           ))}
       </ScrollView>
     </>

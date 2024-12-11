@@ -38,6 +38,11 @@ const config: Config = {
         'l-lg': '1rem',
         'l-no': '0.875rem',
         'l-sm': '0.75rem'
+      },
+      spacing: {
+        '2.5': '10px',
+        '5': '20px',
+        '6': '24px',
       }
     },
   },
