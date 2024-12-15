@@ -21,6 +21,7 @@ import useEditComment from "@/features/board/hooks/useEditComment";
 import useDeletePost from "@/features/board/hooks/useDeletePost";
 import useDeleteComment from "@/features/board/hooks/useDeleteComment";
 import usePost from "@/entities/post/hooks/usePost";
+import usePostDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
 
 export const Viewer = () => {
   return (
@@ -53,7 +54,19 @@ export default function PostDetailContainer({
   postId: string;
 }) {
   const { messageManager, pageEvent } = useMessageManager();
-  const {data:post} = usePost();
+
+  const {
+    post:postQuery,
+    submitComment,
+    reportComment,
+    reportPost,
+    editComment,
+    deleteComment,
+    deletePost,
+  } = usePostDetailViewModel({ postId });
+
+  const post = postQuery.data;
+
   const comments = [
     {
       name: "김정아",
@@ -62,13 +75,6 @@ export default function PostDetailContainer({
       content: "드랍하고 싶어요 ㅠㅠ",
     },
   ];
-  
-  const submitComment = useSubmitComment();
-  const reportPost = useReportComment();
-  const reportComment = useReportComment();
-  const editComment = useEditComment();
-  const deletePost = useDeletePost();
-  const deleteComment = useDeleteComment();
 
   useEffect(() => {
     messageManager?.log("Page Event arrived: ", pageEvent?.value);
@@ -78,7 +84,7 @@ export default function PostDetailContainer({
     }
   }, [messageManager, pageEvent, submitComment]);
   const router = useNativeRouter();
-  if (!post) return <div>no data</div>
+  if (!post) return <div>no data</div>;
   return (
     <>
       <AppBar
@@ -115,7 +121,7 @@ export default function PostDetailContainer({
                   label: "신고",
                   onClick: () => reportPost.mutate(post.postId),
                 },
-                { label: "차단", onClick: () => undefined},
+                { label: "차단", onClick: () => undefined },
               ]}
             />
             {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}

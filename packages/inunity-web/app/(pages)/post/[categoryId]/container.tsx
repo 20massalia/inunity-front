@@ -23,11 +23,8 @@ export default function PostListContainer({
 }) {
   const router = useNativeRouter();
 
-  const messageManager = useMessageManager();
   const posts = usePosts();
 
-  const { isWebView, os } = usePlatform();
-  const { openMenuId, setOpenMenuId } = useMenu();
 
   return (
     <>

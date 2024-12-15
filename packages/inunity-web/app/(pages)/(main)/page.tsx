@@ -1,10 +1,10 @@
-import HomeContainer from "@/app/(pages)/(main)/container";
 import SafeAreaView from "@/widgets/SafeAreaView";
 import getDehydratedQuery from "@/lib/getDehydratedQuery";
 import { Hydration } from "@/shared/ui/Hydration";
 import { PostListItemProps } from "ui";
 import NoticeDto from "@/entities/notice/model/NoticeDto";
 import PostDto from "@/entities/post/model/PostDto";
+import HomeContainer from "./container";
 
 //SSR 파트
 export default async function Page() {

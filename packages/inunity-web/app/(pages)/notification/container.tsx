@@ -1,19 +1,18 @@
 'use client';
 
 import { PostListItemProps, SwipeableTabs, Typography } from "ui";
-import NotificationItem, { Notification } from "../../../features/notification/ui/NotificationItem";
+import NotificationItem from "@/features/notification/ui/NotificationItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "@/widgets/AppBar";
+import useNotification from "@/features/notification/hooks/useNotification";
 
 export default function NotificationListContainer({
-  boardNotiList,
-  systemNotiList,
 }: {
-  boardNotiList: Notification[];
-  systemNotiList: Notification[];
 }) {
+  const {boardNotifications, systemNotifications} = useNotification();
+
   const router = useNativeRouter();
   return (
     <>
@@ -29,7 +28,7 @@ export default function NotificationListContainer({
             title: "게시판",
             content: (
               <div className="p-5 gap-3 flex flex-col">
-                {boardNotiList.map((noti, idx) => (
+                {boardNotifications.data?.map((noti, idx) => (
                   <NotificationItem
                     key={noti.id}
                     notification={noti}
@@ -43,7 +42,7 @@ export default function NotificationListContainer({
             title: "시스템",
             content: (
               <div className="p-5 gap-3 flex flex-col">
-                {systemNotiList.map((noti) => (
+                {systemNotifications.data?.map((noti) => (
                   <NotificationItem key={noti.id} notification={noti} />
                 ))}
               </div>

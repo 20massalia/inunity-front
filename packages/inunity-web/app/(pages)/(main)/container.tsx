@@ -24,7 +24,7 @@ export default function HomeContainer() {
   const {
     posts,
     notices,
-    notifications,
+    notifications:{length},
   } = useHomeViewModel();
   const { messageManager } = useMessageManager();
 
@@ -33,7 +33,6 @@ export default function HomeContainer() {
   }, [messageManager]);
 
   const router = useNativeRouter();
-  const { openMenuId, setOpenMenuId } = useMenu();
 
   return (
     <>
@@ -48,9 +47,11 @@ export default function HomeContainer() {
                 icon={faBell}
                 onClick={() => router.push("/notification")}
               />
-              {(notifications.data?.length ?? 0) > 0 && (
-                <div className=" absolute -bottom-2 -right-2 w-5 h-5 bg-red-600 rounded-full flex justify-center items-center text-white">
-                  {notifications.data?.length}
+              {(length ?? 0) > 0 && (
+                <div className=" absolute -bottom-2 -right-2 w-5 h-5 bg-red-600 rounded-full flex justify-center items-center ">
+                  <Typography className="text-white" variant="ParagraphNormalBold">
+                  {length}
+                  </Typography>
                 </div>
               )}
             </div>
