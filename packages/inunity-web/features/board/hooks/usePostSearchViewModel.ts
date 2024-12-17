@@ -1,4 +1,7 @@
+import PostQueries, { createPage } from "@/entities/post/hooks/PostQueries";
 import usePosts from "@/entities/post/hooks/usePosts";
+import PostDto from "@/entities/post/model/PostDto";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 export default function usePostSearchViewModel({
   categoryId,
@@ -9,6 +12,7 @@ export default function usePostSearchViewModel({
   keyword: string;
   tags: string[];
 }) {
-  const posts = usePosts();
+  const queryOptions = PostQueries.infinitePostQuery({categoryId, keyword, tags,});
+  const posts = useInfiniteQuery({...queryOptions,});
   return { posts };
 }

@@ -5,7 +5,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-const Editor = dynamic(() => import("@/features/board/ui/Editor"), { ssr: false });
+const Editor = dynamic(() => import("@/shared/ui/Editor"), { ssr: false });
 
 import { useState } from "react";
 import { CheckBox, Typography } from "ui";

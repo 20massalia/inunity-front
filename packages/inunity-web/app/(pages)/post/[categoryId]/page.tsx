@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { categoryId: string } 
   return (
       <SafeAreaView>
         <Hydration queries={[postsQuery]}>
-        <PostListContainer categoryId={params.categoryId} />
+        <PostListContainer categoryId={params.categoryId}  />
         </Hydration>
       </SafeAreaView>
   );

@@ -3,10 +3,15 @@
 import { faChevronLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import usePostSearchViewModel from "@/features/board/hooks/usePostSearchViewModel";
+import PostCard from "@/entities/post/ui/PostCard";
+import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
+import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
+import { debounce } from "lodash";
+import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 
 export default function PostSearchContainer({
   categoryId,
@@ -16,19 +21,51 @@ export default function PostSearchContainer({
   const router = useNativeRouter();
 
   const [searchValue, setSearchValue] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState('');
   const tags = ["전공", "취업", "창업", "학과", "학교", "응애"];
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const {posts} = usePostSearchViewModel({categoryId, keyword: searchValue, tags: selectedTags});
+  const { posts:postQuery } = usePostSearchViewModel({
+    categoryId,
+    keyword: debouncedKeyword,
+    tags: selectedTags,
+  });
+  const posts = postQuery.data?.pages?.flatMap(page => page.content)
 
-  const { openMenuId, setOpenMenuId } = useMenu();
+  const queryClient = useQueryClient();
+
+  const search = useCallback((term: string) => {
+    console.log('searching', term)
+    setDebouncedKeyword(term);
+    queryClient.invalidateQueries();
+  }, [queryClient]);
+  // Create a debounced version of the search function
+  const debouncedSearch = useCallback(
+    debounce((term) => {
+      console.log(term)
+      if (term.trim()) {
+        search(term);
+      } else {
+        queryClient.setQueriesData({ queryKey: ["posts"] }, () => []);
+      }
+    }, 300), // 300ms delay
+    [search]
+  );
+
   return (
     <div className="h-full flex flex-col">
       {/* SearchBar Area Start */}
       <div className="flex flex-col items-start gap-4 p-5 bg-white">
-        <FontAwesomeIcon icon={faChevronLeft} onClick={router.back} />
+        <FontAwesomeIcon
+          icon={faChevronLeft}
+          fontSize={24}
+          onClick={router.back}
+        />
         <Input
           value={searchValue}
-          setValue={setSearchValue}
+          setValue={(v) => {
+            setSearchValue(v);
+            debouncedSearch(v);
+          }}
           className="self-stretch"
           leftIcon={<FontAwesomeIcon icon={faSearch} />}
           placeholder="검색어를 입력해주세요."
@@ -76,16 +113,16 @@ export default function PostSearchContainer({
       </div>
       {/* Post List Area Start */}
       <ScrollView className="bg-gray-50 gap-3 pt-3">
-        {posts.data?.map((post) => (
-          <PostListItem
-            name={post.author}
-            department={post.authorOrg}
-            isMenuOpened={openMenuId == `post_${post.postId}`}
-            setMenuOpened={function (opened: boolean): void {
-              setOpenMenuId(opened ? `post_${post.postId}` : null);
-            }}
-            key={post.postId}
+        {posts?.map((post) => (
+          <PostCard
             {...post}
+            key={post.postId}
+            bottomFeatureSlot={
+              <>
+                <ToggleLikeIcon post={post} />
+                <ToggleBoomarkIcon post={post} />
+              </>
+            }
           />
         ))}
       </ScrollView>

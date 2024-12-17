@@ -15,16 +15,18 @@ import { useEffect } from "react";
 import { useMessageManager } from "../../../shared/ui/MessageContext";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "../../../widgets/AppBar";
-import PostCard from "@/features/board/ui/PostCard";
+import PostCard from "@/entities/post/ui/PostCard";
 import NoticeCard from "@/features/notice/ui/NoticeCard";
 import useHomeViewModel from "../../../features/home/useHomeViewModel";
+import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
+import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 
 export default function HomeContainer() {
   // ViewModel 이용
   const {
     posts,
     notices,
-    notifications:{length},
+    notifications: { length },
   } = useHomeViewModel();
   const { messageManager } = useMessageManager();
 
@@ -41,16 +43,18 @@ export default function HomeContainer() {
         rightIcon={
           <div className="flex gap-3">
             <FontAwesomeIcon fontSize={24} icon={faSearch} />
-            <div className="relative">
-              <FontAwesomeIcon
-                fontSize={24}
-                icon={faBell}
-                onClick={() => router.push("/notification")}
-              />
+            <div
+              className="relative"
+              onClick={() => router.push("/notification")}
+            >
+              <FontAwesomeIcon fontSize={24} icon={faBell} />
               {(length ?? 0) > 0 && (
                 <div className=" absolute -bottom-2 -right-2 w-5 h-5 bg-red-600 rounded-full flex justify-center items-center ">
-                  <Typography className="text-white" variant="ParagraphNormalBold">
-                  {length}
+                  <Typography
+                    className="text-white"
+                    variant="ParagraphNormalBold"
+                  >
+                    {length}
                   </Typography>
                 </div>
               )}
@@ -60,7 +64,6 @@ export default function HomeContainer() {
         }
       />
       <ScrollView className="bg-[#f8f8f8]  justify-start items-start flex ">
-   
         <div className="self-stretch px-4 pt-6 pb-1 bg-[#f8f8f8] justify-between items-end inline-flex">
           <Typography variant="HeadingXLargeBold">학과 공지</Typography>
           <Typography variant="ParagraphNormalBold" className="text-primary">
@@ -70,9 +73,7 @@ export default function HomeContainer() {
 
         <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
           {notices.data?.map((notice) => (
-            <NoticeCard 
-            {...notice}
-            />
+            <NoticeCard key={notice.postId} {...notice} />
           ))}
         </div>
         <div className="self-stretch  flex-col justify-start items-start flex">
@@ -80,7 +81,16 @@ export default function HomeContainer() {
             인기 게시글
           </Typography>
           {posts.data?.map((post) => (
-            <PostCard {...post}/>
+            <PostCard
+              {...post}
+              key={post.postId}
+              bottomFeatureSlot={
+                <>
+                  <ToggleLikeIcon post={post} />
+                  <ToggleBoomarkIcon post={post} />
+                </>
+              }
+            />
           ))}
         </div>
       </ScrollView>

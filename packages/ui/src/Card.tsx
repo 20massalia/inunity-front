@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookmark,
@@ -18,7 +18,6 @@ export interface CardProps<T extends CardVariant = 'list'> {
   title?: T extends 'detailed' ? string|undefined : undefined;
   content: string;
   isBookmarked: boolean;
-  onToggleBookmark: () => void;
   thumbnailUrl?: string;
   avatarUrl?: string;
   // PostListCard에서 추가된 프로퍼티들
@@ -26,9 +25,10 @@ export interface CardProps<T extends CardVariant = 'list'> {
   likeCount?: number;
   bookmarkCount?: number;
   isLiked?: boolean;
-  onLikeToggle?: () => void;
   onClick?: () => void;
   className?: string;
+  profileSlot?: ReactNode
+  bottomFeatureSlot?: ReactNode
 }
 
 export function Card(props: CardProps) {
@@ -76,7 +76,6 @@ export function DetailedCard(props: CardProps) {
             icon={faBookmark}
             className={props.isBookmarked ? `text-primary` : "text-placeholder"}
             fontSize={18}
-            onClick={props.onToggleBookmark}
             />
           <FontAwesomeIcon
             icon={faEllipsisVertical}

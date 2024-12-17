@@ -20,7 +20,6 @@ const COLORS = {
   stats: "text-[#0f1419]",
 };
 
-
 export const ListCard: React.FC<CardProps> = ({
   avatarUrl,
   author,
@@ -31,22 +30,22 @@ export const ListCard: React.FC<CardProps> = ({
   bookmarkCount = 0,
   isLiked = false,
   isBookmarked = false,
-  onLikeToggle,
-  onToggleBookmark,
   onClick,
   className = "",
-
+  profileSlot,
+  bottomFeatureSlot,
 }) => {
-    return (
+  return (
     <div
       onClick={onClick}
       className={` h-auto ${COLORS.background} px-4 py-3 flex-col justify-center items-start inline-flex self-stretch ${className}`}
     >
+      {profileSlot}
       <UserProfile
         profileImage={avatarUrl}
         name={author}
         introduction={authorDescription}
-        id={'test'}
+        id={"test"}
         actions={[
           {
             label: "수정",
@@ -77,55 +76,7 @@ export const ListCard: React.FC<CardProps> = ({
       </div>
       <div className={`self-stretch h-px border ${COLORS.border}`}></div>
       <div className={`pl-2 pt-2 justify-start items-start inline-flex gap-2`}>
-        <div className={`justify-start items-center flex`}>
-          <div
-            className={`flex items-center gap-2`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onLikeToggle?.();
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faHeart}
-              className={`w-6 ${
-                isLiked ? "text-blue-500" : "text-black"
-              } cursor-pointer`}
-            />
-            <Typography
-              variant="ParagraphNormalRegular"
-              className={`${COLORS.stats} ${
-                isLiked ? "text-blue-500" : "text-black"
-              }`}
-            >
-              {likeCount}
-            </Typography>
-          </div>
-        </div>
-        <div className={`justify-start items-center flex`}>
-          <div
-            className={`flex items-center gap-2`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleBookmark();
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faBookmark}
-              className={`w-6 ${
-                isBookmarked ? "text-blue-500" : "text-black"
-              } cursor-pointer`}
-            />
-
-            <Typography
-              variant="ParagraphNormalRegular"
-              className={`${COLORS.stats} ${
-                isBookmarked ? "text-blue-500" : "text-black"
-              }`}
-            >
-              {bookmarkCount}
-            </Typography>
-          </div>
-        </div>
+        {bottomFeatureSlot}
       </div>
     </div>
   );

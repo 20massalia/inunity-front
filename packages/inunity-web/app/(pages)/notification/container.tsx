@@ -8,9 +8,7 @@ import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "@/widgets/AppBar";
 import useNotification from "@/features/notification/hooks/useNotification";
 
-export default function NotificationListContainer({
-}: {
-}) {
+export default function NotificationListContainer() {
   const {boardNotifications, systemNotifications} = useNotification();
 
   const router = useNativeRouter();

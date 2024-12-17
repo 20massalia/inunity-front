@@ -31,19 +31,7 @@ export default function DetailedCard(props: CardProps<'detailed'>) {
         <div className="self-stretch text-black/50 text-sm font-medium ">
           {props.content}
         </div>
-        <div className="self-stretch pt-2 justify-end items-start inline-flex gap-4">
-          <FontAwesomeIcon
-            icon={faBookmark}
-            className={props.isBookmarked ? `text-primary` : "text-placeholder"}
-            fontSize={18}
-            onClick={props.onToggleBookmark}
-            />
-          <FontAwesomeIcon
-            icon={faEllipsisVertical}
-            className="text-placeholder"
-            fontSize={18}
-          />
-        </div>
+        {props.bottomFeatureSlot}
       </div>
     </div>
   );

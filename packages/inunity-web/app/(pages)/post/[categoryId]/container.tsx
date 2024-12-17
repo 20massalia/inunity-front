@@ -8,13 +8,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MessageEventType } from "message-type/message-type";
-import { Card,  ScrollView, Typography, useMenu } from "ui";
+import { Card, ScrollView, Typography, useMenu } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { useMessageManager } from "@/shared/ui/MessageContext";
 import AppBar from "@/widgets/AppBar";
 import usePost from "@/entities/post/hooks/usePost";
-import PostCard from "@/features/board/ui/PostCard";
+import PostCard from "@/entities/post/ui/PostCard";
 import usePosts from "@/entities/post/hooks/usePosts";
+import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
+import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 
 export default function PostListContainer({
   categoryId,
@@ -25,14 +27,17 @@ export default function PostListContainer({
 
   const posts = usePosts();
 
-
   return (
     <>
-         <AppBar
+      <AppBar
         center={
           <div className="flex flex-col">
-            <Typography className="text-xs font-bold text-center">컴퓨터공학부</Typography>
-            <Typography variant="HeadingNormalBold" className="text-center">공지사항</Typography>
+            <Typography className="text-xs font-bold text-center">
+              컴퓨터공학부
+            </Typography>
+            <Typography variant="HeadingNormalBold" className="text-center">
+              공지사항
+            </Typography>
           </div>
         }
         leftIcon={
@@ -60,7 +65,16 @@ export default function PostListContainer({
       <ScrollView className="gap-2 ">
         {!posts.isLoading &&
           posts.data?.map((item) => (
-            <PostCard {...item}/>
+            <PostCard
+              key={item.postId}
+              {...item}
+              bottomFeatureSlot={
+                <>
+                  <ToggleLikeIcon post={item} />
+                  <ToggleBoomarkIcon post={item} />
+                </>
+              }
+            />
           ))}
       </ScrollView>
     </>

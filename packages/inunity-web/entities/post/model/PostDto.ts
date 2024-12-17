@@ -1,7 +1,7 @@
 
 export default interface PostDto {
   title: string;
-  avatarUrl?: string;
+  avatarUrl?: string|undefined;
   author: string;
   authorOrg: string;
   content: string;

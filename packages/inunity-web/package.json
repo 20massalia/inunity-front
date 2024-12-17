@@ -26,6 +26,7 @@
     "@tanstack/react-query-devtools": "^5.59.15",
     "@use-funnel/browser": "^0.0.8",
     "editor-react-parser": "^1.0.5",
+    "lodash": "^4.17.21",
     "message-type": "workspace:^",
     "next": "14.2.15",
     "ui": "workspace:^"
@@ -39,6 +40,7 @@
     "react-dom": "*"
   },
   "devDependencies": {
+    "@types/lodash": "^4",
     "@types/next-pwa": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
