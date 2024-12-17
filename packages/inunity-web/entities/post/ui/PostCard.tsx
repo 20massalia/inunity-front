@@ -13,7 +13,6 @@ export default function PostCard({ ...item }: PostDto & {bottomFeatureSlot?: Rea
   
 
   const router = useNativeRouter();
-  
   return (
     <Card
       author={item.author}

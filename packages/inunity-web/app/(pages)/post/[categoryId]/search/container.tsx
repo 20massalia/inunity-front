@@ -3,7 +3,7 @@
 import { faChevronLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import usePostSearchViewModel from "@/features/board/hooks/usePostSearchViewModel";
@@ -11,7 +11,12 @@ import PostCard from "@/entities/post/ui/PostCard";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import { debounce } from "lodash";
-import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryClientProvider,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import PostQueries from "@/entities/post/hooks/PostQueries";
 
 export default function PostSearchContainer({
   categoryId,
@@ -21,27 +26,38 @@ export default function PostSearchContainer({
   const router = useNativeRouter();
 
   const [searchValue, setSearchValue] = useState("");
-  const [debouncedKeyword, setDebouncedKeyword] = useState('');
+  const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const tags = ["전공", "취업", "창업", "학과", "학교", "응애"];
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const { posts:postQuery } = usePostSearchViewModel({
+  // const { posts: postQuery } = usePostSearchViewModel({
+  //   categoryId,
+  //   keyword: debouncedKeyword,
+  //   tags: selectedTags,
+  // });
+
+  const queryOptions = PostQueries.infinitePostQuery({
     categoryId,
     keyword: debouncedKeyword,
-    tags: selectedTags,
+    tags,
   });
-  const posts = postQuery.data?.pages?.flatMap(page => page.content)
+  const postQuery = useInfiniteQuery({ ...queryOptions });
+
+  const posts = postQuery.data?.pages?.flatMap((page) => page.content);
 
   const queryClient = useQueryClient();
 
-  const search = useCallback((term: string) => {
-    console.log('searching', term)
-    setDebouncedKeyword(term);
-    queryClient.invalidateQueries();
-  }, [queryClient]);
+  const search = useCallback(
+    (term: string) => {
+      console.log("searching", term);
+      setDebouncedKeyword(term);
+      queryClient.invalidateQueries();
+    },
+    [queryClient]
+  );
   // Create a debounced version of the search function
   const debouncedSearch = useCallback(
     debounce((term) => {
-      console.log(term)
+      console.log(term);
       if (term.trim()) {
         search(term);
       } else {
@@ -50,6 +66,12 @@ export default function PostSearchContainer({
     }, 300), // 300ms delay
     [search]
   );
+
+
+  const onReachBottom = useCallback(() => {
+    console.log("loading next page!");
+    if (!postQuery.isFetching) postQuery.fetchNextPage();
+  }, [postQuery]);
 
   return (
     <div className="h-full flex flex-col">
@@ -112,7 +134,12 @@ export default function PostSearchContainer({
         </div>
       </div>
       {/* Post List Area Start */}
-      <ScrollView className="bg-gray-50 gap-3 pt-3">
+      <ScrollView
+        className="bg-gray-50 gap-3 pt-3"
+        onReachBottom={function () {
+          onReachBottom();
+        }}
+      >
         {posts?.map((post) => (
           <PostCard
             {...post}

@@ -20,7 +20,7 @@ export interface PostFilter {
   categoryId?: string;
   keyword?: string;
   tags?: string[];
-  sort?: [SortType, SortDirection] 
+  sort?: [SortType, SortDirection];
 }
 
 // 정렬 정보를 나타내는 인터페이스
@@ -141,12 +141,43 @@ export default class PostQueries {
       queryKey,
       queryFn: async ({ pageParam, queryKey }) => {
         const [_, categoryId, keyword, tags, sort] = queryKey;
-        return createPage([dummyData]);
+        console.log('fetching next page...', pageParam)
+        const page = (await (
+          await fetch("http://localhost:8082/notices/v1/university?page=" + pageParam )
+        ).json()) as Page<{
+          id: number;
+          title: string;
+          departmentName: string;
+          contentSummary: string;
+          likes: number;
+          bookmarks: number;
+          isLiked: boolean;
+          isBookmarked: boolean;
+          date: Date;
+        }>;
+        const realpage = {
+          ...page,
+          content: page.content.map(
+            (content) =>
+              ({
+                ...content,
+                postId: content.id.toString(),
+                date: new Date(content.date).toDateString(),
+                author: content.departmentName,
+                authorOrg: "",
+                content: content.contentSummary,
+              } as PostDto)
+          ),
+        };
+        console.log(realpage);
+        return realpage
+        // return createPage([dummyData]);
       },
       initialPageParam: 0,
       getNextPageParam: (lastPage, allPages, lastPageParam) =>
         lastPage.last ? undefined : lastPage.number + 1,
-      getPreviousPageParam: (firstPage, pages) => firstPage.first ? undefined : firstPage.number,
+      getPreviousPageParam: (firstPage, pages) =>
+        firstPage.first ? undefined : firstPage.number,
     });
   }
 }

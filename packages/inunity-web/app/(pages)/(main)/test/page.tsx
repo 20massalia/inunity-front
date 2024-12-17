@@ -29,7 +29,8 @@ export default function Page() {
             headers: {
               'Content-Type': 'application/json'
             },
-            // credentials: 'include', // 쿠키를 포함하려면 이 옵션 필요
+            credentials: 'include', // 쿠키를 포함하려면 이 옵션 필요
+            
 
             body: JSON.stringify({ studentId: Number(form.id), password: form.pw }),
           })
