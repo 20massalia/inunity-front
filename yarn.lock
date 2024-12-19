@@ -10152,6 +10152,7 @@ __metadata:
     next: "npm:14.2.15"
     next-pwa: "npm:^5.6.0"
     postcss: "npm:^8"
+    react-spinners: "npm:^0.15.0"
     tailwindcss: "npm:^3.4.1"
     typescript: "npm:^5"
     ui: "workspace:^"
@@ -14360,6 +14361,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-spinners@npm:^0.15.0":
+  version: 0.15.0
+  resolution: "react-spinners@npm:0.15.0"
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/1915902dd231e60b3c7cc056434eea7920fbae49e60271ce5ca362e72f7a89510ced9a65f99a734a6485165ea2012425df50999b1906fec073775f95deb3bc38
+  languageName: node
+  linkType: hard
+
 "react-syntax-highlighter@npm:^15.5.0":
   version: 15.6.1
   resolution: "react-syntax-highlighter@npm:15.6.1"
@@ -16425,11 +16436,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A^5#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.3#optional!builtin<compat/typescript>":
   version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=b45daf"
+  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/ac8307bb06bbfd08ae7137da740769b7d8c3ee5943188743bb622c621f8ad61d244767480f90fbd840277fbf152d8932aa20c33f867dea1bb5e79b187ca1a92f
+  checksum: 10c0/7c9d2e07c81226d60435939618c91ec2ff0b75fbfa106eec3430f0fcf93a584bc6c73176676f532d78c3594fe28a54b36eb40b3d75593071a7ec91301533ace7
   languageName: node
   linkType: hard
 

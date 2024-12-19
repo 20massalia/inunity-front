@@ -17,6 +17,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import PostQueries from "@/entities/post/hooks/PostQueries";
+import { ClipLoader } from "react-spinners";
 
 export default function PostSearchContainer({
   categoryId,
@@ -67,14 +68,13 @@ export default function PostSearchContainer({
     [search]
   );
 
-
   const onReachBottom = useCallback(() => {
     console.log("loading next page!");
     if (!postQuery.isFetching) postQuery.fetchNextPage();
   }, [postQuery]);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-gray-50">
       {/* SearchBar Area Start */}
       <div className="flex flex-col items-start gap-4 p-5 bg-white">
         <FontAwesomeIcon
@@ -135,11 +135,16 @@ export default function PostSearchContainer({
       </div>
       {/* Post List Area Start */}
       <ScrollView
-        className="bg-gray-50 gap-3 pt-3"
-        onReachBottom={function () {
-          onReachBottom();
+        className=" gap-3 pt-3"
+        spinner={<ClipLoader />}
+        onReachBottom={onReachBottom} // 최하단으로 스크롤됐을 때 이벤트. isLoading: false일 때 fetchNextPage() 호출해주기.
+        onRefresh={() => {
+          postQuery.refetch();
         }}
       >
+        {postQuery.isRefetching && (
+          <div className="flex flex-row justify-center">{<ClipLoader />}</div>
+        )}
         {posts?.map((post) => (
           <PostCard
             {...post}
@@ -152,6 +157,11 @@ export default function PostSearchContainer({
             }
           />
         ))}
+        {postQuery.isFetchingNextPage && (
+          <div className="self-stretch flex justify-center flex-row">
+            <ClipLoader size={50} />
+          </div>
+        )}
       </ScrollView>
     </div>
   );

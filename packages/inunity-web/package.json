@@ -29,6 +29,7 @@
     "lodash": "^4.17.21",
     "message-type": "workspace:^",
     "next": "14.2.15",
+    "react-spinners": "^0.15.0",
     "ui": "workspace:^"
   },
   "peerDependencies": {

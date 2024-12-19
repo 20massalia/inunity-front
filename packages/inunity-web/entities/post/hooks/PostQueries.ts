@@ -69,6 +69,10 @@ const dummyData = {
   isBookmarked: false,
 };
 
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
 /**
  * 리스트만으로 Page 객체를 생성하는 유틸리티 함수
  * @param content - 데이터 리스트
@@ -155,6 +159,7 @@ export default class PostQueries {
           isBookmarked: boolean;
           date: Date;
         }>;
+        await delay(2000)
         const realpage = {
           ...page,
           content: page.content.map(
