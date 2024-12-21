@@ -4,7 +4,6 @@ import {
   queryOptions,
 } from "@tanstack/react-query";
 import PostDto from "../model/PostDto";
-import PageQueries from "../../../shared/hooks/PageQueries";
 
 export enum SortType {
   Date = "date",
@@ -109,45 +108,75 @@ export function createPage<T>(
   };
 }
 
-export default class PostQueries<PostDto> extends PageQueries<PostDto> {
-  domain: string = "post";
+export default class PostQueries {
+  static readonly Keys = {
+    root: ["post"] as const,
+    byId: (id: string) => ["post", id],
+    infinite: (
+      categoryId?: string,
+      keyword?: string,
+      tags?: string[],
+      sort: [SortType, SortDirection] = [
+        SortType.Date,
+        SortDirection.Descending,
+      ]
+    ) => ["posts", categoryId, keyword, tags, sort],
+  };
 
-  protected async fetchSingleItem(id: string): Promise<PostDto> {
-    return dummyData as PostDto;
+  static singlePostQuery(id: string) {
+    const queryKey = this.Keys.byId(id);
+    return queryOptions<PostDto>({
+      queryKey,
+      queryFn: async ({ queryKey: [_, id] }) => {
+        return dummyData;
+      },
+    });
   }
-  protected async fetchInfiniteItems<PostDto>(params: {
-    page: number;
-    [key: string]: unknown;
-  }): Promise<Page<PostDto>> {
-    const page = (await (
-      await fetch(
-        "http://localhost:8082/notices/v1/university?page=" + params.page
-      )
-    ).json()) as Page<{
-      id: number;
-      title: string;
-      departmentName: string;
-      contentSummary: string;
-      likes: number;
-      bookmarks: number;
-      isLiked: boolean;
-      isBookmarked: boolean;
-      date: Date;
-    }>;
-    const pageConverted = {
-      ...page,
-      content: page.content.map(
-        (content) =>
-          ({
-            ...content,
-            postId: content.id.toString(),
-            date: new Date(content.date).toDateString(),
-            author: content.departmentName,
-            authorOrg: "",
-            content: content.contentSummary,
-          } as PostDto)
-      ),
-    };
-    return pageConverted;
+
+  static infinitePostQuery(filter?: PostFilter) {
+    const { categoryId, keyword, tags, sort } = filter ?? {};
+    const queryKey = this.Keys.infinite(categoryId, keyword, tags, sort);
+
+    return infiniteQueryOptions({
+      queryKey,
+      queryFn: async ({ pageParam, queryKey }) => {
+        const [_, categoryId, keyword, tags, sort] = queryKey;
+        console.log('fetching next page...', pageParam)
+        const page = (await (
+          await fetch("http://localhost:8082/notices/v1/university?page=" + pageParam )
+        ).json()) as Page<{
+          id: number;
+          title: string;
+          departmentName: string;
+          contentSummary: string;
+          likes: number;
+          bookmarks: number;
+          isLiked: boolean;
+          isBookmarked: boolean;
+          date: Date;
+        }>;
+        const pageConverted = {
+          ...page,
+          content: page.content.map(
+            (content) =>
+              ({
+                ...content,
+                postId: content.id.toString(),
+                date: new Date(content.date).toDateString(),
+                author: content.departmentName,
+                authorOrg: "",
+                content: content.contentSummary,
+              } as PostDto)
+          ),
+        };
+        return pageConverted;
+        // return createPage([dummyData]);
+      },
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages, lastPageParam) =>
+        lastPage.last ? undefined : lastPage.number + 1,
+      getPreviousPageParam: (firstPage, pages) =>
+        firstPage.first ? undefined : firstPage.number,
+    });
   }
 }
