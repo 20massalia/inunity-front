@@ -27,7 +27,7 @@ export default function CustomWebView({
   pageEventHandler?: (pageEvent: PageEvent<any>) => void;
   initialPathname: string;
 } & WebViewProps) {
-  const { setIsLoading, isLoading, webViewRef, url, setUrl } = useWebView();
+  const { setIsLoading, isLoading, webViewRef } = useWebView();
   const [cookie, setCookie] = useState<string | null>(null);
   const messageManager = useMessageManager(webViewRef);
   const insets = useSafeAreaInsets();

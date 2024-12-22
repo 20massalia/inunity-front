@@ -12,7 +12,7 @@ const SafeAreaView = (props: React.PropsWithChildren<{className?: string}>) => {
   const {os, isWebView} = platformResolver(ua);
   return (
     <div
-      className={`h-dvh overflow-visible flex flex-col overscroll-none touch-none ${
+      className={`h-dvh overflow-visible flex flex-col touch-none ${
         os == "ios" && isWebView ? "pt-[--sat]" : ""
       } ${props?.className}`}
       style={{
