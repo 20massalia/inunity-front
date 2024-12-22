@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { MenuProvider } from "ui/contexts";
 
-
 export const makeQueryClient = () =>
   new QueryClient({
     defaultOptions: {
@@ -22,36 +21,37 @@ export function getQueryClient() {
     const queryClient = makeQueryClient();
     broadcastQueryClient({
       queryClient,
-      broadcastChannel: 'my-app',
-    })
+      broadcastChannel: "my-app",
+    });
     return queryClient;
   } else {
     if (!browserQueryClient) browserQueryClient = makeQueryClient();
     broadcastQueryClient({
       queryClient: browserQueryClient,
-      broadcastChannel: 'my-app',
-    })
+      broadcastChannel: "my-app",
+    });
     return browserQueryClient;
   }
 }
 
 import { MessageProvider } from "./MessageContext";
-
+import { useEffect } from "react";
+import { MessageManager } from "@/lib/MessageManager";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
+  useEffect(() => {
+    const m = new MessageManager(window.ReactNativeWebView);
+    m.log(getComputedStyle(document.documentElement).getPropertyValue("--sat"))
+      
+  });
   return (
     <QueryClientProvider client={queryClient}>
-
       <ReactQueryDevtools initialIsOpen={false} />
       <MenuProvider>
-        <MessageProvider>
-        {children}    
-        </MessageProvider>
-      
+        <MessageProvider>{children}</MessageProvider>
       </MenuProvider>
-      
     </QueryClientProvider>
   );
-  return children
+  return children;
 }

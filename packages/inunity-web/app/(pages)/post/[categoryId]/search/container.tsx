@@ -16,8 +16,8 @@ import {
   useInfiniteQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import PostQueries from "@/entities/post/hooks/PostQueries";
 import { ClipLoader } from "react-spinners";
+import PostQueries from "@/entities/post/hooks/PostQueries";
 
 export default function PostSearchContainer({
   categoryId,
