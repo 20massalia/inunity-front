@@ -3,7 +3,7 @@ import {
   infiniteQueryOptions,
   queryOptions,
 } from "@tanstack/react-query";
-import PostDto from "../model/PostDto";
+import ArticleDto from "../model/ArticleDto";
 import Page from "@/shared/types/Page";
 
 export enum SortType {
@@ -17,7 +17,7 @@ export enum SortDirection {
   Descending = "desc",
 }
 
-export interface PostFilter {
+export interface ArticleFilter {
   categoryId?: string;
   keyword?: string;
   tags?: string[];
@@ -31,21 +31,21 @@ const dummyData = {
   author: "author",
   avatarUrl: "https://github.com/KimWash.png",
   authorOrg: "CS",
-  content: "this is test post",
+  content: "this is test article",
   date: "2023-08-15",
   likes: 12,
   bookmarks: 5,
-  postId: "2",
+  articleId: "2",
   isLiked: false,
   isBookmarked: false,
 };
 
 
 
-export default class PostQueries {
+export default class ArticleQueries {
   static readonly Keys = {
-    root: ["post"] as const,
-    byId: (id: string) => ["post", id],
+    root: ["article"] as const,
+    byId: (id: string) => ["article", id],
     infinite: (
       categoryId?: string,
       keyword?: string,
@@ -54,12 +54,12 @@ export default class PostQueries {
         SortType.Date,
         SortDirection.Descending,
       ]
-    ) => ["posts", categoryId, keyword, tags, sort],
+    ) => ["articles", categoryId, keyword, tags, sort],
   };
 
-  static singlePostQuery(id: string) {
+  static singleArticleQuery(id: string) {
     const queryKey = this.Keys.byId(id);
-    return queryOptions<PostDto>({
+    return queryOptions<ArticleDto>({
       queryKey,
       queryFn: async ({ queryKey: [_, id] }) => {
         return dummyData;
@@ -67,7 +67,7 @@ export default class PostQueries {
     });
   }
 
-  static infinitePostQuery(filter?: PostFilter) {
+  static infiniteArticleQuery(filter?: ArticleFilter) {
     const { categoryId, keyword, tags, sort } = filter ?? {};
     const queryKey = this.Keys.infinite(categoryId, keyword, tags, sort);
 
@@ -95,12 +95,12 @@ export default class PostQueries {
             (content) =>
               ({
                 ...content,
-                postId: content.id.toString(),
+                articleId: content.id.toString(),
                 date: new Date(content.date).toDateString(),
                 author: content.departmentName,
                 authorOrg: "",
                 content: content.contentSummary,
-              } as PostDto)
+              } as ArticleDto)
           ),
         };
         return pageConverted;

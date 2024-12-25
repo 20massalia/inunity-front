@@ -1,30 +1,30 @@
-import PostDto from "@/entities/post/model/PostDto";
+import ArticleDto from "@/entities/article/model/ArticleDto";
 import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Typography } from "ui";
 
 export type ToggleLikeProps = {
-  post: PostDto;
+  article: ArticleDto;
 };
 
-export default function ToggleLikeIcon({ post }: ToggleLikeProps) {
+export default function ToggleLikeIcon({ article }: ToggleLikeProps) {
   const queryClient = useQueryClient();
-  const { likes: likeCount, isLiked: liked } = post;
+  const { likes: likeCount, isLiked: liked } = article;
   const toggleLike = useMutation({
     mutationFn: async (id: string) => {
       // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
-      const prevPost = queryClient.getQueryData<PostDto[]>(["posts"]);
+      const prevArticle = queryClient.getQueryData<ArticleDto[]>(["articles"]);
       queryClient.setQueryData(
-        ["posts"],
-        prevPost?.map((post) =>
-          post.postId === id
+        ["articles"],
+        prevArticle?.map((article) =>
+          article.articleId === id
             ? {
-                ...post,
-                isLiked: !post.isLiked,
-                likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+                ...article,
+                isLiked: !article.isLiked,
+                likes: article.isLiked ? article.likes - 1 : article.likes + 1,
               }
-            : post
+            : article
         )
       );
       // Todo: Server
@@ -38,7 +38,7 @@ export default function ToggleLikeIcon({ post }: ToggleLikeProps) {
       className={`flex items-center gap-2`}
       onClick={(e) => {
         e.stopPropagation();
-        toggleLike.mutate(post.postId);
+        toggleLike.mutate(article.articleId);
       }}
     >
       <FontAwesomeIcon

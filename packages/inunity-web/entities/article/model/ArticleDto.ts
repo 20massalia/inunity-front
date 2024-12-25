@@ -1,5 +1,5 @@
 
-export default interface PostDto {
+export default interface ArticleDto {
   title: string;
   avatarUrl?: string|undefined;
   author: string;
@@ -8,7 +8,7 @@ export default interface PostDto {
   date: string;
   likes: number;
   bookmarks: number;
-  postId: string;
+  articleId: string;
   isLiked: boolean;
   isBookmarked: boolean;
 }

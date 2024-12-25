@@ -12,20 +12,20 @@ import { Card, ScrollView, Typography, useMenu } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { useMessageManager } from "@/shared/ui/MessageContext";
 import AppBar from "@/widgets/AppBar";
-import usePost from "@/entities/post/hooks/usePost";
-import PostCard from "@/entities/post/ui/PostCard";
-import usePosts from "@/entities/post/hooks/usePosts";
+import useArticle from "@/entities/article/hooks/useArticle";
+import useArticles from "@/entities/article/hooks/useArticles";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
+import ArticleCard from "@/entities/article/ui/ArticleCard";
 
-export default function PostListContainer({
+export default function ArticleListContainer({
   categoryId,
 }: {
   categoryId: string;
 }) {
   const router = useNativeRouter();
 
-  const posts = usePosts();
+  const articles = useArticles();
 
   return (
     <>
@@ -52,26 +52,26 @@ export default function PostListContainer({
             <FontAwesomeIcon
               icon={faEdit}
               fontSize={24}
-              onClick={() => router.push(`/post/${categoryId}/write`)}
+              onClick={() => router.push(`/article/${categoryId}/write`)}
             />
             <FontAwesomeIcon
               icon={faSearch}
               fontSize={24}
-              onClick={() => router.push(`/post/${categoryId}/search`)}
+              onClick={() => router.push(`/article/${categoryId}/search`)}
             />
           </div>
         }
       />
       <ScrollView className="gap-2 ">
-        {!posts.isLoading &&
-          posts.data?.map((item) => (
-            <PostCard
-              key={item.postId}
+        {!articles.isLoading &&
+          articles.data?.map((item) => (
+            <ArticleCard
+              key={item.articleId}
               {...item}
               bottomFeatureSlot={
                 <>
-                  <ToggleLikeIcon post={item} />
-                  <ToggleBoomarkIcon post={item} />
+                  <ToggleLikeIcon article={item} />
+                  <ToggleBoomarkIcon article={item} />
                 </>
               }
             />

@@ -15,7 +15,7 @@ import AuthManager from "@/lib/AuthManager";
 import {
   Message,
   MessageEventType,
-  PostDetailPageEventType,
+  ArticleDetailPageEventType,
 } from "message-type/message-type";
 import { parseMessage, handleMessage } from "@/lib/MessageManager";
 import { StatusBar } from "expo-status-bar";
@@ -26,15 +26,15 @@ import CustomWebView from "@/components/CustomWebView";
 import { useWebView } from "@/components/useWebView";
 
 export default function Detail() {
-  const { postId, categoryId } = useLocalSearchParams<{
-    postId: string;
+  const { articleId, categoryId } = useLocalSearchParams<{
+    articleId: string;
     categoryId: string;
   }>();
 
   const { webViewRef } = useWebView();
 
   const sendMessage = (message: Message<any>) => {
-    webViewRef.current?.postMessage(JSON.stringify(message));
+    webViewRef.current?.articleMessage(JSON.stringify(message));
   };
 
   const [comment, setComment] = useState("");
@@ -43,7 +43,7 @@ export default function Detail() {
     sendMessage({
       event: MessageEventType.Page,
       value: {
-        event: PostDetailPageEventType.SubmitComment,
+        event: ArticleDetailPageEventType.SubmitComment,
         value: { text: comment, isAnonymous },
       },
     });
@@ -55,7 +55,7 @@ export default function Detail() {
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1 }}>
-        <CustomWebView initialPathname={`/post/${categoryId}/${postId}`} />
+        <CustomWebView initialPathname={`/article/${categoryId}/${articleId}`} />
       </View>
       <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
         <View style={styles.anonymityWrapper}>

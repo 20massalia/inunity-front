@@ -1,20 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import PostDto from "../model/PostDto";
+import ArticleDto from "../model/ArticleDto";
 
-export default function usePosts() {
-  return useQuery<PostDto[]>({
-    queryKey: ["posts"],
+export default function useArticles() {
+  return useQuery<ArticleDto[]>({
+    queryKey: ["articles"],
     queryFn: () => [
       {
         title: "this is title",
         author: "author",
         avatarUrl: "https://github.com/KimWash.png",
         authorOrg: "CS",
-        content: "this is test post",
+        content: "this is test article",
         date: "2023-08-15",
         likes: 12,
         bookmarks: 5,
-        postId: "2",
+        articleId: "2",
         isLiked: false,
         isBookmarked: false,
       },

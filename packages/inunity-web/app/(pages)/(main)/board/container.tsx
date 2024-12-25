@@ -64,7 +64,7 @@ export default function BoardListContainer() {
               key={menu.id}
               leftIcon={<FontAwesomeIcon icon={menu.icon as IconName} />}
               onClick={() => {
-                router.push(`/post/${menu.id}`)
+                router.push(`/article/${menu.id}`)
               }}
             />
           ))}

@@ -2,7 +2,7 @@
 import { useMessageManager } from "@/shared/ui/MessageContext";
 import { useEffect, useRef } from "react";
 import { ScrollView, Typography, useMenu, UserProfile } from "ui";
-import { PostDetailPageEventType } from "message-type/message-type";
+import { ArticleDetailPageEventType } from "message-type/message-type";
 import {
   faChevronLeft,
   faEllipsisVertical,
@@ -14,14 +14,14 @@ import { useRouter } from "next/navigation";
 import BlockParser from "editor-react-parser";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { DropdownMenu } from "ui/src/DropdownMenu";
-import { editorJsData } from "@/lib/post";
+import { editorJsData } from "@/lib/article";
 import useSubmitComment from "@/features/board/hooks/useSubmitComment";
 import useReportComment from "@/features/board/hooks/useReportComment";
 import useEditComment from "@/features/board/hooks/useEditComment";
-import useDeletePost from "@/features/board/hooks/useDeletePost";
+import useDeleteArticle from "@/features/board/hooks/useDeleteArticle";
 import useDeleteComment from "@/features/board/hooks/useDeleteComment";
-import usePost from "@/entities/post/hooks/usePost";
-import usePostDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
+import useArticle from "@/entities/article/hooks/useArticle";
+import useArticleDetailViewModel from "@/features/board/hooks/useArticleDetailViewModel";
 
 export const Viewer = () => {
   return (
@@ -46,26 +46,26 @@ export const Viewer = () => {
   );
 };
 
-export default function PostDetailContainer({
+export default function ArticleDetailContainer({
   categoryId,
-  postId,
+  articleId,
 }: {
   categoryId: string;
-  postId: string;
+  articleId: string;
 }) {
   const { messageManager, pageEvent } = useMessageManager();
 
   const {
-    post:postQuery,
+    article:articleQuery,
     submitComment,
     reportComment,
-    reportPost,
+    reportArticle,
     editComment,
     deleteComment,
-    deletePost,
-  } = usePostDetailViewModel({ postId });
+    deleteArticle,
+  } = useArticleDetailViewModel({ articleId });
 
-  const post = postQuery.data;
+  const article = articleQuery.data;
 
   const comments = [
     {
@@ -79,12 +79,12 @@ export default function PostDetailContainer({
   useEffect(() => {
     messageManager?.log("Page Event arrived: ", pageEvent?.value);
     if (!pageEvent) return;
-    if (pageEvent?.event === PostDetailPageEventType.SubmitComment) {
+    if (pageEvent?.event === ArticleDetailPageEventType.SubmitComment) {
       submitComment.mutate(pageEvent.value);
     }
   }, [messageManager, pageEvent, submitComment]);
   const router = useNativeRouter();
-  if (!post) return <div>no data</div>;
+  if (!article) return <div>no data</div>;
   return (
     <>
       <AppBar
@@ -104,22 +104,22 @@ export default function PostDetailContainer({
         rightIcon={
           <>
             <DropdownMenu
-              menuId={"post_detail_appbar"}
+              menuId={"article_detail_appbar"}
               actions={[
                 {
                   label: "수정",
                   onClick: () => {
                     // Todo: 수정 페이지로 변경 요망
-                    router.push(`/post/${categoryId}/write`);
+                    router.push(`/article/${categoryId}/write`);
                   },
                 },
                 {
                   label: "삭제",
-                  onClick: () => deletePost.mutate(post.postId),
+                  onClick: () => deleteArticle.mutate(article.articleId),
                 },
                 {
                   label: "신고",
-                  onClick: () => reportPost.mutate(post.postId),
+                  onClick: () => reportArticle.mutate(article.articleId),
                 },
                 { label: "차단", onClick: () => undefined },
               ]}
@@ -132,9 +132,9 @@ export default function PostDetailContainer({
         <div className="flex flex-col gap-3 p-5 bg-white ">
           <UserProfile
             profileImage={"https://github.com/squidjiny.png"}
-            name={post.author}
-            introduction={post.authorOrg}
-            id={post.author}
+            name={article.author}
+            introduction={article.authorOrg}
+            id={article.author}
           />
           <Viewer />
         </div>

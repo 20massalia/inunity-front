@@ -6,5 +6,5 @@ export default function Index() {
     categoryId: string;
   }>();
 
-  return <CustomWebView initialPathname={`/post/${categoryId}/search`} />;
+  return <CustomWebView initialPathname={`/article/${categoryId}`} />;
 }

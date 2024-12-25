@@ -1,9 +1,9 @@
 import { useMessageManager } from "@/shared/ui/MessageContext";
 import { useMutation } from "@tanstack/react-query";
 
-export default function useReportPost() {
+export default function useReportArticle() {
   const {messageManager} = useMessageManager();
-  return useMutation({mutationFn: async (postId: string) => {
-    messageManager?.log('reporting post: ', postId)
+  return useMutation({mutationFn: async (articleId: string) => {
+    messageManager?.log('reporting article: ', articleId)
   }})
 }

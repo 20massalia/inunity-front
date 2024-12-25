@@ -4,10 +4,7 @@ import { faChevronLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Input, Chip, PostListItem, useMenu, ScrollView } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import usePostSearchViewModel from "@/features/board/hooks/usePostSearchViewModel";
-import PostCard from "@/entities/post/ui/PostCard";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import { debounce } from "lodash";
@@ -17,9 +14,12 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { ClipLoader } from "react-spinners";
-import PostQueries from "@/entities/post/hooks/PostQueries";
+import ArticleQueries from "@/entities/article/hooks/ArticleQueries";
+import { Input } from "ui/src/Input";
+import ArticleCard from "@/entities/article/ui/ArticleCard";
+import { Chip, ScrollView } from "ui";
 
-export default function PostSearchContainer({
+export default function ArticleSearchContainer({
   categoryId,
 }: {
   categoryId: string;
@@ -30,20 +30,20 @@ export default function PostSearchContainer({
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const tags = ["전공", "취업", "창업", "학과", "학교", "응애"];
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  // const { posts: postQuery } = usePostSearchViewModel({
+  // const { articles: articleQuery } = useArticleSearchViewModel({
   //   categoryId,
   //   keyword: debouncedKeyword,
   //   tags: selectedTags,
   // });
 
-  const queryOptions = PostQueries.infinitePostQuery({
+  const queryOptions = ArticleQueries.infiniteArticleQuery({
     categoryId,
     keyword: debouncedKeyword,
     tags,
   });
-  const postQuery = useInfiniteQuery({ ...queryOptions });
+  const articleQuery = useInfiniteQuery({ ...queryOptions });
 
-  const posts = postQuery.data?.pages?.flatMap((page) => page.content);
+  const articles = articleQuery.data?.pages?.flatMap((page) => page.content);
 
   const queryClient = useQueryClient();
 
@@ -62,7 +62,7 @@ export default function PostSearchContainer({
       if (term.trim()) {
         search(term);
       } else {
-        queryClient.setQueriesData({ queryKey: ["posts"] }, () => []);
+        queryClient.setQueriesData({ queryKey: ["articles"] }, () => []);
       }
     }, 300), // 300ms delay
     [search]
@@ -70,8 +70,8 @@ export default function PostSearchContainer({
 
   const onReachBottom = useCallback(() => {
     console.log("loading next page!");
-    if (!postQuery.isFetching) postQuery.fetchNextPage();
-  }, [postQuery]);
+    if (!articleQuery.isFetching) articleQuery.fetchNextPage();
+  }, [articleQuery]);
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
@@ -133,31 +133,31 @@ export default function PostSearchContainer({
           ))}
         </div>
       </div>
-      {/* Post List Area Start */}
+      {/* Article List Area Start */}
       <ScrollView
         className=" gap-3 pt-3"
         spinner={<ClipLoader />}
         onReachBottom={onReachBottom} // 최하단으로 스크롤됐을 때 이벤트. isLoading: false일 때 fetchNextPage() 호출해주기.
         onRefresh={() => {
-          postQuery.refetch();
+          articleQuery.refetch();
         }}
       >
-        {postQuery.isRefetching && (
+        {articleQuery.isRefetching && (
           <div className="flex flex-row justify-center">{<ClipLoader />}</div>
         )}
-        {posts?.map((post) => (
-          <PostCard
-            {...post}
-            key={post.postId}
+        {articles?.map((article) => (
+          <ArticleCard
+            {...article}
+            key={article.articleId}
             bottomFeatureSlot={
               <>
-                <ToggleLikeIcon post={post} />
-                <ToggleBoomarkIcon post={post} />
+                <ToggleLikeIcon article={article} />
+                <ToggleBoomarkIcon article={article} />
               </>
             }
           />
         ))}
-        {postQuery.isFetchingNextPage && (
+        {articleQuery.isFetchingNextPage && (
           <div className="self-stretch flex justify-center flex-row">
             <ClipLoader size={50} />
           </div>

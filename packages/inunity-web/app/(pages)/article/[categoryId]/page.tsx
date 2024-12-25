@@ -1,22 +1,22 @@
 import getDehydratedQuery from "@/lib/getDehydratedQuery";
-import PostListContainer from "@/app/(pages)/post/[categoryId]/container";
+import ArticleListContainer from "@/app/(pages)/article/[categoryId]/container";
 import { Hydration } from "@/shared/ui/Hydration";
 import SafeAreaView from "@/widgets/SafeAreaView";
 
 export default async function Page({ params }: { params: { categoryId: string } }) {
-  const postsQuery = await getDehydratedQuery({
-    queryKey: ['posts'],
+  const articlesQuery = await getDehydratedQuery({
+    queryKey: ['articles'],
     queryFn: ({queryKey}) => [
       {
         title: "this is title",
         author: "author",
         avatarUrl: "https://github.com/KimWash.png",
         authorOrg: "CS",
-        content: "this is test post",
+        content: "this is test article",
         date: "2023-08-15",
         likes: 12,
         bookmarks: 5,
-        postId: "2",
+        articleId: "2",
         isLiked: false,
         isBookmarked: false,
       },
@@ -24,8 +24,8 @@ export default async function Page({ params }: { params: { categoryId: string } 
   });
   return (
       <SafeAreaView>
-        <Hydration queries={[postsQuery]}>
-        <PostListContainer categoryId={params.categoryId}  />
+        <Hydration queries={[articlesQuery]}>
+        <ArticleListContainer categoryId={params.categoryId}  />
         </Hydration>
       </SafeAreaView>
   );

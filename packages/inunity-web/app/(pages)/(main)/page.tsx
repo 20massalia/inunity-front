@@ -1,10 +1,9 @@
 import SafeAreaView from "@/widgets/SafeAreaView";
 import getDehydratedQuery from "@/lib/getDehydratedQuery";
 import { Hydration } from "@/shared/ui/Hydration";
-import { PostListItemProps } from "ui";
 import NoticeDto from "@/entities/notice/model/NoticeDto";
-import PostDto from "@/entities/post/model/PostDto";
 import HomeContainer from "./container";
+import ArticleDto from "@/entities/article/model/ArticleDto";
 
 //SSR 파트
 export default async function Page() {
@@ -42,15 +41,15 @@ export default async function Page() {
           date: "2024-01-01",
           content: "대충 내용입니다.",
           avatarUrl: "",
-          postId: "2",
+          articleId: "2",
           title: "제목입니다.",
         },
       ];
     },
   });
   //
-  const postQuery = await getDehydratedQuery<PostDto[]>({
-    queryKey: ["posts"],
+  const articleQuery = await getDehydratedQuery<ArticleDto[]>({
+    queryKey: ["articles"],
     queryFn: () => {
       // mocked function
       return [
@@ -59,11 +58,11 @@ export default async function Page() {
           author: "author",
           avatarUrl: "https://github.com/KimWash.png",
           authorOrg: "CS",
-          content: "this is test post",
+          content: "this is test article",
           date: "2023-08-15",
           likes: 12,
           bookmarks: 5,
-          postId: "2",
+          articleId: "2",
           isLiked: false,
           isBookmarked: false,
         },
@@ -72,7 +71,7 @@ export default async function Page() {
   });
   return (
     <SafeAreaView>
-      <Hydration queries={[scheduleQuery, postQuery, noticesQuery]}>
+      <Hydration queries={[scheduleQuery, articleQuery, noticesQuery]}>
         <HomeContainer />
       </Hydration>
     </SafeAreaView>

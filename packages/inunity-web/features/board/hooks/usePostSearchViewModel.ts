@@ -1,9 +1,9 @@
-import PostQueries, { createPage } from "@/entities/post/hooks/PostQueries";
-import usePosts from "@/entities/post/hooks/usePosts";
-import PostDto from "@/entities/post/model/PostDto";
+import ArticleQueries, { createPage } from "@/entities/article/hooks/ArticleQueries";
+import useArticles from "@/entities/article/hooks/useArticles";
+import ArticleDto from "@/entities/article/model/ArticleDto";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-export default function usePostSearchViewModel({
+export default function useArticleSearchViewModel({
   categoryId,
   keyword,
   tags,
@@ -12,7 +12,7 @@ export default function usePostSearchViewModel({
   keyword: string;
   tags: string[];
 }) {
-  const queryOptions = PostQueries.infinitePostQuery({categoryId, keyword, tags,});
-  const posts = useInfiniteQuery({...queryOptions,});
-  return { posts };
+  const queryOptions = ArticleQueries.infiniteArticleQuery({categoryId, keyword, tags,});
+  const articles = useInfiniteQuery({...queryOptions,});
+  return { articles };
 }

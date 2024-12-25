@@ -1,4 +1,3 @@
-import { webViewUrl } from "@/app/_layout";
 import { createContext, useState, useContext, useRef, useEffect } from "react";
 import { Alert } from "react-native";
 import WebView from "react-native-webview";
@@ -11,6 +10,7 @@ export type WebViewContextType = {
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
 };
+export let webViewUrl = process.env.EXPO_PUBLIC_WEB_URL ?? 'http://localhost:3000/';
 
 const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
 

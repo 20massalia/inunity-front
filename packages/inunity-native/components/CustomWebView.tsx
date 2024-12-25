@@ -1,6 +1,5 @@
 import WebView, { WebViewProps } from "react-native-webview";
-import { useWebView } from "./useWebView";
-import { webViewUrl } from "@/app/_layout";
+import { useWebView, webViewUrl } from "./useWebView";
 import { Platform } from "react-native";
 import {
   handleMessage,

@@ -1,27 +1,27 @@
-import usePost from "@/entities/post/hooks/usePost";
+import useArticle from "@/entities/article/hooks/useArticle";
 import useDeleteComment from "./useDeleteComment";
-import useDeletePost from "./useDeletePost";
+import useDeleteArticle from "./useDeleteArticle";
 import useEditComment from "./useEditComment";
 import useReportComment from "./useReportComment";
 import useSubmitComment from "./useSubmitComment";
 
-export default function usePostDetailViewModel({ postId }: { postId: string }) {
-  const post = usePost();
+export default function useArticleDetailViewModel({ articleId }: { articleId: string }) {
+  const article = useArticle();
 
   const submitComment = useSubmitComment();
-  const reportPost = useReportComment();
+  const reportArticle = useReportComment();
   const reportComment = useReportComment();
   const editComment = useEditComment();
-  const deletePost = useDeletePost();
+  const deleteArticle = useDeleteArticle();
   const deleteComment = useDeleteComment();
 
   return {
-    post,
+    article,
     submitComment,
     reportComment,
-    reportPost,
+    reportArticle,
     editComment,
     deleteComment,
-    deletePost,
+    deleteArticle,
   };
 }

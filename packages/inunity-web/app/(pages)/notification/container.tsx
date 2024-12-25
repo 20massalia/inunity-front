@@ -1,6 +1,6 @@
 'use client';
 
-import { PostListItemProps, SwipeableTabs, Typography } from "ui";
+import { ArticleListItemProps, SwipeableTabs, Typography } from "ui";
 import NotificationItem from "@/features/notification/ui/NotificationItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faGear } from "@fortawesome/free-solid-svg-icons";

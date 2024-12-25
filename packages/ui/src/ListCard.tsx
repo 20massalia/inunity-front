@@ -49,15 +49,15 @@ export const ListCard: React.FC<CardProps> = ({
         actions={[
           {
             label: "수정",
-            onClick: () => console.log("Edit Post clicked"),
+            onClick: () => console.log("Edit Article clicked"),
           },
           {
-            label: "Delete Post",
-            onClick: () => console.log("Delete Post clicked"),
+            label: "Delete Article",
+            onClick: () => console.log("Delete Article clicked"),
           },
           {
-            label: "Report Post",
-            onClick: () => console.log("Report Post clicked"),
+            label: "Report Article",
+            onClick: () => console.log("Report Article clicked"),
           },
         ]}
       />

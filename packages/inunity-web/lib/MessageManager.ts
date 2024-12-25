@@ -32,7 +32,7 @@ export class MessageManager {
   }
 
   sendMessage(messageEvent: MessageEventType, value?: unknown) {
-    this.webViewInstance?.postMessage(
+    this.webViewInstance?.articleMessage(
       JSON.stringify({ event: messageEvent, value })
     );
   }

@@ -1,33 +1,33 @@
-import PostDto from "@/entities/post/model/PostDto";
+import ArticleDto from "@/entities/article/model/ArticleDto";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Typography } from "ui";
 
 export type ToggleBookmarkProps = {
-  post: PostDto;
+  article: ArticleDto;
 };
 
-export default function ToggleBoomarkIcon({ post }: ToggleBookmarkProps) {
-  const { isBookmarked, bookmarks } = post;
+export default function ToggleBoomarkIcon({ article }: ToggleBookmarkProps) {
+  const { isBookmarked, bookmarks } = article;
   const queryClient = useQueryClient();
 
   const toggleBookmark = useMutation({
     mutationFn: async (id: string) => {
       // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
-      const prevPost = queryClient.getQueryData<PostDto[]>(["posts"]);
+      const prevArticle = queryClient.getQueryData<ArticleDto[]>(["articles"]);
       queryClient.setQueryData(
-        ["posts"],
-        prevPost?.map((post) =>
-          post.postId === id
+        ["articles"],
+        prevArticle?.map((article) =>
+          article.articleId === id
             ? {
-                ...post,
-                isBookmarked: !post.isBookmarked,
-                bookmarks: post.isBookmarked
-                  ? post.bookmarks - 1
-                  : post.bookmarks + 1,
+                ...article,
+                isBookmarked: !article.isBookmarked,
+                bookmarks: article.isBookmarked
+                  ? article.bookmarks - 1
+                  : article.bookmarks + 1,
               }
-            : post
+            : article
         )
       );
       // Todo: Server
@@ -39,7 +39,7 @@ export default function ToggleBoomarkIcon({ post }: ToggleBookmarkProps) {
       className={`flex items-center gap-2`}
       onClick={(e) => {
         e.stopPropagation();
-        toggleBookmark.mutate(post.postId);
+        toggleBookmark.mutate(article.articleId);
       }}
     >
       <FontAwesomeIcon

@@ -13,7 +13,7 @@ export default function Screen() {
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1 }}>
-        <CustomWebView initialPathname={`/post/${categoryId}/write`} />
+        <CustomWebView initialPathname={`/article/${categoryId}/write`} />
       </View>
     </KeyboardAvoidingView>
   );

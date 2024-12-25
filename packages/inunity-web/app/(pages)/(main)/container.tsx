@@ -15,16 +15,16 @@ import { useEffect } from "react";
 import { useMessageManager } from "../../../shared/ui/MessageContext";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "../../../widgets/AppBar";
-import PostCard from "@/entities/post/ui/PostCard";
 import NoticeCard from "@/features/notice/ui/NoticeCard";
 import useHomeViewModel from "../../../features/home/useHomeViewModel";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
+import ArticleCard from "@/entities/article/ui/ArticleCard";
 
 export default function HomeContainer() {
   // ViewModel 이용
   const {
-    posts,
+    articles,
     notices,
     notifications: { length },
   } = useHomeViewModel();
@@ -73,21 +73,21 @@ export default function HomeContainer() {
 
         <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
           {notices.data?.map((notice) => (
-            <NoticeCard key={notice.postId} {...notice} />
+            <NoticeCard key={notice.articleId} {...notice} />
           ))}
         </div>
         <div className="self-stretch  flex-col justify-start items-start flex">
           <Typography variant="HeadingXLargeBold" className="px-4">
             인기 게시글
           </Typography>
-          {posts.data?.map((post) => (
-            <PostCard
-              {...post}
-              key={post.postId}
+          {articles.data?.map((article) => (
+            <ArticleCard
+              {...article}
+              key={article.articleId}
               bottomFeatureSlot={
                 <>
-                  <ToggleLikeIcon post={post} />
-                  <ToggleBoomarkIcon post={post} />
+                  <ToggleLikeIcon article={article} />
+                  <ToggleBoomarkIcon article={article} />
                 </>
               }
             />

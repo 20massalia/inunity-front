@@ -20,7 +20,7 @@ export interface CardProps<T extends CardVariant = 'list'> {
   isBookmarked: boolean;
   thumbnailUrl?: string;
   avatarUrl?: string;
-  // PostListCard에서 추가된 프로퍼티들
+  // ArticleListCard에서 추가된 프로퍼티들
   authorDescription?: string;
   likeCount?: number;
   bookmarkCount?: number;

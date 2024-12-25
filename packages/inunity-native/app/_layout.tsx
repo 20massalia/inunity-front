@@ -35,7 +35,6 @@ import { WebViewProvider } from "@/components/useWebView";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-export let webViewUrl = process.env.EXPO_PUBLIC_WEB_URL ?? 'http://localhost:3000/';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -62,9 +61,9 @@ export default function RootLayout() {
           <ThemeProvider value={DefaultTheme}>
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="+not-found" />
-              <Stack.Screen name="post/[categoryId]/index" />
-              <Stack.Screen name="post/[categoryId]/write" />
-              <Stack.Screen name="post/[categoryId]/[postId]/index" />
+              <Stack.Screen name="article/[categoryId]/index" />
+              <Stack.Screen name="article/[categoryId]/write" />
+              <Stack.Screen name="article/[categoryId]/[articleId]/index" />
               <Stack.Screen name="(tabs)" />
 
               <Stack.Screen name="list" />

@@ -12,7 +12,7 @@ import { CheckBox, Typography } from "ui";
 import AppBar from "@/widgets/AppBar";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 
-export default function PostWriteContainer({
+export default function ArticleWriteContainer({
   categoryId,
 }: {
   categoryId: string;
@@ -42,7 +42,7 @@ export default function PostWriteContainer({
         <div className="flex flex-row justify-end">
           <CheckBox checked={isAnonymous} setChecked={setIsAnonymous} />&nbsp;익명
         </div>
-        <Editor onChange={setData} data={data} holder="post-editor" />
+        <Editor onChange={setData} data={data} holder="article-editor" />
       </div>
     </>
   );

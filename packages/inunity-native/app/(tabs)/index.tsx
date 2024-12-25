@@ -15,7 +15,6 @@ import {
 } from "message-type/message-type";
 import { Platform } from "react-native";
 import WebView from "react-native-webview";
-import { webViewUrl } from "../_layout";
 import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -32,7 +31,7 @@ export default function Index() {
     document.documentElement.style.setProperty('--sat', '${insets.top}px');
 `}
       source={{
-        uri: url,
+        uri: 'http://localhost:3000/test',
       }}
       onNavigationStateChange={({ url, navigationType }) => {
         console.log('Navigation changed:', url, navigationType);

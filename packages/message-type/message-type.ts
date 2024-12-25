@@ -8,11 +8,11 @@ export enum MessageEventType {
   Page = "page"
 }
 
-export enum PostDetailPageEventType {
+export enum ArticleDetailPageEventType {
   SubmitComment = 'submit_comment'
 }
 
-export type PageEventType = PostDetailPageEventType;
+export type PageEventType = ArticleDetailPageEventType;
 
 export type CommentPayload = {
   text: string;
@@ -20,7 +20,7 @@ export type CommentPayload = {
 }
 
 type PageEventMap = {
-  [PostDetailPageEventType.SubmitComment]: CommentPayload;
+  [ArticleDetailPageEventType.SubmitComment]: CommentPayload;
 }
 
 export type PageEvent<T extends PageEventType> = {

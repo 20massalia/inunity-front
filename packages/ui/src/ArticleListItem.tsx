@@ -17,7 +17,7 @@ const COLORS = {
   stats: "text-[#0f1419]",
 };
 
-export interface PostListItemProps {
+export interface ArticleListItemProps {
   title: string;
   avatarUrl?: string;
   name: string;
@@ -26,9 +26,9 @@ export interface PostListItemProps {
   date: string;
   likes: number;
   bookmarks: number;
-  postId: string;
-  toggleLike?: (postId: string) => void;
-  toggleBookmark?: (postId: string) => void;
+  articleId: string;
+  toggleLike?: (articleId: string) => void;
+  toggleBookmark?: (articleId: string) => void;
   isLiked: boolean;
   isBookmarked: boolean;
   onClick?: () => void;
@@ -36,7 +36,7 @@ export interface PostListItemProps {
   setMenuOpened: (opened: boolean) => void;
 }
 
-export const PostListItem: React.FC<PostListItemProps> = ({
+export const ArticleListItem: React.FC<ArticleListItemProps> = ({
   title,
   name,
   department,
@@ -44,7 +44,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
   date,
   likes,
   bookmarks,
-  postId,
+  articleId,
   toggleLike,
   toggleBookmark,
   isLiked,
@@ -68,15 +68,15 @@ export const PostListItem: React.FC<PostListItemProps> = ({
         actions={[
           {
             label: "수정",
-            onClick: () => console.log("Edit Post clicked"),
+            onClick: () => console.log("Edit Article clicked"),
           },
           {
-            label: "Delete Post",
-            onClick: () => console.log("Delete Post clicked"),
+            label: "Delete Article",
+            onClick: () => console.log("Delete Article clicked"),
           },
           {
-            label: "Report Post",
-            onClick: () => console.log("Report Post clicked"),
+            label: "Report Article",
+            onClick: () => console.log("Report Article clicked"),
           },
         ]}
       />
@@ -100,7 +100,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
             className={`flex items-center gap-2`}
             onClick={(e) => {
               e.stopPropagation();
-              toggleLike?.(postId);
+              toggleLike?.(articleId);
             }}
           >
             <FontAwesomeIcon
@@ -124,7 +124,7 @@ export const PostListItem: React.FC<PostListItemProps> = ({
             className={`flex items-center gap-2`}
             onClick={(e) => {
               e.stopPropagation();
-              toggleBookmark?.(postId);
+              toggleBookmark?.(articleId);
             }}
           >
             <FontAwesomeIcon
