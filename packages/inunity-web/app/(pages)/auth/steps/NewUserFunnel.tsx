@@ -75,7 +75,7 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
 
         return (
           <GoogleSignin
-            onNext={() => {}}
+            onNext={() => {}} // 현재 빈칸
             onAttachCertificate={handleAttachCertificate}
           />
         );

@@ -16,7 +16,7 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
   const [graduationYear, setGraduationYear] = useState(
     context.graduationYear || ""
   );
-  const [isGraduated, setIsGraduated] = useState(true);
+  const [isGraduated, setIsGraduated] = useState(false);
 
   const updateContext = (key: keyof typeof context, value: string) => {
     history.replace("Info", { ...context, [key]: value });
@@ -33,39 +33,37 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
         <br />몇 가지 정보를 입력해주세요.
       </Typography>
 
-      <div className="mb-4">
+      <Input
+        placeholder="이름"
+        value={name}
+        setValue={(value) => {
+          setName(value);
+          updateContext("name", value);
+        }}
+        className="mt-4"
+      />
+      <Input
+        placeholder="사용할 닉네임"
+        value={nickname}
+        setValue={(value) => {
+          setNickname(value);
+          updateContext("nickname", value);
+        }}
+        className="mt-4"
+      />
+      {isGraduated && (
         <Input
-          placeholder="이름"
-          value={name}
+          placeholder="졸업 연월"
+          value={graduationYear}
           setValue={(value) => {
-            setName(value);
-            updateContext("name", value);
+            setGraduationYear(value);
+            updateContext("graduationYear", value);
           }}
           className="mt-4"
         />
-        <Input
-          placeholder="사용할 닉네임"
-          value={nickname}
-          setValue={(value) => {
-            setNickname(value);
-            updateContext("nickname", value);
-          }}
-          className="mt-4"
-        />
-        {isGraduated && (
-          <Input
-            placeholder="졸업 연월"
-            value={graduationYear}
-            setValue={(value) => {
-              setGraduationYear(value);
-              updateContext("graduationYear", value);
-            }}
-            className="mt-4"
-          />
-        )}
-      </div>
+      )}
 
-      <div className="flex items-center mb-6">
+      <div className="flex items-center mt-4">
         <label className="mr-4">졸업 여부</label>
         <button
           onClick={() => setIsGraduated((prev) => !prev)}
