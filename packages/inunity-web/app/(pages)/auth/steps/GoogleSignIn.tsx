@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Typography } from "ui";
+import { Typography } from "ui";
+import { FcGoogle } from "react-icons/fc";
 
 interface GoogleSignInProps {
   onNext: () => void;
@@ -18,12 +19,20 @@ export default function GoogleSignIn({
         <br />
         구글 로그인을 시도할게요.
       </Typography>
+      <div className="flex justify-center items-center flex-1">
+        <button
+          onClick={onNext}
+          className="flex items-center justify-center px-6 py-3 border border-gray-300 rounded-3xl shadow-sm bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <FcGoogle className="w-5 h-5 mr-2" />
+          <span className="text-gray-700 font-medium">
+            Google 계정으로 로그인
+          </span>
+        </button>
+      </div>
       <div className="mt-auto mb-5 flex flex-col gap-4">
-        <Button variant="primary" size="large" onClick={onNext}>
-          Google로 계속하기
-        </Button>
         <div className="text-center" onClick={onAttachCertificate}>
-          학교 포탈 계정이 없나요?
+          학교 웹메일 계정이 없나요?
         </div>
       </div>
     </div>
