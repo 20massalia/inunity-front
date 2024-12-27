@@ -1,6 +1,5 @@
 "use client";
 
-import { SimpleListItem } from "@/app/(pages)/(main)/board/page";
 import {
   faSearch,
   faClipboard,
@@ -22,7 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library} from "@fortawesome/fontawesome-svg-core";
 library.add(fas)
 import React, { useState } from "react";
-import { Divider, Input, Typography } from "ui";
+import { Divider, Input, SimpleListItem, Typography } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 
 

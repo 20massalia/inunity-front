@@ -1,9 +1,9 @@
 import useArticle from "@/entities/article/hooks/useArticle";
 import useDeleteComment from "./useDeleteComment";
-import useDeleteArticle from "./useDeleteArticle";
 import useEditComment from "./useEditComment";
 import useReportComment from "./useReportComment";
 import useSubmitComment from "./useSubmitComment";
+import useDeleteArticle from "./useDeleteArticle";
 
 export default function useArticleDetailViewModel({ articleId }: { articleId: string }) {
   const article = useArticle();

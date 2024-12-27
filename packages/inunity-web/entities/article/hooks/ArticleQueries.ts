@@ -5,6 +5,9 @@ import {
 } from "@tanstack/react-query";
 import ArticleDto from "../model/ArticleDto";
 import Page from "@/shared/types/Page";
+import { generateMockArticle, generateMockArticleThumbnails } from "../model/ArticleMock";
+import ResponseArticle from "../model/ResponseAritcle";
+import { createPage } from "@/shared/utils/createPage";
 
 export enum SortType {
   Date = "date",
@@ -26,19 +29,6 @@ export interface ArticleFilter {
 
 
 
-const dummyData = {
-  title: "this is title",
-  author: "author",
-  avatarUrl: "https://github.com/KimWash.png",
-  authorOrg: "CS",
-  content: "this is test article",
-  date: "2023-08-15",
-  likes: 12,
-  bookmarks: 5,
-  articleId: "2",
-  isLiked: false,
-  isBookmarked: false,
-};
 
 
 
@@ -55,16 +45,27 @@ export default class ArticleQueries {
         SortDirection.Descending,
       ]
     ) => ["articles", categoryId, keyword, tags, sort],
+    featured: ['featuredArticle',]
   };
 
   static singleArticleQuery(id: string) {
     const queryKey = this.Keys.byId(id);
-    return queryOptions<ArticleDto>({
+    return queryOptions<ResponseArticle>({
       queryKey,
       queryFn: async ({ queryKey: [_, id] }) => {
-        return dummyData;
+        return generateMockArticle();
       },
     });
+  }
+
+  static featuredArticleQuery(length: number) {
+    const queryKey = this.Keys.featured;
+    return queryOptions({
+      queryKey,
+      queryFn: async () => {
+        return generateMockArticleThumbnails(length)
+      }
+    })
   }
 
   static infiniteArticleQuery(filter?: ArticleFilter) {
@@ -76,35 +77,36 @@ export default class ArticleQueries {
       queryFn: async ({ pageParam, queryKey }) => {
         const [_, categoryId, keyword, tags, sort] = queryKey;
         console.log('fetching next page...', pageParam)
-        const page = (await (
-          await fetch("http://localhost:8082/notices/v1/university?page=" + pageParam )
-        ).json()) as Page<{
-          id: number;
-          title: string;
-          departmentName: string;
-          contentSummary: string;
-          likes: number;
-          bookmarks: number;
-          isLiked: boolean;
-          isBookmarked: boolean;
-          date: Date;
-        }>;
-        const pageConverted = {
-          ...page,
-          content: page.content.map(
-            (content) =>
-              ({
-                ...content,
-                articleId: content.id.toString(),
-                date: new Date(content.date).toDateString(),
-                author: content.departmentName,
-                authorOrg: "",
-                content: content.contentSummary,
-              } as ArticleDto)
-          ),
-        };
-        return pageConverted;
-        // return createPage([dummyData]);
+        return createPage(generateMockArticleThumbnails(20));
+        // const page = (await (
+        //   await fetch("http://localhost:8082/notices/v1/university?page=" + pageParam )
+        // ).json()) as Page<{
+        //   id: number;
+        //   title: string;
+        //   departmentName: string;
+        //   contentSummary: string;
+        //   likes: number;
+        //   bookmarks: number;
+        //   isLiked: boolean;
+        //   isBookmarked: boolean;
+        //   date: Date;
+        // }>;
+        // const pageConverted = {
+        //   ...page,
+        //   content: page.content.map(
+        //     (content) =>
+        //       ({
+        //         ...content,
+        //         articleId: content.id.toString(),
+        //         date: new Date(content.date).toDateString(),
+        //         author: content.departmentName,
+        //         authorOrg: "",
+        //         content: content.contentSummary,
+        //       } as ArticleDto)
+        //   ),
+        // };
+        // return pageConverted;
+        // // return createPage([dummyData]);
       },
       initialPageParam: 0,
       getNextPageParam: (lastPage, allPages, lastPageParam) =>

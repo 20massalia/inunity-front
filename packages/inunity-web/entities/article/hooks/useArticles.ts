@@ -1,23 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import ArticleDto from "../model/ArticleDto";
+import { generateMockArticleThumbnails } from "../model/ArticleMock";
+import ArticleQueries from "./ArticleQueries";
 
 export default function useArticles() {
-  return useQuery<ArticleDto[]>({
-    queryKey: ["articles"],
-    queryFn: () => [
-      {
-        title: "this is title",
-        author: "author",
-        avatarUrl: "https://github.com/KimWash.png",
-        authorOrg: "CS",
-        content: "this is test article",
-        date: "2023-08-15",
-        likes: 12,
-        bookmarks: 5,
-        articleId: "2",
-        isLiked: false,
-        isBookmarked: false,
-      },
-    ],
-  });
+  const queryOptions = ArticleQueries.infiniteArticleQuery();
+  const articles = useInfiniteQuery({...queryOptions,});
+  return articles
 }

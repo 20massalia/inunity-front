@@ -77,13 +77,13 @@ export default function Login() {
 
   return (
     <div className={`p-5 gap-3 flex flex-col `} >
-      <Typography variant='h3'>아이디</Typography>
+      <Typography variant='HeadingLargeBold'>아이디</Typography>
       <Input
         value={form.id}
         setValue={(value) => edit('id', value)}
         placeholder='포탈 아이디'
       />    
-      <Typography variant='h3' >비밀번호</Typography>
+      <Typography variant='HeadingLargeBold' >비밀번호</Typography>
       <Input
         ref={pwRef}
         value={form.pw}

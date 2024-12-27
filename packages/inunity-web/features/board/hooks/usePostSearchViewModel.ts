@@ -1,4 +1,4 @@
-import ArticleQueries, { createPage } from "@/entities/article/hooks/ArticleQueries";
+import ArticleQueries from "@/entities/article/hooks/ArticleQueries";
 import useArticles from "@/entities/article/hooks/useArticles";
 import ArticleDto from "@/entities/article/model/ArticleDto";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";

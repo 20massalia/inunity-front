@@ -1,18 +1,14 @@
 "use client";
 
-import { usePlatform } from "@/hooks/usePlatform";
 import {
   faChevronLeft,
   faEdit,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MessageEventType } from "message-type/message-type";
 import { Card, ScrollView, Typography, useMenu } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import { useMessageManager } from "@/shared/ui/MessageContext";
 import AppBar from "@/widgets/AppBar";
-import useArticle from "@/entities/article/hooks/useArticle";
 import useArticles from "@/entities/article/hooks/useArticles";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
@@ -25,7 +21,8 @@ export default function ArticleListContainer({
 }) {
   const router = useNativeRouter();
 
-  const articles = useArticles();
+  const articleQuery = useArticles();
+  const articles = articleQuery.data?.pages.flatMap(page => page.content);
 
   return (
     <>
@@ -63,8 +60,8 @@ export default function ArticleListContainer({
         }
       />
       <ScrollView className="gap-2 ">
-        {!articles.isLoading &&
-          articles.data?.map((item) => (
+        {!articleQuery.isLoading &&
+          articles?.map((item) => (
             <ArticleCard
               key={item.articleId}
               {...item}

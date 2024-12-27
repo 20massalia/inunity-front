@@ -1,16 +1,18 @@
 import ArticleDto from "@/entities/article/model/ArticleDto";
+import ResponseArticleThumbnail from "@/entities/article/model/ResponseArticleThumbnail";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Typography } from "ui";
 
 export type ToggleBookmarkProps = {
-  article: ArticleDto;
+  article: ResponseArticleThumbnail;
 };
 
 export default function ToggleBoomarkIcon({ article }: ToggleBookmarkProps) {
-  const { isBookmarked, bookmarks } = article;
+  const { commentNum,  } = article;
   const queryClient = useQueryClient();
+  const {isBookmarked, bookmarks} = {isBookmarked: false, bookmarks: 40}
 
   const toggleBookmark = useMutation({
     mutationFn: async (id: string) => {

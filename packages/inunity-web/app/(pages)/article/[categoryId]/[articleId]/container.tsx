@@ -14,14 +14,13 @@ import { useRouter } from "next/navigation";
 import BlockParser from "editor-react-parser";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { DropdownMenu } from "ui/src/DropdownMenu";
-import { editorJsData } from "@/lib/article";
 import useSubmitComment from "@/features/board/hooks/useSubmitComment";
 import useReportComment from "@/features/board/hooks/useReportComment";
 import useEditComment from "@/features/board/hooks/useEditComment";
-import useDeleteArticle from "@/features/board/hooks/useDeleteArticle";
 import useDeleteComment from "@/features/board/hooks/useDeleteComment";
 import useArticle from "@/entities/article/hooks/useArticle";
-import useArticleDetailViewModel from "@/features/board/hooks/useArticleDetailViewModel";
+import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
+import { editorJsData } from "@/lib/article";
 
 export const Viewer = () => {
   return (

@@ -72,7 +72,7 @@ export default function HomeContainer() {
         </div>
 
         <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
-          {notices.data?.map((notice) => (
+          {notices.data?.pages.flatMap(page => page.content).map((notice) => (
             <NoticeCard key={notice.articleId} {...notice} />
           ))}
         </div>
