@@ -2,28 +2,16 @@ import getDehydratedQuery from "@/lib/getDehydratedQuery";
 import ArticleDetailContainer from "@/app/(pages)/article/[categoryId]/[articleId]/container";
 import { Hydration } from "@/shared/ui/Hydration";
 import SafeAreaView from "@/widgets/SafeAreaView";
+import { generateMockArticle } from "@/entities/article/model/ArticleMock";
+import ArticleQueries from "@/entities/article/hooks/ArticleQueries";
 
 export default async function Page({
   params,
 }: {
   params: { categoryId: string; articleId: string };
 }) {
-  const articleQuery = await getDehydratedQuery({
-    queryKey: ["article"],
-    queryFn: ({ queryKey }) => ({
-      title: "this is title",
-      author: "author",
-      avatarUrl: "https://github.com/KimWash.png",
-      authorOrg: "CS",
-      content: "this is test article",
-      date: "2023-08-15",
-      likes: 12,
-      bookmarks: 5,
-      articleId: "2",
-      isLiked: false,
-      isBookmarked: false,
-    }),
-  });
+  const queryOptions = ArticleQueries.singleArticleQuery(params.articleId);
+  const articleQuery = await getDehydratedQuery(queryOptions);
   return (
     <SafeAreaView>
       <Hydration queries={[articleQuery]}>

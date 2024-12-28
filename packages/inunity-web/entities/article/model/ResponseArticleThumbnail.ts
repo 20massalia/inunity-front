@@ -14,6 +14,7 @@ type ResponseArticleThumbnail = Pick<
   | "commentNum"
   | "likeNum"
   | "isLiked"
+  | 'userImageUrl'
 >;
 
 export default ResponseArticleThumbnail

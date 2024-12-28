@@ -4,6 +4,7 @@ import { Hydration } from "@/shared/ui/Hydration";
 import NoticeDto from "@/entities/notice/model/NoticeDto";
 import HomeContainer from "./container";
 import ArticleDto from "@/entities/article/model/ArticleDto";
+import ArticleQueries from "@/entities/article/hooks/ArticleQueries";
 
 //SSR 파트
 export default async function Page() {
@@ -48,27 +49,8 @@ export default async function Page() {
     },
   });
   //
-  const articleQuery = await getDehydratedQuery<ArticleDto[]>({
-    queryKey: ["articles"],
-    queryFn: () => {
-      // mocked function
-      return [
-        {
-          title: "this is title",
-          author: "author",
-          avatarUrl: "https://github.com/KimWash.png",
-          authorOrg: "CS",
-          content: "this is test article",
-          date: "2023-08-15",
-          likes: 12,
-          bookmarks: 5,
-          articleId: "2",
-          isLiked: false,
-          isBookmarked: false,
-        },
-      ];
-    },
-  });
+  const articleQueryOptions = ArticleQueries.featuredArticleQuery(5);
+  const articleQuery = await getDehydratedQuery(articleQueryOptions);
   return (
     <SafeAreaView>
       <Hydration queries={[scheduleQuery, articleQuery, noticesQuery]}>

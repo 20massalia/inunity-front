@@ -21,6 +21,7 @@ export default function ArticleCard({ ...item }: ResponseArticleThumbnail & {bot
       content={item.content}
       fromUpdate={item.updatedAt.toDateString()}
       likeCount={item.likeNum}
+      avatarUrl={item.userImageUrl}
       bookmarkCount={0}
       onClick={() => router.push(`/article/1/${item.articleId}`)}
       isLiked={item.isLiked}

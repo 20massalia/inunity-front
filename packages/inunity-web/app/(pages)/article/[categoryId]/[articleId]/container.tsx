@@ -21,6 +21,7 @@ import useDeleteComment from "@/features/board/hooks/useDeleteComment";
 import useArticle from "@/entities/article/hooks/useArticle";
 import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
 import { editorJsData } from "@/lib/article";
+import { generateMockComment, generateMockCommentsWithReplies } from "@/entities/article/model/ArticleMock";
 
 export const Viewer = () => {
   return (
@@ -66,14 +67,7 @@ export default function ArticleDetailContainer({
 
   const article = articleQuery.data;
 
-  const comments = [
-    {
-      name: "김정아",
-      department: "컴퓨터공학부",
-      date: "2023-08-15",
-      content: "드랍하고 싶어요 ㅠㅠ",
-    },
-  ];
+  const comments = generateMockCommentsWithReplies(3);
 
   useEffect(() => {
     messageManager?.log("Page Event arrived: ", pageEvent?.value);
@@ -130,30 +124,30 @@ export default function ArticleDetailContainer({
       <ScrollView className="text-black gap-2">
         <div className="flex flex-col gap-3 p-5 bg-white ">
           <UserProfile
-            profileImage={"https://github.com/squidjiny.png"}
-            name={article.author}
-            introduction={article.authorOrg}
-            id={article.author}
+            profileImage={article.userImageUrl}
+            name={article.nickname}
+            introduction={article.department}
+            id={article.userId}
           />
           <Viewer />
         </div>
         <div className="bg-white self-stretch flex flex-col items-start justify-start p-5 gap-3">
           <div className="flex flex-row items-center justify-center gap-1">
             <Typography variant="HeadingLargeBold">댓글&nbsp;</Typography>
-            <Typography variant="HeadingNormalBold">2</Typography>
+            <Typography variant="HeadingNormalBold">{comments.comments.length}</Typography>
           </div>
           <div className="self-stretch flex flex-col items-start justify-start gap-3">
-            {comments.map((comment) => (
+            {comments.comments.map((comment) => (
               <>
                 <div
                   className="flex flex-col justify-start self-stretch"
                   key={comment.content}
                 >
                   <UserProfile
-                    profileImage={""}
-                    name={comment.name}
+                    profileImage={comment.userImageUrl}
+                    name={comment.nickname}
                     introduction={comment.department}
-                    id={comment.name}
+                    id={comment.userId}
                     actions={[
                       { label: "수정", onClick: () => {} },
                       { label: "삭제", onClick: () => {} },
@@ -166,7 +160,7 @@ export default function ArticleDetailContainer({
                     variant="LabelNormalRegular"
                     className="inline text-end"
                   >
-                    {comment.date}
+                    {comment.createAt.toString()}
                   </Typography>
                 </div>
               </>

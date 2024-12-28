@@ -84,6 +84,7 @@ export default function HomeContainer() {
             <ArticleCard
               {...article}
               key={article.articleId}
+              
               bottomFeatureSlot={
                 <>
                   <ToggleLikeIcon article={article} />

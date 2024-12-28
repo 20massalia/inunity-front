@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { fakerKO as faker } from '@faker-js/faker';
 import ResponseArticleThumbnail from './ResponseArticleThumbnail';
 import ResponseComment from '@/entities/comment/model/ResponseComment';
 import ResponseReplyComment from '@/entities/comment/model/ResponseReplyComment';
@@ -10,7 +10,7 @@ export function generateMockReplyComment(): ResponseReplyComment {
     isAnonymous: faker.datatype.boolean(),
     userId: faker.number.int({ min: 1, max: 10000 }),
     department: faker.helpers.arrayElement(['컴퓨터공학과', '전자공학과', '기계공학과', '산업공학과', '화학공학과']),
-    nickname: faker.internet.userName(),
+    nickname: faker.person.fullName(),
     userImageUrl: faker.image.avatar(),
     content: faker.lorem.sentence(),
     isOwner: faker.datatype.boolean(),
@@ -24,7 +24,7 @@ export function generateMockComment(): ResponseComment {
     isAnonymous: faker.datatype.boolean(),
     userId: faker.number.int({ min: 1, max: 10000 }),
     department: faker.helpers.arrayElement(['컴퓨터공학과', '전자공학과', '기계공학과', '산업공학과', '화학공학과']),
-    nickname: faker.internet.userName(),
+    nickname: faker.person.fullName(),
     userImageUrl: faker.image.avatar(),
     content: faker.lorem.paragraph(),
     isOwner: faker.datatype.boolean(),
@@ -38,7 +38,7 @@ export function generateMockArticle(): ResponseArticle {
   return {
     userId: faker.number.int({ min: 1, max: 10000 }),
     department: faker.helpers.arrayElement(['컴퓨터공학과', '전자공학과', '기계공학과', '산업공학과', '화학공학과']),
-    nickname: faker.internet.userName(),
+    nickname: faker.person.fullName(),
     userImageUrl: faker.image.avatar(),
     isAnonymous: faker.datatype.boolean(),
     articleId: faker.string.uuid(),
@@ -61,7 +61,8 @@ export function generateMockArticleThumbnail(): ResponseArticleThumbnail {
   return {
     userId: faker.number.int({ min: 1, max: 10000 }),
     department: faker.helpers.arrayElement(['컴퓨터공학과', '전자공학과', '기계공학과', '산업공학과', '화학공학과']),
-    nickname: faker.internet.userName(),
+    nickname: faker.person.fullName(),
+    userImageUrl: faker.image.avatar(),
     isAnonymous: faker.datatype.boolean(),
     articleId: faker.string.uuid(),
     title: faker.lorem.sentence(),

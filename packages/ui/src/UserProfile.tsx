@@ -21,7 +21,7 @@ export interface UserProfileProps {
   /** 드롭다운 메뉴 아이템 */
   actions?: DropDownActionItem[];
   isVerified?: boolean;
-  id: string;
+  id: number;
 }
 
 /** 글, 댓글에서 사용자 프로필 컴포넌트 */
@@ -55,6 +55,7 @@ export const UserProfile = ({
         </div>
       </div>
 
+{/* Todo: Actions ReactNode로 타입 바꾼 후 외부에서 받아오게 수정 */}
       {actions && (
         <DropdownMenu
           actions={actions}

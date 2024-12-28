@@ -3,8 +3,6 @@ import {
   infiniteQueryOptions,
   queryOptions,
 } from "@tanstack/react-query";
-import ArticleDto from "../model/ArticleDto";
-import Page from "@/shared/types/Page";
 import { generateMockArticle, generateMockArticleThumbnails } from "../model/ArticleMock";
 import ResponseArticle from "../model/ResponseAritcle";
 import { createPage } from "@/shared/utils/createPage";
