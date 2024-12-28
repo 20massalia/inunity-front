@@ -45,7 +45,7 @@ export function Card(props: CardProps) {
 
 export function DetailedCard(props: CardProps) {
   return (
-    <div className="w-[300px] p-3 bg-white rounded border border-black/10 flex-col justify-start items-start inline-flex">
+    <div className="w-[300px] p-3 bg-white rounded border border-black/10 flex-col justify-start items-start flex">
       <img className="h-32 relative" src={props.thumbnailUrl ?? "https://via.placeholder.com/276x128"} />
       <div className="self-stretch  pt-4 bg-white flex-col justify-start items-start gap-2 flex">
         <div className="justify-start items-center gap-2 inline-flex">

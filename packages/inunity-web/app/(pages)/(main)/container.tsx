@@ -71,10 +71,12 @@ export default function HomeContainer() {
           </Typography>
         </div>
 
-        <div className="self-stretch text-pri p-4 justify-start items-start gap-4 inline-flex">
+        <div className="text-pri p-4  w-full ">
+          <div className=" justify-start items-start gap-4 flex overflow-x-scroll">
           {notices.data?.pages.flatMap(page => page.content).map((notice) => (
             <NoticeCard key={notice.articleId} {...notice} />
           ))}
+          </div>
         </div>
         <div className="self-stretch  flex-col justify-start items-start flex">
           <Typography variant="HeadingXLargeBold" className="px-4">
