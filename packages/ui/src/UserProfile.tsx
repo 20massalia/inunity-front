@@ -19,7 +19,7 @@ export interface UserProfileProps {
   /** 사용자 소개 */
   introduction?: string;
   /** 드롭다운 메뉴 아이템 */
-  actions?: DropDownActionItem[];
+  actions?: React.ReactNode;
   isVerified?: boolean;
   id: number;
 }
@@ -33,7 +33,6 @@ export const UserProfile = ({
   id,
   isVerified,
 }: UserProfileProps) => {
-  const { scrollContainerRef } = useScrollView();
   return (
     <div className="pb-4 bg-white flex justify-between items-center gap-2 flex-row w-full">
       <div className="flex gap-2">
@@ -56,13 +55,7 @@ export const UserProfile = ({
       </div>
 
 {/* Todo: Actions ReactNode로 타입 바꾼 후 외부에서 받아오게 수정 */}
-      {actions && (
-        <DropdownMenu
-          actions={actions}
-          menuId={`user_${name}}`}
-          scrollContainerRef={scrollContainerRef}
-        />
-      )}
+      {actions}
 
       {/* <div
         className="w-6 h-6 relative flex justify-end"

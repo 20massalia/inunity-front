@@ -5,6 +5,8 @@ import { UserProfile } from "./UserProfile";
 import { Typography } from "./Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { DropdownMenu } from "./DropdownMenu";
+import { useScrollView } from "./contexts/ScrollContext";
 // Colors
 const COLORS = {
   background: "bg-white",
@@ -50,35 +52,43 @@ export const ArticleListItem: React.FC<ArticleListItemProps> = ({
   isLiked,
   isBookmarked,
   onClick,
+  avatarUrl,
   isMenuOpened: isMenuOpen,
   setMenuOpened: setIsMenuOpen,
 }) => {
   // const isMenuOpen = isMenuOpened
-  // const setIsMenuOpen = (value: boolean) => 
+  // const setIsMenuOpen = (value: boolean) =>
+  const {scrollContainerRef} = useScrollView();
   return (
     <div
       onClick={onClick}
       className={` h-auto ${COLORS.background} px-4 py-3 flex-col justify-center items-start inline-flex self-stretch`}
     >
       <UserProfile
-        profileImage={""}
+        profileImage={avatarUrl}
         name={name}
         introduction={department}
-        id={name}
-        actions={[
-          {
-            label: "수정",
-            onClick: () => console.log("Edit Article clicked"),
-          },
-          {
-            label: "Delete Article",
-            onClick: () => console.log("Delete Article clicked"),
-          },
-          {
-            label: "Report Article",
-            onClick: () => console.log("Report Article clicked"),
-          },
-        ]}
+        id={0}
+        actions={
+          <DropdownMenu
+            menuId={`article_${articleId}`}
+            scrollContainerRef={scrollContainerRef}
+            actions={[
+              {
+                label: "수정",
+                onClick: () => console.log("Edit Article clicked"),
+              },
+              {
+                label: "Delete Article",
+                onClick: () => console.log("Delete Article clicked"),
+              },
+              {
+                label: "Report Article",
+                onClick: () => console.log("Report Article clicked"),
+              },
+            ]}
+          />
+        }
       />
       <Typography
         variant="ParagraphNormalRegular"

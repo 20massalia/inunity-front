@@ -21,7 +21,10 @@ import useDeleteComment from "@/features/board/hooks/useDeleteComment";
 import useArticle from "@/entities/article/hooks/useArticle";
 import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
 import { editorJsData } from "@/lib/article";
-import { generateMockComment, generateMockCommentsWithReplies } from "@/entities/article/model/ArticleMock";
+import {
+  generateMockComment,
+  generateMockCommentsWithReplies,
+} from "@/entities/article/model/ArticleMock";
 
 export const Viewer = () => {
   return (
@@ -56,7 +59,7 @@ export default function ArticleDetailContainer({
   const { messageManager, pageEvent } = useMessageManager();
 
   const {
-    article:articleQuery,
+    article: articleQuery,
     submitComment,
     reportComment,
     reportArticle,
@@ -134,7 +137,9 @@ export default function ArticleDetailContainer({
         <div className="bg-white self-stretch flex flex-col items-start justify-start p-5 gap-3">
           <div className="flex flex-row items-center justify-center gap-1">
             <Typography variant="HeadingLargeBold">댓글&nbsp;</Typography>
-            <Typography variant="HeadingNormalBold">{comments.comments.length}</Typography>
+            <Typography variant="HeadingNormalBold">
+              {comments.comments.length}
+            </Typography>
           </div>
           <div className="self-stretch flex flex-col items-start justify-start gap-3">
             {comments.comments.map((comment) => (
@@ -148,12 +153,17 @@ export default function ArticleDetailContainer({
                     name={comment.nickname}
                     introduction={comment.department}
                     id={comment.userId}
-                    actions={[
-                      { label: "수정", onClick: () => {} },
-                      { label: "삭제", onClick: () => {} },
-                      { label: "신고", onClick: () => {} },
-                      { label: "차단", onClick: () => {} },
-                    ]}
+                    actions={
+                      <DropdownMenu
+                        menuId={`comment_${comment.commentId}`}
+                        actions={[
+                          { label: "수정", onClick: () => {} },
+                          { label: "삭제", onClick: () => {} },
+                          { label: "신고", onClick: () => {} },
+                          { label: "차단", onClick: () => {} },
+                        ]}
+                      />
+                    }
                   />
                   <Typography>{comment.content}</Typography>
                   <Typography

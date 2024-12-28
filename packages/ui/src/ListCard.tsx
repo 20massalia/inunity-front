@@ -6,8 +6,9 @@ import { Typography } from "./Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useMenu } from "./contexts/MenuContext";
-import { DropDownActionItem } from "./DropdownMenu";
+import { DropDownActionItem, DropdownMenu } from "./DropdownMenu";
 import { CardProps } from "./Card";
+import { useScrollView } from "./contexts/ScrollContext";
 // Colors
 const COLORS = {
   background: "bg-white",
@@ -35,6 +36,7 @@ export const ListCard: React.FC<CardProps> = ({
   profileSlot,
   bottomFeatureSlot,
 }) => {
+  const {scrollContainerRef} = useScrollView();
   return (
     <div
       onClick={onClick}
@@ -46,20 +48,26 @@ export const ListCard: React.FC<CardProps> = ({
         name={author}
         introduction={authorDescription}
         id={2}
-        actions={[
-          {
-            label: "수정",
-            onClick: () => console.log("Edit Article clicked"),
-          },
-          {
-            label: "Delete Article",
-            onClick: () => console.log("Delete Article clicked"),
-          },
-          {
-            label: "Report Article",
-            onClick: () => console.log("Report Article clicked"),
-          },
-        ]}
+        actions={
+          <DropdownMenu
+            actions={[
+              {
+                label: "수정",
+                onClick: () => console.log("Edit Article clicked"),
+              },
+              {
+                label: "Delete Article",
+                onClick: () => console.log("Delete Article clicked"),
+              },
+              {
+                label: "Report Article",
+                onClick: () => console.log("Report Article clicked"),
+              },
+            ]}
+            menuId={`user_${name}}`}
+            scrollContainerRef={scrollContainerRef}
+          />
+        }
       />
       <Typography
         variant="ParagraphNormalRegular"
