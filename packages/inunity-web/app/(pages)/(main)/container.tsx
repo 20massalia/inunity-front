@@ -73,8 +73,11 @@ export default function HomeContainer() {
 
         <div className="text-pri p-4  w-full ">
           <div className=" justify-start items-start gap-4 flex overflow-x-scroll">
-          {notices.data?.pages.flatMap(page => page.content).map((notice) => (
-            <NoticeCard key={notice.articleId} {...notice} />
+          {notices.data?.pages.flatMap(page => page.content).map((notice,) => (
+                    <div  key={notice.articleId} className="flex-none">
+                    <NoticeCard {...notice} />
+                  </div>
+          
           ))}
           </div>
         </div>
