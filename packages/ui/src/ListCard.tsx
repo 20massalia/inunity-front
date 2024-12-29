@@ -64,7 +64,7 @@ export const ListCard: React.FC<CardProps> = ({
                 onClick: () => console.log("Report Article clicked"),
               },
             ]}
-            menuId={`user_${name}}`}
+            menuId={`user_${author}`}
             scrollContainerRef={scrollContainerRef}
           />
         }
