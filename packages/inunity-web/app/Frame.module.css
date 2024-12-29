@@ -223,7 +223,7 @@
   overflow: hidden;
   flex-shrink: 0;
 }
-.postUserProfile {
+.articleUserProfile {
   align-self: stretch;
   background-color: #fff;
   display: flex;
@@ -297,7 +297,7 @@
   gap: 20px;
   font-size: 13px;
 }
-.postListItem {
+.articleListItem {
   width: 393px;
   background-color: #fff;
   display: flex;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookmark,
@@ -18,17 +18,17 @@ export interface CardProps<T extends CardVariant = 'list'> {
   title?: T extends 'detailed' ? string|undefined : undefined;
   content: string;
   isBookmarked: boolean;
-  onToggleBookmark: () => void;
   thumbnailUrl?: string;
   avatarUrl?: string;
-  // PostListCard에서 추가된 프로퍼티들
+  // ArticleListCard에서 추가된 프로퍼티들
   authorDescription?: string;
   likeCount?: number;
   bookmarkCount?: number;
   isLiked?: boolean;
-  onLikeToggle?: () => void;
   onClick?: () => void;
   className?: string;
+  profileSlot?: ReactNode
+  bottomFeatureSlot?: ReactNode
 }
 
 export function Card(props: CardProps) {
@@ -45,39 +45,43 @@ export function Card(props: CardProps) {
 
 export function DetailedCard(props: CardProps) {
   return (
-    <div className="w-[300px] p-3 bg-white rounded border border-black/10 flex-col justify-start items-start inline-flex">
-      <img className="h-32 relative" src={props.thumbnailUrl ?? "https://via.placeholder.com/276x128"} />
-      <div className="self-stretch  pt-4 bg-white flex-col justify-start items-start gap-2 flex">
-        <div className="justify-start items-center gap-2 inline-flex">
+    <div className="p-3 bg-white rounded border border-black/10 flex flex-col h-full">
+      <img 
+        className="h-32 w-full object-cover"
+        src={props.thumbnailUrl ?? "https://via.placeholder.com/276x128"} 
+        alt=""
+      />
+      <div className="flex flex-col flex-grow gap-2 pt-4">
+        <div className="flex items-center gap-2">
           <img
-            className="w-5 h-5 relative rounded-[360px]"
+            className="w-5 h-5 rounded-full"
             src={props.avatarUrl ?? "/avatar.png"}
+            alt=""
           />
-          <div className="text-black/50 text-base font-bold ">
+          <div className="text-black/50 text-base font-bold">
             {props.author}
           </div>
-          <div className="text-black/50 text-[15px] font-extrabold  leading-tight">
+          <div className="text-black/50 text-[15px] font-extrabold leading-tight">
             ·
           </div>
-          <div className="text-black/50 text-base font-bold ">
+          <div className="text-black/50 text-base font-bold">
             {props.fromUpdate}
           </div>
         </div>
-        <div className="self-stretch justify-start items-center gap-1 inline-flex">
-          <div className="grow shrink basis-0 text-black text-lg font-bold ">
+        <div className="flex items-center gap-1">
+          <div className="grow shrink basis-0 text-black text-lg font-bold">
             {props.title}
           </div>
         </div>
-        <div className="self-stretch text-black/50 text-sm font-medium ">
+        <div className="text-black/50 text-sm font-medium w-[70vw] line-clamp-3">
           {props.content}
         </div>
-        <div className="self-stretch pt-2 justify-end items-start inline-flex gap-4">
+        <div className="flex justify-end items-start gap-4 pt-2 mt-auto">
           <FontAwesomeIcon
             icon={faBookmark}
             className={props.isBookmarked ? `text-primary` : "text-placeholder"}
             fontSize={18}
-            onClick={props.onToggleBookmark}
-            />
+          />
           <FontAwesomeIcon
             icon={faEllipsisVertical}
             className="text-placeholder"
@@ -87,4 +91,5 @@ export function DetailedCard(props: CardProps) {
       </div>
     </div>
   );
+
 }

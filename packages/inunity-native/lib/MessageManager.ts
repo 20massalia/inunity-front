@@ -25,7 +25,7 @@ export const parseMessage = (messageText: string) => {
 
 export const useMessageManager = (webViewRef: RefObject<WebView>) => {
   const sendMessage = (message: Message) => {
-    webViewRef.current?.postMessage(JSON.stringify(message));
+    webViewRef.current?.articleMessage(JSON.stringify(message));
   };
   return {sendMessage}
 

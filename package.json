@@ -8,7 +8,9 @@
     "run-ios": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run ios",
     "run-ios-sim": "EXPO_PUBLIC_WEB_URL=http://localhost:3000; yarn nextapp run dev & yarn nativeapp run ios",
     "start": "yarn nextapp run dev & EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000 yarn nativeapp start",
-    "startsim": "yarn nextapp run dev & EXPO_PUBLIC_WEB_URL=http://localhost:3000 yarn nativeapp start"
+    "startsim": "yarn nextapp run dev & EXPO_PUBLIC_WEB_URL=http://localhost:3000 yarn nativeapp start",
+    "lint": "yarn nextapp lint; yarn nativeapp lint",
+    "build": "yarn nextapp run build"
   },
   "workspaces": {
     "packages": [

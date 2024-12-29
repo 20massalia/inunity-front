@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
     const heads = headers();
     const ua = userAgent({headers: heads}).ua
-    return <div className="h-dvh flex flex-col ">
+    return <div className="h-dvh flex flex-col  ">
         <div className="flex-1 h-full overflow-hidden">
             {children}
         </div>    

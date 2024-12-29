@@ -1,13 +1,14 @@
 import useNotice from "@/entities/notice/hooks/useNotice";
-import usePosts from "@/entities/post/hooks/usePosts";
+import useArticles from "@/entities/article/hooks/useArticles";
 import useNotification from "@/features/notification/hooks/useNotification";
+import useFeaturedArticles from "./useFeaturedArticles";
 
 export default function useHomeViewModel() {
-  const posts = usePosts();
-  const notices = useNotice();
+  const articles = useFeaturedArticles(5);
+  const notices = useArticles();
   const notifications = useNotification();
   return {
-    posts,
+    articles,
     notices,
     notifications,
   }

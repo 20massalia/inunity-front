@@ -1,6 +1,5 @@
-import WebView from "react-native-webview";
-import { useWebView } from "./useWebView";
-import { webViewUrl } from "@/app/_layout";
+import WebView, { WebViewProps } from "react-native-webview";
+import { useWebView, webViewUrl } from "./useWebView";
 import { Platform } from "react-native";
 import {
   handleMessage,
@@ -17,17 +16,21 @@ import { isLightColor } from "@/lib/ColorUtil";
 import { setStatusBarStyle } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import AuthManager from "@/lib/AuthManager";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function CustomWebView({
   pageEventHandler,
-  initialPathname
+  initialPathname,
+  ...props
 }: {
   pageEventHandler?: (pageEvent: PageEvent<any>) => void;
   initialPathname: string;
-}) {
-  const { setIsLoading, isLoading, webViewRef, url, setUrl } = useWebView();
+} & WebViewProps) {
+  const { setIsLoading, isLoading, webViewRef } = useWebView();
   const [cookie, setCookie] = useState<string | null>(null);
   const messageManager = useMessageManager(webViewRef);
+  const insets = useSafeAreaInsets();
+
   useEffect(() => {
     if (!isLoading)
       AuthManager.getCredentialFromStorage().then((cookie) => {
@@ -43,16 +46,14 @@ export default function CustomWebView({
     <WebView
       ref={webViewRef}
       injectedJavaScriptBeforeContentLoaded={`
-  if (!document.cookie)
-    document.cookie=${cookie};
-  window.ReactNativepostMessage(JSON.stringify({ event: 'themeColor', value: document.body.style.backgroundColor
+      if (!document.cookie)
+        document.cookie=${cookie};
+      document.documentElement.style.setProperty('--sat', '${insets.top}px');
   `}
       source={{
         uri: `${webViewUrl}/${initialPathname}`,
       }}
-      onNavigationStateChange={({ url, navigationType }) => {
-        setUrl(new URL(url).pathname);
-      }}
+      onNavigationStateChange={props.onNavigationStateChange}
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       sharedCookiesEnabled
       onLoadStart={() => setIsLoading(true)}

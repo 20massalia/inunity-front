@@ -3,7 +3,7 @@ export default interface NoticeDto {
   isBookmarked: boolean;
   date: string;
   title: string;
-  postId: string;
+  articleId: string;
   avatarUrl?: string;
   author:string
 }

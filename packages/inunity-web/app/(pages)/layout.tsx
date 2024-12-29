@@ -23,14 +23,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overscroll-none ">
       <head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </head>
-      <body className={`${inter.className} h-real-screen`}>
+      <body
+        className={`${inter.className} h-real-screen  `}
+        style={{ WebkitOverflowScrolling: "touch" }}
+  
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
