@@ -34,6 +34,7 @@ import useNotification from "@/hooks/useNotification";
 import { WebViewProvider } from "@/components/useWebView";
 import AuthManager, { CookieName } from "@/lib/AuthManager";
 import AppLifecycleHandler from "@/lib/AppLifecycleHandler";
+import { Cookie } from "@react-native-cookies/cookies";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -43,6 +44,7 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
   const [cookieSynced, setCookieSynced] = useState(false);
+  const [cycleManagerInitialized, setCycleManagerInitialized] = useState(false);
 
   useEffect(() => {
     if (loaded && cookieSynced) {
@@ -54,9 +56,9 @@ export default function RootLayout() {
     // 스토리지에 쿠키가 있으면 꺼내서 셋.
     try {
       const cookieFromStorage = await AuthManager.getCookieFromStorage();
-
+      console.log("cookie:", (cookieFromStorage as Cookie).name);
       // if (cookieFromStorage)
-        // await AuthManager.setCookieToManager(cookieFromStorage);
+      // await AuthManager.setCookieToManager(cookieFromStorage);
     } catch (e) {
       console.error(e);
     }
@@ -68,7 +70,10 @@ export default function RootLayout() {
     syncCookie().then(() => {
       setCookieSynced(true);
     });
-    AppLifecycleHandler.init();
+    if (!cycleManagerInitialized) {
+      AppLifecycleHandler.init();
+      setCycleManagerInitialized(true);
+    }
   }, []);
 
   useNotification();

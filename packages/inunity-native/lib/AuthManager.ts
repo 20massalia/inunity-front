@@ -27,10 +27,17 @@ export default class AuthManager {
 
   static async getCookieFromStorage() {
     const cookie = await SecureStoreManager.get(SecureStorageKey.Cookie);
-    if (!cookie) throw Error('No Cookies in storage!');
-    console.log(cookie);
+    console.log('typeof cookie:', typeof cookie); // 'string'인지 확인
 
-    return safeJsonParse<Cookie>(cookie)
+    if (!cookie) throw Error('No Cookies in storage!');
+    const parsedCookie = safeJsonParse<Cookie>(cookie);
+    console.log(parsedCookie, typeof parsedCookie);
+    if (parsedCookie === null) {
+      console.error('쿠키 파싱 실패');
+      return;
+    }
+    
+    return JSON.parse(JSON.stringify(parsedCookie)) as Cookie
   }
 
   static async saveCookieToStorage(cookie: Cookie) {
