@@ -1,11 +1,11 @@
 "use client";
 
 import { useFunnel } from "@use-funnel/browser";
-import SignInOptions from "@/app/(pages)/auth/steps/SignInOptions";
-import PasswordForm from "@/app/(pages)/auth/steps/PasswordForm";
-import TextOnly from "@/app/(pages)/auth/steps/TextOnly";
-import { CertificateSetupFunnel } from "@/app/(pages)/auth/steps/CertificateSetupFunnel";
-import { NewUserFunnel } from "./steps/NewUserFunnel";
+import SignInOptions from "@/features/onboarding/ui/steps/SignInOptions";
+import PasswordForm from "@/features/onboarding/ui/steps/PasswordForm";
+import TextOnly from "@/features/onboarding/ui/steps/TextOnly";
+import { CertificateSetupFunnel } from "@/features/onboarding/ui/steps/CertificateSetupFunnel";
+import { NewUserFunnel } from "../../../features/onboarding/ui/steps/NewUserFunnel";
 
 export default function AuthContainer() {
   const funnel = useFunnel<{

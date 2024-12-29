@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useFunnel } from "@use-funnel/browser";
 
-import TextOnly from "@/app/(pages)/auth/steps/TextOnly";
-import GoogleSignin from "@/app/(pages)/auth/steps/GoogleSignIn";
+import TextOnly from "@/features/onboarding/ui/steps/TextOnly";
+import GoogleSignin from "@/features/onboarding/ui/steps/GoogleSignIn";
 import CertificateAttach from "./CertificateAttach";
 import NewUserInfo from "./NewUserInfo";
 

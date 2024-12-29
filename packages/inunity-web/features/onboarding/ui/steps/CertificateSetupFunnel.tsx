@@ -1,7 +1,7 @@
 // (포탈 계정이 없는 경우) 증명서 첨부 및 유저 정보 입력 과정...이었으나 잠정적 폐기(?)
 
 import { useFunnel } from "@use-funnel/browser";
-import InputForm from "@/app/(pages)/auth/steps/InputForm";
+import InputForm from "@/features/onboarding/ui/steps/InputForm";
 import CertificateAttach from "./CertificateAttach";
 
 interface CertificateSetupFunnelProps {
