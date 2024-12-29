@@ -7,7 +7,6 @@ interface PasswordFormStepProps {
   password: string;
   setPassword: (password: string) => void;
   handlePasswordFormSubmit: () => void;
-  title: string;
 }
 
 export default function PasswordFormStep({
@@ -15,12 +14,13 @@ export default function PasswordFormStep({
   password,
   setPassword,
   handlePasswordFormSubmit,
-  title,
 }: PasswordFormStepProps) {
   return (
     <div className="h-dvh flex flex-col mx-5">
       <Typography variant="HeadingLargeBold" className="mb-4">
-        {title}
+        학내 포탈에서 사용하는
+        <br />
+        비밀번호를 입력해주세요.
       </Typography>
       <Input
         value={password}
