@@ -15,13 +15,16 @@ import {
 } from "message-type/message-type";
 import { Platform } from "react-native";
 import WebView from "react-native-webview";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CookieManager from "@react-native-cookies/cookies";
+import AuthManager from "@/lib/AuthManager";
 
 export default function Index() {
   const { setIsLoading, isLoading, webViewRef, setUrl, url } = useWebView();
   const [cookie, setCookie] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
+
   return (
     <WebView
       ref={webViewRef}
@@ -31,13 +34,20 @@ export default function Index() {
     document.documentElement.style.setProperty('--sat', '${insets.top}px');
 `}
       source={{
-        uri: 'http://localhost:3000/test',
+        uri: url,
+        // uri: 'http://localhost:3000/test'
+        // uri: 'https://inunity-server.squidjiny.com/v1/auth/test'
       }}
       onNavigationStateChange={({ url, navigationType }) => {
         console.log('Navigation changed:', url, navigationType);
 
         setUrl(url);
       }}
+      thirdPartyCookiesEnabled
+      domStorageEnabled
+      incognito={false}
+      webviewDebuggingEnabled
+      javaScriptEnabled
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       sharedCookiesEnabled
       onLoadStart={() => setIsLoading(true)}

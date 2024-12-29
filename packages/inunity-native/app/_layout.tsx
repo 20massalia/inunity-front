@@ -32,6 +32,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MenuView } from "@react-native-menu/menu";
 import useNotification from "@/hooks/useNotification";
 import { WebViewProvider } from "@/components/useWebView";
+import AuthManager, { CookieName } from "@/lib/AuthManager";
+import AppLifecycleHandler from "@/lib/AppLifecycleHandler";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -40,19 +42,40 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+  const [cookieSynced, setCookieSynced] = useState(false);
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && cookieSynced) {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
 
+  const syncCookie = async () => {
+    // 스토리지에 쿠키가 있으면 꺼내서 셋.
+    try {
+      const cookieFromStorage = await AuthManager.getCookieFromStorage();
+
+      // if (cookieFromStorage)
+        // await AuthManager.setCookieToManager(cookieFromStorage);
+    } catch (e) {
+      console.error(e);
+    }
+    // 쿠키 싱크 성공 유무와 관계없이 통과.
+    setCookieSynced(true);
+  };
+
+  useEffect(() => {
+    syncCookie().then(() => {
+      setCookieSynced(true);
+    });
+    AppLifecycleHandler.init();
+  }, []);
+
   useNotification();
 
-   if (!loaded) {
+  if (!loaded) {
     return null;
   }
-
 
   return (
     <SafeAreaProvider>
@@ -76,4 +99,3 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
-

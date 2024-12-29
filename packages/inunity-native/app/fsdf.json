@@ -1,0 +1,291 @@
+{
+  "ACCOUNT_CHOOSER": {
+    "domain": "accounts.google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "ACCOUNT_CHOOSER",
+    "path": "/",
+    "secure": true,
+    "value": "AFx_qI4Le_yZeLWOzN3SzSBRpCIAcM_0ZFd2G8upijwY5fS_nGTMkm22S15xPhaJZ-LLx2zV6JgugUNEHpUXIExDDEH7_0ou-nWgcpxOdHdPapVCnPMyDAOSG16hTs7Nu1qQlq26BNXaX1_1Z_8nfLPuU_HMLdnXPgjQCBmoNI9RGf3pc_66XQU",
+    "version": "1"
+  },
+  "AEC": {
+    "domain": ".google.com",
+    "expires": "2025-05-23T19:53:29.000+09:00",
+    "httpOnly": true,
+    "name": "AEC",
+    "path": "/",
+    "secure": true,
+    "value": "AZ6Zc-WS3OzuwUGs7vhMNuHS-oTU6kEzC8l2HokYEl4AeQgyc8T1qv2jGOs",
+    "version": "1"
+  },
+  "APISID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": false,
+    "name": "APISID",
+    "path": "/",
+    "secure": false,
+    "value": "WUGyLEJZY0WzAe1g/A7f9QIzP_kacbI1K3",
+    "version": "1"
+  },
+  "G_ENABLED_IDPS": {
+    "domain": ".fukuno.jig.jp",
+    "expires": "2025-12-29T19:59:59.000+09:00",
+    "httpOnly": false,
+    "name": "G_ENABLED_IDPS",
+    "path": "/",
+    "secure": false,
+    "value": "google",
+    "version": "1"
+  },
+  "HSID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "HSID",
+    "path": "/",
+    "secure": false,
+    "value": "A4cfODV9siFnhurl-",
+    "version": "1"
+  },
+  "LSID": {
+    "domain": "accounts.google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "LSID",
+    "path": "/",
+    "secure": true,
+    "value": "s.KR|s.youtube:g.a000rgjhwKY_4PlyuJGA6qphLxMPJBGS3nJP_Nn8zExZogMpmblIZY5cepMFzJ2KZBhJ7eTDHQACgYKAQUSARYSFQHGX2MixamMeaRsy4nLebap7Kg4YxoVAUF8yKr72UNszmKVe1BnVkEuNs020076",
+    "version": "1"
+  },
+  "NID": {
+    "domain": ".google.com",
+    "expires": "2025-06-02T19:56:39.000+09:00",
+    "httpOnly": true,
+    "name": "NID",
+    "path": "/",
+    "secure": false,
+    "value": "519=EMP1D1mNy403YKRSTfpsjsGUy-Euyptcv_pem9zOCTnnQLPFtMlUKuIxjOYnVZI9acJggHbkDZ2-yb74P2Fh1vePggPNsILq5fXAFZhCxwU3uxSQFYjWqXXPhFCkRBv1LvwS50OZrjXRf0-7wbKlmslFCSUFUF19ZNDqrZoEXyoE7A3Qow",
+    "version": "1"
+  },
+  "OTZ": {
+    "domain": "accounts.google.com",
+    "expires": "2025-01-24T22:11:43.000+09:00",
+    "httpOnly": false,
+    "name": "OTZ",
+    "path": "/",
+    "secure": true,
+    "value": "7880472_20_20__20_",
+    "version": "1"
+  },
+  "SAPISID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": false,
+    "name": "SAPISID",
+    "path": "/",
+    "secure": true,
+    "value": "aPjei61KsLNFZ3Y1/Aw3Rgo5-Em643Zbb5",
+    "version": "1"
+  },
+  "SID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": false,
+    "name": "SID",
+    "path": "/",
+    "secure": false,
+    "value": "g.a000rgjhwKG_zPpb-7TPzDPkjfZdWg0DLb41PYpfr0aqQdmL-iMgL2nzSfq_BdrTIydRJE-AvwACgYKAdQSARYSFQHGX2MiOrGt9JURzNx_AxgBlscNqxoVAUF8yKqGGXphUhha0sVsO8Gwr8In0076",
+    "version": "1"
+  },
+  "SIDCC": {
+    "domain": ".google.com",
+    "expires": "2025-01-01T22:12:08.000+09:00",
+    "httpOnly": false,
+    "name": "SIDCC",
+    "path": "/",
+    "secure": false,
+    "value": "AKEyXzVzUbborY5aquFxaqMU-KCMcyOxGi6HMuiqijdA_mmZOWtYruhQGNUEIXkr4mslGrh-yg",
+    "version": "1"
+  },
+  "SSID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "SSID",
+    "path": "/",
+    "secure": true,
+    "value": "A1PXtB17PwVFEQR6d",
+    "version": "1"
+  },
+  "UI_topMenuSkin": {
+    "domain": "zm917.mailplug.com",
+    "expires": "2026-01-29T22:11:58.000+09:00",
+    "httpOnly": true,
+    "name": "UI_topMenuSkin",
+    "path": "/",
+    "secure": false,
+    "value": "11",
+    "version": "1"
+  },
+  "__Host-1PLSID": {
+    "domain": "accounts.google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "__Host-1PLSID",
+    "path": "/",
+    "secure": true,
+    "value": "s.KR|s.youtube:g.a000rgjhwKY_4PlyuJGA6qphLxMPJBGS3nJP_Nn8zExZogMpmblIkrPOJuo3-ZMz0nCvqmWY4QACgYKAQASARYSFQHGX2MiM-TynRHptEBm2JXcBOvyvxoVAUF8yKp_2e1JnNPkSdioW9BXfIwm0076",
+    "version": "1"
+  },
+  "__Host-3PLSID": {
+    "domain": "accounts.google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "__Host-3PLSID",
+    "path": "/",
+    "secure": true,
+    "value": "s.KR|s.youtube:g.a000rgjhwKY_4PlyuJGA6qphLxMPJBGS3nJP_Nn8zExZogMpmblIyWJ3NJt65OaXDujO6qNFGgACgYKAeASARYSFQHGX2Mibha8QiDccSgT9zl9eukIUhoVAUF8yKovx2xLbxtXWJKpFX9s-5Gi0076",
+    "version": "1"
+  },
+  "__Host-GAPS": {
+    "domain": "accounts.google.com",
+    "expires": "2025-12-29T19:53:31.000+09:00",
+    "httpOnly": true,
+    "name": "__Host-GAPS",
+    "path": "/",
+    "secure": true,
+    "value": "1:dHLoWDIuHta4WaC44xI3NjMPnZwm3A:hOpsM8nObKKzWkHr",
+    "version": "1"
+  },
+  "__Secure-1PAPISID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": false,
+    "name": "__Secure-1PAPISID",
+    "path": "/",
+    "secure": true,
+    "value": "aPjei61KsLNFZ3Y1/Aw3Rgo5-Em643Zbb5",
+    "version": "1"
+  },
+  "__Secure-1PSID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "__Secure-1PSID",
+    "path": "/",
+    "secure": true,
+    "value": "g.a000rgjhwKG_zPpb-7TPzDPkjfZdWg0DLb41PYpfr0aqQdmL-iMgfzvNKaOst2lr2oasbV7dvAACgYKAcQSARYSFQHGX2MiJHSzCO0TCR5SrVWvtxKDAxoVAUF8yKqIJRG3SAfmUgrYLe_ODmXK0076",
+    "version": "1"
+  },
+  "__Secure-1PSIDCC": {
+    "domain": ".google.com",
+    "expires": "2025-01-01T22:12:08.000+09:00",
+    "httpOnly": true,
+    "name": "__Secure-1PSIDCC",
+    "path": "/",
+    "secure": true,
+    "value": "AKEyXzXQKI3mcaGP8X4LkrFerlbJwzTNmQv749gmhw-oMKLTfHoBgRqVq77mGVawEJqQMwVfKA",
+    "version": "1"
+  },
+  "__Secure-1PSIDTS": {
+    "domain": ".youtube.com",
+    "expires": "2025-12-25T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "__Secure-1PSIDTS",
+    "path": "/",
+    "secure": true,
+    "value": "sidts-CjEB7wV3sTc15apKKvTlwE3GCOdqtdsXOk_nUIOmf1tXpjYB0At9UZdsSRWD5UjLsh4GEAA",
+    "version": "1"
+  },
+  "__Secure-3PAPISID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": false,
+    "name": "__Secure-3PAPISID",
+    "path": "/",
+    "secure": true,
+    "value": "aPjei61KsLNFZ3Y1/Aw3Rgo5-Em643Zbb5",
+    "version": "1"
+  },
+  "__Secure-3PSID": {
+    "domain": ".google.com",
+    "expires": "2026-01-29T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "__Secure-3PSID",
+    "path": "/",
+    "secure": true,
+    "value": "g.a000rgjhwKG_zPpb-7TPzDPkjfZdWg0DLb41PYpfr0aqQdmL-iMgscjI2ekMQOdPoW2mxkWmmQACgYKASQSARYSFQHGX2MiWOo6Pthae10t95fXx2UYmRoVAUF8yKqnP1tn0f3HgqnXDp1g6NzX0076",
+    "version": "1"
+  },
+  "__Secure-3PSIDCC": {
+    "domain": ".google.com",
+    "expires": "2025-01-01T22:12:08.000+09:00",
+    "httpOnly": true,
+    "name": "__Secure-3PSIDCC",
+    "path": "/",
+    "secure": true,
+    "value": "AKEyXzUDb4Y43oLuul1T1ephHDRYpt5URQwvTg3NmXIHQJQ2V4Qi4KtxEqT4vWWxB6-PBNBabQ",
+    "version": "1"
+  },
+  "__Secure-3PSIDTS": {
+    "domain": ".youtube.com",
+    "expires": "2025-12-25T22:12:01.000+09:00",
+    "httpOnly": true,
+    "name": "__Secure-3PSIDTS",
+    "path": "/",
+    "secure": true,
+    "value": "sidts-CjEB7wV3sTc15apKKvTlwE3GCOdqtdsXOk_nUIOmf1tXpjYB0At9UZdsSRWD5UjLsh4GEAA",
+    "version": "1"
+  },
+  "host_domain": {
+    "domain": "zm917.mailplug.com",
+    "expires": "2026-01-29T22:11:50.000+09:00",
+    "httpOnly": true,
+    "name": "host_domain",
+    "path": "/",
+    "secure": false,
+    "value": "inu.ac.kr",
+    "version": "1"
+  },
+  "login_domain": {
+    "domain": ".mailplug.com",
+    "expires": "2026-01-29T22:11:58.000+09:00",
+    "httpOnly": false,
+    "name": "login_domain",
+    "path": "/",
+    "secure": false,
+    "value": "inu.ac.kr",
+    "version": "1"
+  },
+  "null": {
+    "domain": "localhost",
+    "httpOnly": false,
+    "name": "null",
+    "path": "/",
+    "secure": false,
+    "value": "",
+    "version": "1"
+  },
+  "show_rsb": {
+    "domain": "zm917.mailplug.com",
+    "expires": "2026-01-29T22:11:50.000+09:00",
+    "httpOnly": true,
+    "name": "show_rsb",
+    "path": "/",
+    "secure": false,
+    "value": "off",
+    "version": "1"
+  },
+  "sidebarFix": {
+    "domain": "zm917.mailplug.com",
+    "expires": "2025-12-25T22:11:51.000+09:00",
+    "httpOnly": false,
+    "name": "sidebarFix",
+    "path": "/",
+    "secure": false,
+    "value": "Y",
+    "version": "1"
+  }
+}

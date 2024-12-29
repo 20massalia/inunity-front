@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useRef, useEffect } from "react";
 import { Alert } from "react-native";
 import WebView from "react-native-webview";
 import { registerDevMenuItems } from "expo-dev-menu";
+import AuthManager, { CookieName } from "@/lib/AuthManager";
 
 export type WebViewContextType = {
   webViewRef: React.RefObject<WebView>;
@@ -37,6 +38,19 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
               },
             },
           ]);
+        },
+      },
+      {
+        name: "Get cookies from manager",
+        callback: async () => {
+          const cookies =   await AuthManager.getCookieFromManager(CookieName.AccessToken);
+          console.info(cookies)
+          Alert.alert(
+            "디버그",
+            JSON.stringify(
+            cookies
+            )
+          );
         },
       },
     ];

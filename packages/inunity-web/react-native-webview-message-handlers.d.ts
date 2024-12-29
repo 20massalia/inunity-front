@@ -1,7 +1,7 @@
 // react-native-webview-message-handlers.d.ts
 declare const webkit: Webkit;
 interface ReactNativeWebView {
-  articleMessage(msg: string): void
+  postMessage(msg: string): void
 }
 interface Window {
     webkit: Webkit;
@@ -11,7 +11,7 @@ interface Window {
      * @see: https://github.com/react-native-community/react-native-webview/blob/25552977852427cf5fdc7b233fd1bbc7c77c18b0/ios/RNCWebView.m#L1128-L1146
      */
     ReactNativeWebView: {
-        articleMessage(msg: string): void;
+        postMessage(msg: string): void;
     };
 }
 
@@ -22,14 +22,14 @@ interface Webkit {
          * @see: https://github.com/react-native-community/react-native-webview/blob/25552977852427cf5fdc7b233fd1bbc7c77c18b0/ios/RNCWebView.m#L1244
          */
         ReactNativeWebView: {
-            articleMessage(message: string): void;
+            postMessage(message: string): void;
         }
         /**
          * Added due to our call to addScriptMessageHandler.
          * @see: https://github.com/react-native-community/react-native-webview/blob/25552977852427cf5fdc7b233fd1bbc7c77c18b0/ios/RNCWebView.m#L214
          */
         ReactNativeHistoryShim: {
-            articleMessage(message: string): void;
+            postMessage(message: string): void;
         }
     }
 }

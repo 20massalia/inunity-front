@@ -34,7 +34,7 @@ export default function Detail() {
   const { webViewRef } = useWebView();
 
   const sendMessage = (message: Message<any>) => {
-    webViewRef.current?.articleMessage(JSON.stringify(message));
+    webViewRef.current?.postMessage(JSON.stringify(message));
   };
 
   const [comment, setComment] = useState("");

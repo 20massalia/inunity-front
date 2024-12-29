@@ -1,10 +1,12 @@
 "use client";
 
+import { useMessageManager } from "@/shared/ui/MessageContext";
 import { useState } from "react";
 import { Button, Input } from "ui";
 
 export default function Page() {
   const [form, setForm] = useState({ id: "", pw: "" });
+  const {messageManager} = useMessageManager();
 
   return (
     <div>
@@ -23,7 +25,7 @@ export default function Page() {
       ></Input>
 
       <Button
-        onClick={() =>
+        onClick={() =>{
           fetch("https://inunity-server.squidjiny.com/v1/auth/login", {
             method: 'POST',
             headers: {
@@ -33,7 +35,13 @@ export default function Page() {
             
 
             body: JSON.stringify({ studentId: Number(form.id), password: form.pw }),
-          })
+          }).then(res => {
+          
+            messageManager?.log(res.ok, res.status, Array.from(res.headers), document.cookie)
+            console.log(res.ok, res.status, Array.from(res.headers))
+            
+          }).catch()
+        }
         }
       >
         로그인이다 새끼야
