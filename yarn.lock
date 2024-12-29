@@ -10143,6 +10143,7 @@ __metadata:
     next: "npm:14.2.15"
     next-pwa: "npm:^5.6.0"
     postcss: "npm:^8"
+    react-icons: "npm:^5.4.0"
     tailwindcss: "npm:^3.4.1"
     typescript: "npm:^5"
     ui: "workspace:^"
@@ -14120,6 +14121,15 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
   checksum: 10c0/8f51257c261bfefff86f618e958683536248f708019632d309ee5ebdd52f25d3c130660d06fb6f0f4fdef79f00f8ec7177233a872c2321f7d46b7e77ccc522a1
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.4.0":
+  version: 5.4.0
+  resolution: "react-icons@npm:5.4.0"
+  peerDependencies:
+    react: "*"
+  checksum: 10c0/698b0c4616870152d86de2585fb709bf3eeb9292d971d689965dade5f0ee71cdc92d2125b728ab220cc39a4c6d6bad1ed526b9b934ab39a7b6001bc23b73ee16
   languageName: node
   linkType: hard
 

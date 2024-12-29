@@ -4,12 +4,10 @@ import { Typography } from "ui";
 import { FcGoogle } from "react-icons/fc";
 
 interface GoogleSignInProps {
-  onNext: () => void;
   onAttachCertificate: () => void;
 }
 
 export default function GoogleSignIn({
-  onNext,
   onAttachCertificate,
 }: GoogleSignInProps) {
   return (
@@ -21,7 +19,10 @@ export default function GoogleSignIn({
       </Typography>
       <div className="flex justify-center items-center flex-1">
         <button
-          onClick={onNext}
+          onClick={() => {
+            // google login page로 이동
+            document.location = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/google`
+          }}
           className="flex items-center justify-center px-6 py-3 border border-gray-300 rounded-3xl shadow-sm bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           <FcGoogle className="w-5 h-5 mr-2" />
