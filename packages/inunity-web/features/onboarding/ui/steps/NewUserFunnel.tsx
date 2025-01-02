@@ -14,7 +14,7 @@ interface NewUserFunnelProps {
 type FunnelContext = {
   name?: string;
   nickname?: string;
-  graduationYear?: string;
+  graduationDate?: string;
 };
 
 export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
@@ -27,7 +27,6 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
     id: "new-user",
     initial: { step: "Introduction", context: {} },
   });
-
 
   // pathname 감지해서 구글 로그인 성공/실패 시 처리
   // Todo: auth/google/success or fail 페이지에서 처리 필요. or /auth#success나 /auth#fail로 처리
@@ -77,11 +76,7 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
           history.push("Certificate", {});
         };
 
-        return (
-          <GoogleSignin
-            onAttachCertificate={handleAttachCertificate}
-          />
-        );
+        return <GoogleSignin onAttachCertificate={handleAttachCertificate} />;
       }}
       Certificate={() => {
         return <CertificateAttach onAttachCertificate={onComplete} />;

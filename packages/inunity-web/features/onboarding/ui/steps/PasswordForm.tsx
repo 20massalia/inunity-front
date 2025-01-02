@@ -15,6 +15,14 @@ export default function PasswordFormStep({
   setPassword,
   handlePasswordFormSubmit,
 }: PasswordFormStepProps) {
+  const handleNext = () => {
+    if (!password.trim()) {
+      alert("비밀번호를 입력해주세요!");
+      return;
+    }
+
+    handlePasswordFormSubmit();
+  };
   return (
     <div className="h-dvh flex flex-col mx-5">
       <Typography variant="HeadingLargeBold" className="mb-4">
@@ -27,14 +35,10 @@ export default function PasswordFormStep({
         setValue={setPassword}
         placeholder="포탈 비밀번호"
         masked
-        className="mt-6"
+        className="mt-16"
       />
       <div className="mt-auto mb-5 flex flex-col gap-4">
-        <Button
-          variant="primary"
-          size="large"
-          onClick={handlePasswordFormSubmit}
-        >
+        <Button variant="primary" size="large" onClick={handleNext}>
           계속하기
         </Button>
       </div>

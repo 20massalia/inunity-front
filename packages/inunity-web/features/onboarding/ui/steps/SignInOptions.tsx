@@ -13,6 +13,20 @@ export default function SignInOptions({
   onNext,
   onAttachCertificate,
 }: SignInOptionsProps) {
+  const handleNext = () => {
+    if (!studentNumber.trim()) {
+      alert("아이디를 입력해주세요!");
+      return;
+    }
+
+    if (studentNumber.length !== 9 || !/^\d+$/.test(studentNumber)) {
+      alert("포탈 아이디는 9자리 학번입니다.");
+      return;
+    }
+
+    onNext();
+  };
+
   return (
     <div className="h-dvh flex flex-col mx-5">
       <Typography variant="HeadingLargeBold" className="mb-4">
@@ -24,10 +38,10 @@ export default function SignInOptions({
         value={studentNumber}
         setValue={setStudentNumber}
         placeholder="포탈 아이디"
-        className="mt-6"
+        className="mt-16"
       />
       <div className="mt-auto mb-5 flex flex-col gap-4">
-        <Button variant="primary" size="large" onClick={onNext}>
+        <Button variant="primary" size="large" onClick={handleNext}>
           계속하기
         </Button>
         {/* <div className="text-center" onClick={onAttachCertificate}>

@@ -1,28 +1,45 @@
 import { useState } from "react";
-import { Button, Input, Typography } from "ui";
+import { Button, Input, Typography, CheckBox } from "ui";
+import { DateInput } from "../DateInput";
 
 interface NewUserInfoProps {
   context: {
     name?: string;
     nickname?: string;
-    graduationYear?: string;
+    graduationDate?: string;
   };
   history: any;
 }
 
 export default function NewUserInfo({ context, history }: NewUserInfoProps) {
-  const [name, setName] = useState(context.name || "");
-  const [nickname, setNickname] = useState(context.nickname || "");
-  const [graduationYear, setGraduationYear] = useState(
-    context.graduationYear || ""
-  );
-  const [isGraduated, setIsGraduated] = useState(false);
+  const [form, setForm] = useState({
+    name: context.name || "",
+    nickname: context.nickname || "",
+    graduationDate: context.graduationDate || "",
+    isGraduated: false,
+  });
 
-  const updateContext = (key: keyof typeof context, value: string) => {
-    history.replace("Info", { ...context, [key]: value });
+  const updateField = (key: keyof typeof form, value: string | boolean) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    if (typeof value === "string") {
+      history.replace("Info", { ...context, [key]: value });
+    }
   };
 
   const handleSubmit = () => {
+    if (!form.name.trim()) {
+      alert("이름을 입력해주세요.");
+      return;
+    }
+    if (!form.nickname.trim()) {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+    if (form.isGraduated && !form.graduationDate.trim()) {
+      alert("졸업 날짜를 입력해주세요.");
+      return;
+    }
+
     history.push("Google", {});
   };
 
@@ -32,53 +49,39 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
         서비스 이용에 필요한
         <br />몇 가지 정보를 입력해주세요.
       </Typography>
-
       <Input
         placeholder="이름"
-        value={name}
-        setValue={(value) => {
-          setName(value);
-          updateContext("name", value);
-        }}
-        className="mt-4"
+        value={form.name}
+        setValue={(value) => updateField("name", value)}
+        className="mt-16"
       />
       <Input
         placeholder="사용할 닉네임"
-        value={nickname}
-        setValue={(value) => {
-          setNickname(value);
-          updateContext("nickname", value);
-        }}
-        className="mt-4"
+        value={form.nickname}
+        setValue={(value) => updateField("nickname", value)}
+        className="mt-16"
       />
-      {isGraduated && (
-        <Input
-          placeholder="졸업 연월"
-          value={graduationYear}
-          setValue={(value) => {
-            setGraduationYear(value);
-            updateContext("graduationYear", value);
-          }}
-          className="mt-4"
-        />
-      )}
-
-      <div className="flex items-center mt-4">
-        <label className="mr-4">졸업 여부</label>
-        <button
-          onClick={() => setIsGraduated((prev) => !prev)}
-          className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
-            isGraduated ? "bg-primary" : "bg-gray-300"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
-              isGraduated
-                ? "translate-x-6 bg-white"
-                : "translate-x-0 bg-gray-500"
-            }`}
+      <div className="flex items-center justify-between mt-4 w-full h-[50px]">
+        <div className="flex items-center gap-2 h-full">
+          <CheckBox
+            checked={form.isGraduated}
+            setChecked={(checked) => {
+              updateField("isGraduated", checked);
+              if (!checked) {
+                updateField("graduationDate", "");
+              }
+            }}
           />
-        </button>
+          <Typography>졸업 여부</Typography>
+        </div>
+        {form.isGraduated && (
+          <DateInput
+            placeholder="졸업 날짜"
+            value={form.graduationDate}
+            setValue={(value) => updateField("graduationDate", value)}
+            className="w-32"
+          />
+        )}
       </div>
 
       <div className="mt-auto mb-5 flex flex-col gap-4">
