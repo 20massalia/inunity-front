@@ -6,6 +6,7 @@ import PasswordForm from "@/features/onboarding/ui/steps/PasswordForm";
 import TextOnly from "@/features/onboarding/ui/steps/TextOnly";
 import { CertificateSetupFunnel } from "@/features/onboarding/ui/steps/CertificateSetupFunnel";
 import { NewUserFunnel } from "../../../features/onboarding/ui/steps/NewUserFunnel";
+import { useNativeRouter } from "@/hooks/useNativeRouter";
 
 export default function AuthContainer() {
   const funnel = useFunnel<{
@@ -20,6 +21,8 @@ export default function AuthContainer() {
     id: "auth",
     initial: { step: "Welcome", context: {} },
   });
+
+  const router = useNativeRouter();
 
   return (
     <div className="h-full flex flex-col">
@@ -53,7 +56,6 @@ export default function AuthContainer() {
           />
         )}
         Password={({ context, history }) => {
-          const userExists = context.studentNumber === "123"; // 임시 로그인 이력 판별
           return (
             <PasswordForm
               studentNumber={context.studentNumber}
@@ -61,12 +63,11 @@ export default function AuthContainer() {
               setPassword={(password) =>
                 history.replace("Password", { ...context, password })
               }
-              handlePasswordFormSubmit={() => {
-                if (userExists) {
-                  history.push("ExistingUser", {});
-                } else {
-                  history.push("NewUser", {});
-                }
+              handleLoginSuccess={() => {
+                history.push("ExistingUser", {}); // 로그인 성공
+              }}
+              handleRegisterSuccess={() => {
+                history.push("NewUser", {}); // 회원 가입 성공
               }}
             />
           );
@@ -82,7 +83,7 @@ export default function AuthContainer() {
                 돌아오신 걸 환영해요!
               </>
             }
-            onNext={() => alert("로그인 완료")}
+            onNext={() => router.push("/")}
           />
         )}
         NewUser={({ history }) => (
