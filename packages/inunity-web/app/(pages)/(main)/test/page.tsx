@@ -32,14 +32,9 @@ export default function Page() {
               'Content-Type': 'application/json'
             },
             credentials: 'include', // 쿠키를 포함하려면 이 옵션 필요
-            
-
             body: JSON.stringify({ studentId: Number(form.id), password: form.pw }),
           }).then(res => {
-          
             messageManager?.log(res.ok, res.status, Array.from(res.headers), document.cookie)
-            console.log(res.ok, res.status, Array.from(res.headers))
-            
           }).catch()
         }
         }

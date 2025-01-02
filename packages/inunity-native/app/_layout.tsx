@@ -4,35 +4,19 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { router, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useRef, useState } from "react";
 import "react-native-reanimated";
 
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Pressable,
-  Alert,
-  TouchableHighlight,
-  Platform,
-  SafeAreaView,
-} from "react-native";
-import { FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { registerDevMenuItems } from "expo-dev-menu";
-import { Slot } from "expo-router";
 
 // Import your global CSS file
 import "../globals.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { MenuView } from "@react-native-menu/menu";
 import useNotification from "@/hooks/useNotification";
 import { WebViewProvider } from "@/components/useWebView";
-import AuthManager, { CookieName } from "@/lib/AuthManager";
+import AuthManager from "@/lib/AuthManager";
 import AppLifecycleHandler from "@/lib/AppLifecycleHandler";
 import { Cookie } from "@react-native-cookies/cookies";
 
@@ -57,8 +41,8 @@ export default function RootLayout() {
     try {
       const cookieFromStorage = await AuthManager.getCookieFromStorage();
       console.log("cookie:", (cookieFromStorage as Cookie).name);
-      // if (cookieFromStorage)
-      // await AuthManager.setCookieToManager(cookieFromStorage);
+      if (cookieFromStorage)
+      await AuthManager.setCookieToManager(cookieFromStorage);
     } catch (e) {
       console.error(e);
     }

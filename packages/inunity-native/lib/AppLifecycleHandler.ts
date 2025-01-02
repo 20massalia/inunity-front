@@ -26,7 +26,6 @@ interface AppStateData {
 class AppLifecycleHandler {
   private appState: AppStateStatus;
   private lastAppState?: AppStateData;
-  private readonly persistenceKey: string = '@AppState';
 
   constructor() {
     this.appState = AppState.currentState;
@@ -68,10 +67,11 @@ class AppLifecycleHandler {
     this.appState = nextAppState;
   }
 
-  private handleBackButton(): boolean {
+  private handleBackButton() {
     // Android 백버튼 처리 로직
     // true를 반환하면 기본 동작 방지
-    return true;
+    this.saveAppState();
+    return false;
   }
 
 
@@ -94,13 +94,7 @@ class AppLifecycleHandler {
 
   private async onBackground(): Promise<void> {
     try {
-      const currentState: AppStateData = {
-        lastActiveAt: Date.now(),
-        networkState: await this.getCurrentNetworkState(),
-        currentScreen: this.getCurrentScreen(),
-      };
-      
-      await this.saveAppState(currentState);
+      await this.saveAppState();
       await this.disconnectNetwork();
     } catch (error) {
       console.error('Background transition failed:', error);
@@ -138,16 +132,6 @@ class AppLifecycleHandler {
     }
   }
 
-  // 유틸리티 메서드들
-  private async getCurrentNetworkState(): Promise<NetworkState> {
-    // 네트워크 상태 확인 로직 구현
-    return {
-      isConnected: true, // 실제 구현 필요
-      type: 'wifi',  // 실제 구현 필요
-      lastConnectedAt: Date.now()
-    };
-  }
-
   private getCurrentScreen(): string {
     // 현재 화면 정보 반환 로직 구현
     return 'MainScreen'; // 실제 구현 필요
@@ -157,7 +141,7 @@ class AppLifecycleHandler {
     // 서버와 동기화 로직 구현
   }
 
-  private async saveAppState(state: AppStateData): Promise<void> {
+  private async saveAppState(): Promise<void> {
     // 앱 상태 저장 구현
     const cookie = await AuthManager.getCookieFromManager(CookieName.AccessToken);
     if (!cookie) return;
@@ -165,7 +149,7 @@ class AppLifecycleHandler {
     await AuthManager.saveCookieToStorage(cookie);
   }
 
-  private async restoreAppState(): Promise<AppStateData | null> {
+  private async restoreAppState(): Promise<null> {
     // 앱 상태 복구 구현
     const cookie = await AuthManager.getCookieFromStorage();
     console.info(cookie)
@@ -178,14 +162,6 @@ class AppLifecycleHandler {
 
   private async reconnectNetwork(): Promise<void> {
     // 네트워크 재연결 구현
-  }
-
-  private async cleanupCache(): Promise<void> {
-    // 캐시 정리 구현
-  }
-
-  private async endSession(): Promise<void> {
-    // 세션 종료 구현
   }
 
   private async saveLastCrashInfo(crashInfo: CrashInfo): Promise<void> {

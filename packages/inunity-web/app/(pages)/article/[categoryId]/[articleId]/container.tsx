@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 import BlockParser from "editor-react-parser";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { DropdownMenu } from "ui/src/DropdownMenu";
-import useSubmitComment from "@/features/board/hooks/useSubmitComment";
 import useReportComment from "@/features/board/hooks/useReportComment";
 import useEditComment from "@/features/board/hooks/useEditComment";
 import useDeleteComment from "@/features/board/hooks/useDeleteComment";
@@ -73,14 +72,16 @@ export default function ArticleDetailContainer({
   const comments = generateMockCommentsWithReplies(3);
 
   useEffect(() => {
-    messageManager?.log("Page Event arrived: ", pageEvent?.value);
     if (!pageEvent) return;
+    messageManager?.log("Page Event arrived: ", pageEvent);
     if (pageEvent?.event === ArticleDetailPageEventType.SubmitComment) {
       submitComment.mutate(pageEvent.value);
     }
-  }, [messageManager, pageEvent, submitComment]);
+  }, [pageEvent]);
+
   const router = useNativeRouter();
   if (!article) return <div>no data</div>;
+
   return (
     <>
       <AppBar
