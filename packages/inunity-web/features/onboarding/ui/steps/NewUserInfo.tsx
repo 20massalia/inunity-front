@@ -26,7 +26,7 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name.trim()) {
       alert("이름을 입력해주세요.");
       return;
@@ -40,7 +40,36 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
       return;
     }
 
-    history.push("Google", {});
+    const requestBody = {
+      userName: form.name,
+      nickName: form.nickname,
+      graduationDate: form.isGraduated ? form.graduationDate : null,
+      isGraduation: form.isGraduated,
+    };
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/users`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`오류가 발생했습니다: ${errorData.message}`);
+        return;
+      }
+
+      alert("사용자 정보가 성공적으로 저장되었습니다!");
+      history.push("Google", {});
+    } catch (error) {
+      alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
