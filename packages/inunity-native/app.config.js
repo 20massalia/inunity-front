@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "inunity-native",
     "slug": "inunity-native",
@@ -23,7 +23,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "org.inu.inunity",
-      "googleServicesFile": "./google-services.json"
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './google-services.json',
     },
     "web": {
       "bundler": "metro",
@@ -55,4 +55,4 @@
       }
     }
   }
-}
+};
