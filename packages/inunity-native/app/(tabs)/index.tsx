@@ -25,7 +25,7 @@ export default function Index() {
   return (
     <WebView
       ref={webViewRef}
-      injectedJavaScriptBeforeContentLoaded={`
+      injectedJavaScript={`
     if (!document.cookie)
       document.cookie=${cookie};
     document.documentElement.style.setProperty('--sat', '${insets.top}px');
@@ -34,7 +34,7 @@ export default function Index() {
         uri: 'http://localhost:3000/test',
       }}
       onNavigationStateChange={({ url, navigationType }) => {
-        console.log('Navigation changed:', url, navigationType);
+        console.log("Navigation changed:", url, navigationType);
 
         setUrl(url);
       }}

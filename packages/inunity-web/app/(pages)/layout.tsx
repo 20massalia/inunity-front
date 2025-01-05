@@ -15,6 +15,7 @@ import { Inter } from "next/font/google"; // 해당 폰트의 함수를 사용�
 const inter = Inter({ subsets: ["latin"] }); // 변수를 선언하고, 함수의 인자로 스타일을 지정합니다.
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import Script from "next/script";
 config.autoAddCss = false;
 
 export default function RootLayout({
@@ -29,11 +30,14 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
+        <Script id="inject-vh">
+          {`const vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', \`\$\{vh\}px\`); `}
+        </Script>
       </head>
       <body
         className={`${inter.className} h-real-screen  `}
         style={{ WebkitOverflowScrolling: "touch" }}
-  
       >
         <Providers>{children}</Providers>
       </body>
