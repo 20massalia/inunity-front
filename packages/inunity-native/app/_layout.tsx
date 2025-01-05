@@ -31,10 +31,10 @@ export default function RootLayout() {
   const [cycleManagerInitialized, setCycleManagerInitialized] = useState(false);
 
   useEffect(() => {
-    if (loaded && cookieSynced) {
+    if (loaded && cookieSynced && cycleManagerInitialized) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, cookieSynced, cycleManagerInitialized]);
 
   const syncCookie = async () => {
     // 스토리지에 쿠키가 있으면 꺼내서 셋.
@@ -42,11 +42,12 @@ export default function RootLayout() {
       const cookieFromStorage = await AuthManager.getCookieFromStorage();
       console.log("cookie:", (cookieFromStorage as Cookie).name);
       if (cookieFromStorage)
-      await AuthManager.setCookieToManager(cookieFromStorage);
+        await AuthManager.setCookieToManager(cookieFromStorage);
     } catch (e) {
       console.error(e);
     }
     // 쿠키 싱크 성공 유무와 관계없이 통과.
+    console.log('cookie synced or not')
     setCookieSynced(true);
   };
 
