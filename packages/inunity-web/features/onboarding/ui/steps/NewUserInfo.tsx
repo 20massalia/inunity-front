@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Input, Typography, CheckBox } from "ui";
 import { DateInput } from "../DateInput";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface NewUserInfoProps {
   context: {
@@ -12,7 +13,7 @@ interface NewUserInfoProps {
 }
 
 export default function NewUserInfo({ context, history }: NewUserInfoProps) {
-  const [form, setForm] = useState({
+  const [form, setForm] = useLocalStorage("new_user_info", {
     name: context.name || "",
     nickname: context.nickname || "",
     graduationDate: context.graduationDate || "",

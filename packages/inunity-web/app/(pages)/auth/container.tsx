@@ -7,8 +7,12 @@ import TextOnly from "@/features/onboarding/ui/steps/TextOnly";
 import { CertificateSetupFunnel } from "@/features/onboarding/ui/steps/CertificateSetupFunnel";
 import { NewUserFunnel } from "../../../features/onboarding/ui/steps/NewUserFunnel";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function AuthContainer() {
+  const [step, setStep] = useLocalStorage("onboarding_step", "Welcome");
+  const [context, setContext] = useLocalStorage("onboarding_context", {});
+
   const funnel = useFunnel<{
     Welcome: Record<string, never>;
     SignIn: { studentNumber?: string };
@@ -38,21 +42,30 @@ export default function AuthContainer() {
             }
             onNext={() => {
               history.push("SignIn", {});
+              setStep("SignIn");
             }}
           />
         )}
         SignIn={({ context, history }) => (
           <SignInOptions
             studentNumber={context.studentNumber || ""}
-            setStudentNumber={(studentNumber) =>
-              history.replace("SignIn", { ...context, studentNumber })
-            }
-            onNext={() =>
+            setStudentNumber={(studentNumber) => {
+              setContext((prev) => ({
+                ...prev,
+                studentNumber,
+              }));
+              history.replace("SignIn", { ...context, studentNumber });
+            }}
+            onNext={() => {
               history.push("Password", {
                 studentNumber: context.studentNumber || "",
-              })
-            }
-            onAttachCertificate={() => history.push("CertificateSetup", {})}
+              });
+              setStep("Password");
+            }}
+            onAttachCertificate={() => {
+              history.push("CertificateSetup", {});
+              setStep("CertificateSetup");
+            }}
           />
         )}
         Password={({ context, history }) => {
@@ -64,10 +77,12 @@ export default function AuthContainer() {
                 history.replace("Password", { ...context, password })
               }
               handleLoginSuccess={() => {
-                history.push("ExistingUser", {}); // 로그인 성공
+                history.push("ExistingUser", {});
+                setStep("ExistingUser");
               }}
               handleRegisterSuccess={() => {
-                history.push("NewUser", {}); // 회원 가입 성공
+                history.push("NewUser", {});
+                setStep("NewUser");
               }}
             />
           );
@@ -87,11 +102,19 @@ export default function AuthContainer() {
           />
         )}
         NewUser={({ history }) => (
-          <NewUserFunnel onComplete={() => history.push("Completion", {})} />
+          <NewUserFunnel
+            onComplete={() => {
+              history.push("Completion", {});
+              setStep("Completion");
+            }}
+          />
         )}
         CertificateSetup={({ history }) => (
           <CertificateSetupFunnel
-            onComplete={() => history.push("Completion", {})}
+            onComplete={() => {
+              history.push("Completion", {});
+              setStep("Completion");
+            }}
           />
         )}
         Completion={() => (

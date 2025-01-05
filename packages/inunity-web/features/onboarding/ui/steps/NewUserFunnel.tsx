@@ -6,6 +6,7 @@ import TextOnly from "@/features/onboarding/ui/steps/TextOnly";
 import GoogleSignin from "@/features/onboarding/ui/steps/GoogleSignIn";
 import CertificateAttach from "./CertificateAttach";
 import NewUserInfo from "./NewUserInfo";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface NewUserFunnelProps {
   onComplete: () => void;
@@ -18,7 +19,10 @@ type FunnelContext = {
 };
 
 export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
-  const { Render, history } = useFunnel<{
+  const [step, setStep] = useLocalStorage("new_user_step", "Introduction");
+  const [context, setContext] = useLocalStorage("new_user_context", {});
+
+  const funnel = useFunnel<{
     Introduction: Record<string, never>;
     Info: FunnelContext;
     Google: Record<string, never>;
@@ -48,10 +52,11 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
   // }, [pathname, onComplete, history]);
 
   return (
-    <Render
-      Introduction={() => {
+    <funnel.Render
+      Introduction={({ history }) => {
         const handleNext = () => {
           history.push("Info", {});
+          setStep("Info");
         };
 
         return (
@@ -67,20 +72,35 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
           />
         );
       }}
-      Info={({ context }) => (
-        <NewUserInfo context={context} history={history} />
+      Info={({ context, history }) => (
+        <NewUserInfo
+          context={context}
+          history={{
+            ...history,
+            replace: (step: "Info", updatedContext: FunnelContext) => {
+              const mergedContext = { ...context, ...updatedContext };
+              history.replace(step, mergedContext);
+              setContext((prev) => ({ ...prev, ...mergedContext }));
+            },
+          }}
+        />
       )}
-      Google={() => {
-        // 학교 웸 메일이 없는 경우 증명서 제출 페이지로 이동
+      Google={({ history }) => {
         const handleAttachCertificate = () => {
           history.push("Certificate", {});
+          setStep("Certificate");
         };
 
         return <GoogleSignin onAttachCertificate={handleAttachCertificate} />;
       }}
-      Certificate={() => {
-        return <CertificateAttach onAttachCertificate={onComplete} />;
-      }}
+      Certificate={() => (
+        <CertificateAttach
+          onAttachCertificate={() => {
+            onComplete();
+            setStep("Complete");
+          }}
+        />
+      )}
     />
   );
 }
