@@ -27,27 +27,13 @@ export default function CustomWebView({
   initialPathname: string;
 } & WebViewProps) {
   const { setIsLoading, isLoading, webViewRef } = useWebView();
-  const [cookie, setCookie] = useState<string | null>(null);
-  const messageManager = useMessageManager(webViewRef);
   const insets = useSafeAreaInsets();
 
-  useEffect(() => {
-    if (!isLoading)
-      AuthManager.getCredentialFromStorage().then((cookie) => {
-        messageManager.sendMessage({
-          event: MessageEventType.Auth,
-          value: cookie,
-        });
-        setCookie(cookie);
-      });
-  }, [isLoading]);
 
   return (
     <WebView
       ref={webViewRef}
       injectedJavaScriptBeforeContentLoaded={`
-      if (!document.cookie)
-        document.cookie=${cookie};
       document.documentElement.style.setProperty('--sat', '${insets.top}px');
   `}
       source={{

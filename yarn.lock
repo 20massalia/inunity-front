@@ -4418,6 +4418,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-cookies/cookies@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@react-native-cookies/cookies@npm:6.2.1"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    react-native: ">= 0.60.2"
+  checksum: 10c0/7f3b6dcd966326587196d674491275ae52c574ae46c765981327c541336de58963d33e4fcdc5a55d4041f9b0b520840db4c79d880a43464728a115e2dff39ffa
+  languageName: node
+  linkType: hard
+
 "@react-native-firebase/app@npm:^21.6.0":
   version: 21.6.0
   resolution: "@react-native-firebase/app@npm:21.6.0"
@@ -10084,6 +10095,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.2"
+    "@react-native-cookies/cookies": "npm:^6.2.1"
     "@react-native-firebase/app": "npm:^21.6.0"
     "@react-native-menu/menu": "npm:^1.1.6"
     "@react-navigation/native": "npm:^6.0.2"
@@ -10110,6 +10122,7 @@ __metadata:
     nativewind: "npm:^4.1.23"
     react: "npm:*"
     react-native: "npm:0.74.5"
+    react-native-exit-app: "npm:^2.0.0"
     react-native-gesture-handler: "npm:~2.16.1"
     react-native-reanimated: "npm:~3.10.1"
     react-native-safe-area-context: "npm:4.10.5"
@@ -14193,6 +14206,13 @@ __metadata:
     react-native-svg:
       optional: true
   checksum: 10c0/d6052499b8615b58e02ee43b7d2906fd2b5ef90410c26af94dd11d6d93ed116ab0c96f7228573734030f1d41b4e8e2878a63b2223eb86c797730df207ed0c2f0
+  languageName: node
+  linkType: hard
+
+"react-native-exit-app@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "react-native-exit-app@npm:2.0.0"
+  checksum: 10c0/301ce787e2a905cbfb8f3e19200c316c4c18274ccfea89c3b4f11cdeda3c88c3aa99cb4b16d360c0b7666e3275e75a074076234dc2f6c1ef937440f94ef07054
   languageName: node
   linkType: hard
 

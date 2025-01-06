@@ -17,7 +17,7 @@ import {
   MessageEventType,
   ArticleDetailPageEventType,
 } from "message-type/message-type";
-import { parseMessage, handleMessage } from "@/lib/MessageManager";
+import { parseMessage, handleMessage, useMessageManager } from "@/lib/MessageManager";
 import { StatusBar } from "expo-status-bar";
 import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { NativeInput } from "@/components/NativeInput";
@@ -32,21 +32,21 @@ export default function Detail() {
   }>();
 
   const { webViewRef } = useWebView();
-
-  const sendMessage = (message: Message<any>) => {
-    webViewRef.current?.articleMessage(JSON.stringify(message));
-  };
+  const messageManager = useMessageManager(webViewRef);
 
   const [comment, setComment] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
-  const write = () =>
-    sendMessage({
+  const write = () =>{
+    console.log('calling submit by write')
+    
+    messageManager.sendMessage({
       event: MessageEventType.Page,
       value: {
         event: ArticleDetailPageEventType.SubmitComment,
         value: { text: comment, isAnonymous },
       },
     });
+  }
 
   return (
     <KeyboardAvoidingView

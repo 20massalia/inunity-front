@@ -10,11 +10,11 @@ export const handleMessage = (
 ) => {
 
   switch (message.event) {
-    case MessageEventType.Login: {
-            AuthManager.saveCredential(message.value as string);
+    // case MessageEventType.Login: {
+    //         AuthManager.saveCredential(message.value as string);
       
-      break;
-    }
+    //   break;
+    // }
   }
   handlers[message.event]?.();
 };
@@ -25,7 +25,7 @@ export const parseMessage = (messageText: string) => {
 
 export const useMessageManager = (webViewRef: RefObject<WebView>) => {
   const sendMessage = (message: Message) => {
-    webViewRef.current?.articleMessage(JSON.stringify(message));
+    webViewRef.current?.postMessage(JSON.stringify(message));
   };
   return {sendMessage}
 
