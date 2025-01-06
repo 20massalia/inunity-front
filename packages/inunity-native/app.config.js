@@ -15,7 +15,8 @@ export default {
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "org.inu.inunity",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": process.env.GOOGLE_SERVICES_PLIST ?? "./GoogleService-Info.plist",
+      buildNumber: "1"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,6 +25,7 @@ export default {
       },
       "package": "org.inu.inunity",
       googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './google-services.json',
+      versionCode: '1'
     },
     "web": {
       "bundler": "metro",
