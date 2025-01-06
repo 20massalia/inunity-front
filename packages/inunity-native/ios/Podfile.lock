@@ -1490,8 +1490,6 @@ PODS:
     - React-logger (= 0.74.5)
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
-  - RNExitApp (2.0.0):
-    - React-Core
   - RNFBApp (21.6.0):
     - Firebase/CoreOnly (= 11.5.0)
     - React-Core
@@ -1617,6 +1615,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - "react-native-cookies (from `../node_modules/@react-native-cookies/cookies`)"
   - "react-native-menu (from `../node_modules/@react-native-menu/menu`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -1763,6 +1762,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-cookies:
+    :path: "../node_modules/@react-native-cookies/cookies"
   react-native-menu:
     :path: "../node_modules/@react-native-menu/menu"
   react-native-safe-area-context:
@@ -1883,6 +1884,7 @@ SPEC CHECKSUMS:
   React-jsitracing: d73503c33d42ae2c0732945338cff966e41cc51e
   React-logger: 780b9ee9cec7d44eabc4093de90107c379078cb6
   React-Mapbuffer: 32481ad50f09c781bdb408b302757e0c9285d6db
+  react-native-cookies: d648ab7025833b977c0b19e142503034f5f29411
   react-native-menu: 6eb1bc1cffd6f3f29e0d33f0326552f805637b9c
   react-native-safe-area-context: df9763c5de6fa38883028e243a0b60123acb8858
   react-native-webview: f246abd8b2fa884686628a64e791579e66e09d0c
@@ -1916,6 +1918,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 33622183a85805e12703cd618b2c16bfd18bfffb
 
-PODFILE CHECKSUM: 7bae5a4125439082c94b98b220032c82234f49f8
+PODFILE CHECKSUM: a99cecce0b1a990ee4e82c18659a17ca0f773b3e
 
 COCOAPODS: 1.16.2
