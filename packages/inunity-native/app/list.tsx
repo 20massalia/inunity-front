@@ -18,7 +18,7 @@ export default function List() {
   }, []);
 
   const sendMessage = (message: Message<any>) => {
-    webViewRef.current?.articleMessage(JSON.stringify(message));
+    webViewRef.current?.postMessage(JSON.stringify(message));
   };
 
   return (

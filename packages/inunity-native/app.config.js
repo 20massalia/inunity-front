@@ -16,7 +16,10 @@ export default {
       "supportsTablet": true,
       "bundleIdentifier": "org.inu.inunity",
       "googleServicesFile": process.env.GOOGLE_SERVICES_PLIST ?? "./GoogleService-Info.plist",
-      buildNumber: "1"
+      buildNumber: "1",
+      "infoPlist": {
+        "NSCrossWebsiteTrackingUsageDescription": "Allow apps to authenticate ."
+      }
     },
     "android": {
       "adaptiveIcon": {

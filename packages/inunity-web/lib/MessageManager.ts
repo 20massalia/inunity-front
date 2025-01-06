@@ -3,6 +3,7 @@ import {
   Message,
   MessageEventType,
 } from "message-type/message-type";
+import safeJsonParse from "message-type/safeParseJson";
 // 타입 가드 함수
 function isMessage<T extends MessageEventType>(obj: any): obj is Message<T> {
   return (
@@ -14,16 +15,6 @@ function isMessage<T extends MessageEventType>(obj: any): obj is Message<T> {
   );
 }
 
-// 타입 안전한 JSON 파싱 함수
-function safeJsonParse<T>(json: string): T | null {
-  try {
-    const parsed = JSON.parse(json);
-    return parsed as T;
-  } catch (error) {
-    console.error("JSON 파싱 오류:", error);
-    return null;
-  }
-}
 
 export class MessageManager {
   webViewInstance?: ReactNativeWebView;
@@ -32,7 +23,7 @@ export class MessageManager {
   }
 
   sendMessage(messageEvent: MessageEventType, value?: unknown) {
-    this.webViewInstance?.articleMessage(
+    this.webViewInstance?.postMessage(
       JSON.stringify({ event: messageEvent, value })
     );
   }
