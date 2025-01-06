@@ -10120,9 +10120,8 @@ __metadata:
     jest-expo: "npm:~51.0.3"
     message-type: "workspace:^"
     nativewind: "npm:^4.1.23"
-    react: "npm:*"
+    react: "npm:18.2.0"
     react-native: "npm:0.74.5"
-    react-native-exit-app: "npm:^2.0.0"
     react-native-gesture-handler: "npm:~2.16.1"
     react-native-reanimated: "npm:~3.10.1"
     react-native-safe-area-context: "npm:4.10.5"
@@ -14209,13 +14208,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-exit-app@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "react-native-exit-app@npm:2.0.0"
-  checksum: 10c0/301ce787e2a905cbfb8f3e19200c316c4c18274ccfea89c3b4f11cdeda3c88c3aa99cb4b16d360c0b7666e3275e75a074076234dc2f6c1ef937440f94ef07054
-  languageName: node
-  linkType: hard
-
 "react-native-gesture-handler@npm:~2.16.1":
   version: 2.16.2
   resolution: "react-native-gesture-handler@npm:2.16.2"
@@ -14438,7 +14430,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:*, react@npm:^18.2.0, react@npm:^18.3.1":
+"react@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react@npm:18.2.0"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+  checksum: 10c0/b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
+  languageName: node
+  linkType: hard
+
+"react@npm:^18.2.0, react@npm:^18.3.1":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:

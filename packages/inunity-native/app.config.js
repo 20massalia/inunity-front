@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "inunity-native",
     "slug": "inunity-native",
@@ -15,7 +15,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "org.inu.inunity",
-      "googleServicesFile": "./GoogleService-Info.plist",
+      "googleServicesFile": process.env.GOOGLE_SERVICES_PLIST ?? "./GoogleService-Info.plist",
+      buildNumber: "1",
       "infoPlist": {
         "NSCrossWebsiteTrackingUsageDescription": "Allow apps to authenticate ."
       }
@@ -26,7 +27,8 @@
         "backgroundColor": "#ffffff"
       },
       "package": "org.inu.inunity",
-      "googleServicesFile": "./google-services.json"
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './google-services.json',
+      versionCode: '1'
     },
     "web": {
       "bundler": "metro",
@@ -41,7 +43,8 @@
         "expo-build-properties",
         {
           "ios": {
-            "useFrameworks": "static"
+            "useFrameworks": "static",
+            "deploymentTarget": "13.4"
           }
         }
       ]
@@ -58,4 +61,4 @@
       }
     }
   }
-}
+};
