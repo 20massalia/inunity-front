@@ -43,12 +43,25 @@ interface ProfileData {
   skill: Skill[];
 }
 
+interface ProfileContainerProps {
+  userId?: string;
+  ogData?: Array<{
+    title?: string;
+    description?: string;
+    image?: string;
+    url: string;
+  }>;
+}
+
 /**
  * @param userId
  *   - 없으면 "내 프로필" 모드
  *   - 있으면 userId에 해당하는 "타인 프로필" 모드
  */
-export default function ProfileContainer({ userId }: { userId?: string }) {
+export default function ProfileContainer({
+  userId,
+  ogData = [],
+}: ProfileContainerProps) {
   const router = useNativeRouter();
   const [token, setToken] = useState<string | null>(null);
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
@@ -192,38 +205,43 @@ export default function ProfileContainer({ userId }: { userId?: string }) {
   const ProjectsTabContent = () => {
     return (
       <div className="flex flex-col gap-4 mt-4 px-2">
-        {profileData.projectHistory.map((p, i) => (
-          <div key={i} className="relative p-4 rounded-md">
-            {isOwner && (
-              <div className="absolute right-2 top-4">
-                <DropdownMenu
-                  menuId={`${i}`}
-                  actions={[
-                    {
-                      label: "수정",
-                      onClick: () => handleEdit("projects", i),
-                    },
-                    {
-                      label: "삭제",
-                      onClick: () => alert("삭제"),
-                    },
-                  ]}
-                />
-              </div>
-            )}
-            <div className="text-lg font-extrabold">{p.title}</div>
-            <div className="mt-1 text-sm text-gray-700">{p.period}</div>
-            {p.link && (
-              <div className="mt-2">
-                <iframe
-                  src={p.link}
-                  className="w-full h-64 border rounded-md"
-                  title={`project-${i}`}
-                />
-              </div>
-            )}
-          </div>
-        ))}
+        {profileData.projectHistory.map((p, i) => {
+          const og = ogData[i];
+          return (
+            <div key={i} className="relative p-4 rounded-md">
+              {isOwner && (
+                <div className="absolute right-2 top-4">
+                  <DropdownMenu
+                    menuId={`${i}`}
+                    actions={[
+                      {
+                        label: "수정",
+                        onClick: () => router.push(`/profile/my/projects/${i}`),
+                      },
+                      {
+                        label: "삭제",
+                        onClick: () => alert("삭제되었습니다."),
+                      },
+                    ]}
+                  />
+                </div>
+              )}
+              <div className="text-lg font-extrabold">{p.title}</div>
+              <div className="mt-1 text-sm text-gray-700">{p.period}</div>
+              {og?.image ? (
+                <div className="mt-4">
+                  <img
+                    src={og.image}
+                    alt={og.title || p.title}
+                    className="w-full h-64 object-cover rounded-md"
+                  />
+                </div>
+              ) : (
+                <div className="mt-4 text-gray-500">{og.url}</div>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   };
