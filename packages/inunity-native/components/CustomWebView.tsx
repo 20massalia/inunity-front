@@ -35,12 +35,8 @@ export default function CustomWebView({
   return (
     <WebView
       ref={(node) => {
-        if (node) {
-          webViewRefs.current![id] =
-            React.createRef() as MutableRefObject<WebView>;
-          webViewRefs.current![id].current = node;
-        } else {
-          delete webViewRefs.current![id];
+        if (webViewRefs.current) {
+          webViewRefs.current[id] = node;
         }
       }}
       injectedJavaScriptBeforeContentLoaded={`

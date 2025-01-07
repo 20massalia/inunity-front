@@ -30,12 +30,9 @@ export default function Index() {
   return (
     <WebView
       ref={(node) => {
-        if (node) {
-          webViewRefs.current!["index"] =
-            React.createRef() as MutableRefObject<WebView>;
-          webViewRefs.current!["index"].current = node;
-        } else {
-          delete webViewRefs.current!["index"];
+        // WebView ref 설정을 위한 컴포넌트에서의 사용 예시
+        if (webViewRefs.current) {
+          webViewRefs.current["index"] = node;
         }
       }}
       injectedJavaScript={`

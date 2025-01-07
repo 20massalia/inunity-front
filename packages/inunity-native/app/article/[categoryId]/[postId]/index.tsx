@@ -36,7 +36,7 @@ export default function Detail() {
   }>();
 
   const { webViewRef } = useWebView("ArticleDetail");
-  const messageManager = useMessageManager(webViewRef?.current!);
+  const messageManager = useMessageManager(webViewRef!);
 
   const [comment, setComment] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);

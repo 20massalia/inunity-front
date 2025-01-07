@@ -12,7 +12,7 @@ const CustomTabBar = ({
   navigation,
 }: BottomTabBarProps) => {
   const webView = useWebView("index");
-  const messageManager = useMessageManager(webView.webViewRef?.current!);
+  const messageManager = useMessageManager(webView.webViewRef!);
 
   return (
     <View style={{ flexDirection: "row" }}>
