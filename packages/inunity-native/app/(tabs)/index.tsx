@@ -35,11 +35,12 @@ export default function Index() {
           webViewRefs.current["index"] = node;
         }
       }}
-      injectedJavaScript={`
-        document.documentElement.style.setProperty('--sat', '${insets.top}px');
-`}
+ 
       source={{
         uri: webViewOrigin,
+        headers: {
+          'Top-Inset': `${insets.top}`,
+        },
         // uri: 'http://localhost:3000/test'
         // uri: 'https://inunity-server.squidjiny.com/v1/auth/test'
       }}

@@ -35,8 +35,13 @@ export function getQueryClient() {
 }
 
 import { MessageProvider } from "./MessageContext";
+import { useEffect } from "react";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const queryClient = getQueryClient();
 
   return (
