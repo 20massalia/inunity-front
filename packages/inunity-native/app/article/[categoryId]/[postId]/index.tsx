@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   Platform,
   Button,
@@ -17,13 +17,17 @@ import {
   MessageEventType,
   ArticleDetailPageEventType,
 } from "message-type/message-type";
-import { parseMessage, handleMessage, useMessageManager } from "@/lib/MessageManager";
+import {
+  parseMessage,
+  handleMessage,
+  useMessageManager,
+} from "@/lib/MessageManager";
 import { StatusBar } from "expo-status-bar";
 import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { NativeInput } from "@/components/NativeInput";
 import NativeCheckBox from "@/components/NativeCheckBox";
 import CustomWebView from "@/components/CustomWebView";
-import { useWebView } from "@/components/useWebView";
+import { useWebView, webViewOrigin } from "@/components/useWebView";
 
 export default function Detail() {
   const { articleId, categoryId } = useLocalSearchParams<{
@@ -31,14 +35,14 @@ export default function Detail() {
     categoryId: string;
   }>();
 
-  const { webViewRef } = useWebView();
-  const messageManager = useMessageManager(webViewRef);
+  const { webViewRef } = useWebView("ArticleDetail");
+  const messageManager = useMessageManager(webViewRef?.current!);
 
   const [comment, setComment] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
-  const write = () =>{
-    console.log('calling submit by write')
-    
+  const write = useCallback(() => {
+
+
     messageManager.sendMessage({
       event: MessageEventType.Page,
       value: {
@@ -46,8 +50,7 @@ export default function Detail() {
         value: { text: comment, isAnonymous },
       },
     });
-  }
-
+  }, [webViewRef, comment, isAnonymous, messageManager])
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -55,7 +58,10 @@ export default function Detail() {
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1 }}>
-        <CustomWebView initialPathname={`/article/${categoryId}/${articleId}`} />
+        <CustomWebView
+          initialUrl={`${webViewOrigin}/article/${categoryId}/${articleId}`}
+          id={"ArticleDetail"}
+        />
       </View>
       <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
         <View style={styles.anonymityWrapper}>

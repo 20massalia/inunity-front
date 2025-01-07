@@ -1,5 +1,5 @@
 import CustomWebView from "@/components/CustomWebView";
-import { useWebView } from "@/components/useWebView";
+import { useWebView, webViewOrigin } from "@/components/useWebView";
 import { isLightColor } from "@/lib/ColorUtil";
 import {
   parseMessage,
@@ -15,26 +15,34 @@ import {
 } from "message-type/message-type";
 import { Platform } from "react-native";
 import WebView from "react-native-webview";
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CookieManager from "@react-native-cookies/cookies";
 import AuthManager from "@/lib/AuthManager";
+import React from "react";
 
 export default function Index() {
-  const { setIsLoading, isLoading, webViewRef, setUrl, url } = useWebView();
+  const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebView("index");
   const [cookie, setCookie] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
+  console.log(insets.top);
 
   return (
     <WebView
-      ref={webViewRef}
+      ref={(node) => {
+        if (node) {
+          webViewRefs.current!["index"] =
+            React.createRef() as MutableRefObject<WebView>;
+          webViewRefs.current!["index"].current = node;
+        } else {
+          delete webViewRefs.current!["index"];
+        }
+      }}
       injectedJavaScript={`
-    if (!document.cookie)
-      document.cookie=${cookie};
-    document.documentElement.style.setProperty('--sat', '${insets.top}px');
+        document.documentElement.style.setProperty('--sat', '${insets.top}px');
 `}
       source={{
-        uri: url,
+        uri: webViewOrigin,
         // uri: 'http://localhost:3000/test'
         // uri: 'https://inunity-server.squidjiny.com/v1/auth/test'
       }}

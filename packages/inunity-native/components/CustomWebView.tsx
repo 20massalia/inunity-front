@@ -1,5 +1,5 @@
 import WebView, { WebViewProps } from "react-native-webview";
-import { useWebView, webViewUrl } from "./useWebView";
+import { useWebView, webViewOrigin } from "./useWebView";
 import { Platform } from "react-native";
 import {
   handleMessage,
@@ -14,30 +14,41 @@ import {
 import { router } from "expo-router";
 import { isLightColor } from "@/lib/ColorUtil";
 import { setStatusBarStyle } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import AuthManager from "@/lib/AuthManager";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React from "react";
 
 export default function CustomWebView({
+  id,
   pageEventHandler,
-  initialPathname,
+  initialUrl,
   ...props
 }: {
+  id: string;
   pageEventHandler?: (pageEvent: PageEvent<any>) => void;
-  initialPathname: string;
+  initialUrl: string;
 } & WebViewProps) {
-  const { setIsLoading, isLoading, webViewRef } = useWebView();
+  const { setIsLoading, isLoading, webViewRefs } = useWebView(id);
   const insets = useSafeAreaInsets();
-
 
   return (
     <WebView
-      ref={webViewRef}
+      ref={(node) => {
+        if (node) {
+          webViewRefs.current![id] =
+            React.createRef() as MutableRefObject<WebView>;
+          webViewRefs.current![id].current = node;
+        } else {
+          delete webViewRefs.current![id];
+        }
+      }}
       injectedJavaScriptBeforeContentLoaded={`
-      document.documentElement.style.setProperty('--sat', '${insets.top}px');
-  `}
+       setTimeout(() => {
+        document.documentElement.style.setProperty('--sat', '${insets.top}px');
+        }, 300);  `}
       source={{
-        uri: `${webViewUrl}/${initialPathname}`,
+        uri: `${initialUrl}`,
       }}
       onNavigationStateChange={props.onNavigationStateChange}
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
@@ -70,8 +81,8 @@ export default function CustomWebView({
             pageEventHandler?.(pageEvent);
           },
           [MessageEventType.Log]: () => {
-            console.log(message.value)
-          }
+            console.log(message.value);
+          },
         });
       }}
     ></WebView>

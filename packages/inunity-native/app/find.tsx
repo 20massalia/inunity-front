@@ -11,13 +11,13 @@ import { MessageEventType } from "message-type/message-type";
 export default function Find() {
   const webViewRef = useRef<WebView>(null);
   const [cookie, setCookie] = useState<string | null>(null);
-  const messageManager = useMessageManager(webViewRef);
-  useEffect(() => {
-    AuthManager.getCredentialFromStorage().then((cookie) => {
-      messageManager.sendMessage({ event: MessageEventType.Auth, value: cookie });
-      setCookie(cookie);
-    });
-  }, []);
+  const messageManager = useMessageManager(webViewRef.current!);
+  // useEffect(() => {
+  //   AuthManager.getCredentialFromStorage().then((cookie) => {
+  //     messageManager.sendMessage({ event: MessageEventType.Auth, value: cookie });
+  //     setCookie(cookie);
+  //   });
+  // }, []);
 
 
 
