@@ -13,8 +13,8 @@ const CustomTabBar = ({
   descriptors,
   navigation,
 }: BottomTabBarProps) => {
-  const webView = useWebView();
-  const messageManager = useMessageManager(webView.webViewRef);
+  const webView = useWebView("index");
+  const messageManager = useMessageManager(webView.webViewRef!);
 
   return (
     <View style={{ flexDirection: "row", borderTopWidth:2, borderTopColor: '#EFF3F4', backgroundColor: 'white' }}>
@@ -22,7 +22,7 @@ const CustomTabBar = ({
         const { options } = descriptors[route.key];
         const label = options.title || route.name;
         const pathname = (route.params as { pathname?: string }).pathname;
-        const webViewPathName = new URL(webView.url).pathname;
+        const webViewPathName = new URL(webView.webViews['index']).pathname;
 
         const isFocused = pathname === webViewPathName;
 
@@ -34,16 +34,19 @@ const CustomTabBar = ({
           });
 
           if (!isFocused && !event.defaultPrevented) {
+            const url = webView.webViews["index"];
             // 여기서 라우팅 대신 원하는 동작을 수행합니다
             console.log("Comparing:", { pathname, webViewPathName, isFocused });
             console.log("Route params:", route.params);
-            console.log("WebView URL:", webView.url);
-            console.log("Extracted pathname:", new URL(webView.url).pathname);
+            console.log("WebView URL:", url);
+            console.log("Extracted pathname:", new URL(url).pathname);
+
 
             console.log(`Tab ${label} pressed, ${webViewPathName}`);
 
             if (pathname) {
               console.log("Sending navigation event: ", pathname);
+
               messageManager.sendMessage({
                 event: MessageEventType.Navigation,
                 value: { path: pathname } as NavigationEvent,
