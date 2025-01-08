@@ -70,7 +70,7 @@ export default function CustomWebView({
             const color = message.value as string;
             if (!new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).test(color))
               return;
-            setStatusBarStyle(isLightColor(color) ? "dark" : "light");
+            // setStatusBarStyle(isLightColor(color) ? "dark" : "light");
           },
           [MessageEventType.Page]: () => {
             const pageEvent = message.value as PageEvent<any>;
