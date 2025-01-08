@@ -1,4 +1,5 @@
 import CustomWebView from "@/components/CustomWebView";
+import { webViewOrigin } from "@/components/useWebView";
 import { useLocalSearchParams } from "expo-router";
 
 export default function Index() {
@@ -6,5 +7,5 @@ export default function Index() {
     categoryId: string;
   }>();
 
-  return <CustomWebView initialPathname={`/article/${categoryId}`} />;
+  return <CustomWebView initialUrl={`${webViewOrigin}/article/${categoryId}`} id={"ArticleList"} />;
 }
