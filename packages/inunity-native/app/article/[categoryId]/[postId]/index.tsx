@@ -19,7 +19,6 @@ import {
 } from "message-type/message-type";
 import { parseMessage, handleMessage, useMessageManager } from "@/lib/MessageManager";
 import { StatusBar } from "expo-status-bar";
-import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { NativeInput } from "@/components/NativeInput";
 import NativeCheckBox from "@/components/NativeCheckBox";
 import CustomWebView from "@/components/CustomWebView";

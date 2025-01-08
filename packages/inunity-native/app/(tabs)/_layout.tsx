@@ -5,6 +5,8 @@ import { WebViewProvider, useWebView } from "../../components/useWebView";
 import { useMessageManager } from "@/lib/MessageManager";
 import { MessageEventType, NavigationEvent } from "message-type/message-type";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
+import { Colors } from "@/constants/Colors";
 
 const CustomTabBar = ({
   state,
@@ -15,7 +17,7 @@ const CustomTabBar = ({
   const messageManager = useMessageManager(webView.webViewRef);
 
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={{ flexDirection: "row", borderTopWidth:2, borderTopColor: '#EFF3F4', backgroundColor: 'white' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label = options.title || route.name;
@@ -37,11 +39,11 @@ const CustomTabBar = ({
             console.log("Route params:", route.params);
             console.log("WebView URL:", webView.url);
             console.log("Extracted pathname:", new URL(webView.url).pathname);
-    
+
             console.log(`Tab ${label} pressed, ${webViewPathName}`);
 
             if (pathname) {
-              console.log('Sending navigation event: ', pathname)
+              console.log("Sending navigation event: ", pathname);
               messageManager.sendMessage({
                 event: MessageEventType.Navigation,
                 value: { path: pathname } as NavigationEvent,
@@ -57,9 +59,10 @@ const CustomTabBar = ({
           <TouchableOpacity
             key={index}
             onPress={onPress}
-            style={{ flex: 1, alignItems: "center", padding: 16 }}
+            style={{ flex: 1, alignItems: "center", padding: 16, gap:6 }}
           >
-            <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
+            {options.tabBarIcon?.({focused: isFocused, color: '', size: 24})}
+            <Text style={{ color: isFocused ? "#185bec" : "#222" }}>
               {label}
             </Text>
           </TouchableOpacity>
@@ -79,12 +82,28 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{ title: "Home", headerShown: false }}
+        options={{
+          title: "홈",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <FontAwesome
+              name="home"
+              size={24}
+              color={focused ? "#185bec" : "#222"}
+            />
+          ),
+        }}
         initialParams={{ pathname: "/" }}
       />
       <Tabs.Screen
         name="board"
-        options={{ title: "Board" }}
+        options={{ title: "게시판", tabBarIcon: ({ focused }) => (
+          <FontAwesome6
+            name="clipboard"
+            size={24}
+            color={focused ? "#185bec" : "#222"}
+          />
+        ), }}
         initialParams={{ pathname: "/board" }}
       />
       {/* <Tabs.Screen name="board" options={{ title: 'Settings' }} /> */}

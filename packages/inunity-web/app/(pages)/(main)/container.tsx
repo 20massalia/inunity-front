@@ -45,6 +45,7 @@ export default function HomeContainer() {
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
+    arrows:false
   };
 
   useEffect(() => {
