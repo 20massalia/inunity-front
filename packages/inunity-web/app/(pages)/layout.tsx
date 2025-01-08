@@ -36,8 +36,8 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${inter.className} h-real-screen sm:[] `}
-        style={{ WebkitOverflowScrolling: "touch" }}
+        className={`${inter.className} h-real-screen sm:max-w-sm sm:fixed`}
+        style={{ WebkitOverflowScrolling: "touch", left: 'calc(50vw - 12rem)' }}
       >
         <Providers>{children}</Providers>
       </body>
