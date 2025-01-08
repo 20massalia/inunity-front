@@ -7,6 +7,7 @@ import ArticleDto from "@/entities/article/model/ArticleDto";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import { ReactNode } from "react";
 import ResponseArticleThumbnail from "../model/ResponseArticleThumbnail";
+import '@/lib/date.extension'
 
 // 이정도는 해도 되지 않을까?요?
 // 상위에서 개수대로 index 를 prop으로 넘겨서 여기서 데이터 꺼내먹는건 너무 오바지 않나?
@@ -19,7 +20,7 @@ export default function ArticleCard({ ...item }: ResponseArticleThumbnail & {bot
       author={item.nickname}
       authorDescription={item.department}
       content={item.content}
-      fromUpdate={item.updatedAt.toDateString()}
+      fromUpdate={item.updatedAt.format('yyyy-MM-dd')}
       likeCount={item.likeNum}
       avatarUrl={item.userImageUrl}
       bookmarkCount={0}

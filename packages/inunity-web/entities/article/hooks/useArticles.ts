@@ -4,7 +4,7 @@ import { generateMockArticleThumbnails } from "../model/ArticleMock";
 import ArticleQueries from "./ArticleQueries";
 
 export default function useArticles() {
-  const queryOptions = ArticleQueries.infiniteArticleQuery();
+  const queryOptions = ArticleQueries.infiniteArticleQuery({categoryId: 0});
   const articles = useInfiniteQuery({...queryOptions,});
   return articles
 }
