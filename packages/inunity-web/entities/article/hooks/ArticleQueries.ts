@@ -54,8 +54,7 @@ export default class ArticleQueries {
       queryKey,
       queryFn: async ({ queryKey: [_, id] }) => {
         // return generateMockArticle();
-        const res = await fetchExtended<ResponseArticle>(`v1/articles/${id}`)
-        return res.body;
+        return await fetchExtended<ResponseArticle>(`v1/articles/${id}`);
       },
     });
   }
@@ -66,9 +65,9 @@ export default class ArticleQueries {
       queryKey,
       queryFn: async () => {
         // return generateMockArticleThumbnails(length);
-        const res = await fetchExtended<{data: Page<ResponseArticleThumbnail>}>(`v1/categories/1/articles`)
-        return res.body;
-        
+        return await fetchExtended<Page<ResponseArticleThumbnail>>(
+          `v1/categories/1/articles`
+        );
       },
     });
   }
@@ -82,8 +81,14 @@ export default class ArticleQueries {
       queryFn: async ({ pageParam, queryKey }) => {
         const [_, categoryId, keyword, tags, sort] = queryKey;
         console.log("fetching next page...", pageParam);
-        const res = await fetchExtended<Page<ResponseArticleThumbnail>>(`v1/categories/${categoryId}/articles`)
-        return res.body;
+        return await fetchExtended<Page<ResponseArticleThumbnail>>(
+          `v1/categories/${categoryId}/articles`,
+          {
+            query: { page: pageParam.toString(), size: "20" },
+            next: { revalidate: 3600 },
+          }
+        );
+
         // return createPage(generateMockArticleThumbnails(20));
         // const page = (await (
         //   await fetch("http://localhost:8082/notices/v1/university?page=" + pageParam )

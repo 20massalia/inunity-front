@@ -68,6 +68,9 @@ export default function ArticleDetailContainer({
   } = useArticleDetailViewModel({ articleId });
 
   const article = articleQuery.data;
+  useEffect(() => {
+    messageManager?.log(JSON.stringify(article))
+  }, [article])
 
   const comments = generateMockCommentsWithReplies(3);
 

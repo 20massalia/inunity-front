@@ -7,6 +7,7 @@ import {
   faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { ListCard } from "./ListCard";
+import { DropDownActionItem } from "./DropdownMenu";
 
 export type CardVariant = 'list' | 'detailed';
 
@@ -29,6 +30,7 @@ export interface CardProps<T extends CardVariant = 'list'> {
   className?: string;
   profileSlot?: ReactNode
   bottomFeatureSlot?: ReactNode
+  actions?:ReactNode
 }
 
 export function Card(props: CardProps) {

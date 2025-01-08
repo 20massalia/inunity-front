@@ -22,7 +22,7 @@ import { Chip, ScrollView } from "ui";
 export default function ArticleSearchContainer({
   categoryId,
 }: {
-  categoryId: string;
+  categoryId: number;
 }) {
   const router = useNativeRouter();
 

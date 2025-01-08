@@ -31,12 +31,13 @@ export const ListCard: React.FC<CardProps> = ({
   bookmarkCount = 0,
   isLiked = false,
   isBookmarked = false,
+  actions,
   onClick,
   className = "",
   profileSlot,
   bottomFeatureSlot,
 }) => {
-  const {scrollContainerRef} = useScrollView();
+  const { scrollContainerRef } = useScrollView();
   return (
     <div
       onClick={onClick}
@@ -45,29 +46,10 @@ export const ListCard: React.FC<CardProps> = ({
       {profileSlot}
       <UserProfile
         profileImage={avatarUrl}
-        name={author ?? '익명'}
+        name={author ?? "익명"}
         introduction={authorDescription}
         id={2}
-        actions={
-          <DropdownMenu
-            actions={[
-              {
-                label: "수정",
-                onClick: () => console.log("Edit Article clicked"),
-              },
-              {
-                label: "Delete Article",
-                onClick: () => console.log("Delete Article clicked"),
-              },
-              {
-                label: "Report Article",
-                onClick: () => console.log("Report Article clicked"),
-              },
-            ]}
-            menuId={`user_${author}`}
-            scrollContainerRef={scrollContainerRef}
-          />
-        }
+        actions={actions}
       />
       <Typography
         variant="ParagraphNormalRegular"

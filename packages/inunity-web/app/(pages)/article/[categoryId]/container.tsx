@@ -17,11 +17,11 @@ import ArticleCard from "@/entities/article/ui/ArticleCard";
 export default function ArticleListContainer({
   categoryId,
 }: {
-  categoryId: string;
+  categoryId: number;
 }) {
   const router = useNativeRouter();
 
-  const articleQuery = useArticles();
+  const articleQuery = useArticles({categoryId});
   const articles = articleQuery.data?.pages.flatMap(page => page.content);
 
   return (

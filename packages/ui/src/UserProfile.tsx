@@ -10,7 +10,6 @@ import { Typography } from "./Typography";
 import { useScrollView } from "./contexts/ScrollContext";
 import { DropDownActionItem, DropdownMenu } from "./DropdownMenu";
 
-
 export interface UserProfileProps {
   /** 사용자 프로필 이미지 */
   profileImage?: string;
@@ -38,7 +37,7 @@ export const UserProfile = ({
       <div className="flex gap-2">
         <div className=" flex justify-center items-center rounded-full w-12 aspect-square">
           <img
-            src={profileImage}
+            src={profileImage ?? "https://www.gravatar.com/avatar"}
             className="rounded-full"
             style={{ WebkitUserSelect: "none" }}
           />

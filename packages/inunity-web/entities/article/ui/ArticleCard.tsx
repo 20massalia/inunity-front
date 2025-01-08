@@ -8,11 +8,11 @@ import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmark
 import { ReactNode } from "react";
 import ResponseArticleThumbnail from "../model/ResponseArticleThumbnail";
 import '@/lib/date.extension'
+import { DropDownActionItem } from "ui/src/DropdownMenu";
 
 // 이정도는 해도 되지 않을까?요?
 // 상위에서 개수대로 index 를 prop으로 넘겨서 여기서 데이터 꺼내먹는건 너무 오바지 않나?
-export default function ArticleCard({ ...item }: ResponseArticleThumbnail & {bottomFeatureSlot?: ReactNode}) {
-  
+export default function ArticleCard({ ...item }: ResponseArticleThumbnail & {bottomFeatureSlot?: ReactNode; actions?: ReactNode}) {
 
   const router = useNativeRouter();
   return (
@@ -24,11 +24,16 @@ export default function ArticleCard({ ...item }: ResponseArticleThumbnail & {bot
       likeCount={item.likeNum}
       avatarUrl={item.userImageUrl}
       bookmarkCount={0}
-      onClick={() => router.push(`/article/1/${item.articleId}`)}
+      onClick={() => {
+        // alert(item.articleId)
+        alert(`/article/1/${item.articleId}`)
+        router.push(`/article/1/${item.articleId}`)
+      }}
       isLiked={item.isLiked}
       isBookmarked={false}
       variant="list"
       bottomFeatureSlot={item.bottomFeatureSlot}
+      actions={item.actions}
     />
   );
 }

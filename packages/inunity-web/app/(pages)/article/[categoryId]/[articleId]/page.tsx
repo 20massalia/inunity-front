@@ -4,6 +4,7 @@ import { Hydration } from "@/shared/ui/Hydration";
 import SafeAreaView from "@/widgets/SafeAreaView";
 import { generateMockArticle } from "@/entities/article/model/ArticleMock";
 import ArticleQueries from "@/entities/article/hooks/ArticleQueries";
+import { headers } from "next/headers";
 
 export default async function Page({
   params,

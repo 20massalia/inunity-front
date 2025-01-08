@@ -18,29 +18,34 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { library} from "@fortawesome/fontawesome-svg-core";
-library.add(fas)
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(fas);
 import React, { useState } from "react";
 import { Divider, Input, SimpleListItem, Typography } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
+import useCategories from "@/entities/category/hooks/useCategories";
 
+const icons = [
+  "clipboard",
+  "clipboard-list",
+  "comments",
+  "briefcase",
+  "hand-holding-heart",
+  "exclamation-triangle",
+  "trophy",
+  "book",
+  "laptop-code",
+  "microchip",
+];
 
 export default function BoardListContainer() {
   const [searchValue, setSearchValue] = useState("");
 
-  const menus = [
-    { id: "freeboard", text: "자유게시판", icon: "clipboard" },
-    { id: "recruitmentboard", text: "모집 게시판", icon: "clipboard-list" },
-    { id: "qnaboard", text: "질문 게시판", icon: "comments" },
-    { id: "jobreviews", text: "취업후기 게시판", icon: "briefcase" },
-    { id: "tradeshare", text: "거래/나눔 게시판", icon: "hand-holding-heart" },
-    { id: "lostandfound", text: "분실물 게시판", icon: "exclamation-triangle" },
-    { id: "contestsevents", text: "대회 및 공모전", icon: "trophy" },
-    { id: "itcollege", text: "정보기술대", icon: "book" },
-    { id: "computerscience", text: "컴퓨터공학부", icon: "laptop-code" },
-    { id: "embeddedsystems", text: "임베디드시스템공학과", icon: "microchip" },
-    { id: "infocomm", text: "정보통신공학과", icon: "signal" },
-  ];
+  const categoryQuery = useCategories();
+  const categories = categoryQuery.data?.map((category, idx) => ({
+    ...category,
+    icon: icons[idx],
+  }));
   const router = useNativeRouter();
 
   return (
@@ -57,13 +62,13 @@ export default function BoardListContainer() {
           />
         </div>
         <div className="bg-white self-stretch p-5 flex flex-col gap-4">
-          {menus.map((menu) => (
+          {categories?.map((menu) => (
             <SimpleListItem
-              text={menu.text}
+              text={menu.name}
               key={menu.id}
               leftIcon={<FontAwesomeIcon icon={menu.icon as IconName} />}
               onClick={() => {
-                router.push(`/article/${menu.id}`)
+                router.push(`/article/${menu.id}`);
               }}
             />
           ))}

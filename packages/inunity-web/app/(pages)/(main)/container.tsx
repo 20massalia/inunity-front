@@ -29,6 +29,7 @@ import banner2 from "@/app/banner2.jpg";
 import banner3 from "@/app/banner3.jpg";
 import logo from "@/app/inunity.png";
 import computer from "@/app/computer.png";
+import { DropdownMenu } from "ui/src/DropdownMenu";
 
 export default function HomeContainer() {
   // ViewModel 이용
@@ -45,7 +46,7 @@ export default function HomeContainer() {
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
-    arrows:false
+    arrows: false,
   };
 
   useEffect(() => {
@@ -100,17 +101,19 @@ export default function HomeContainer() {
           ))}
         </Slider>
         <div className="flex flex-row flex-wrap p-3 justify-center items-center gap-1">
-          {new Array(8).fill({ label: "컴퓨터공학부", image: computer }).map((item) => (
-            <div className="flex flex-col items-center" key={item.label}>
-              <Image
-                src={item.image}
-                alt="link image"
-                width={60}
-                height={60}
-              ></Image>
-              {item.label}
-            </div>
-          ))}
+          {new Array(8)
+            .fill({ label: "컴퓨터공학부", image: computer })
+            .map((item) => (
+              <div className="flex flex-col items-center" key={item.label}>
+                <Image
+                  src={item.image}
+                  alt="link image"
+                  width={60}
+                  height={60}
+                ></Image>
+                {item.label}
+              </div>
+            ))}
         </div>
         <div className="self-stretch px-4 pt-6 pb-1 bg-[#f8f8f8] justify-between items-end inline-flex">
           <Typography variant="HeadingXLargeBold">학과 공지</Typography>
@@ -120,20 +123,20 @@ export default function HomeContainer() {
         </div>
         <div className="text-pri p-4  w-full ">
           <div className=" justify-start items-start gap-4 flex overflow-x-scroll">
-            {/* {notices.data?.pages
+            {notices.data?.pages
               .flatMap((page) => page.content)
               .map((notice) => (
                 <div key={notice.articleId} className="flex-none">
                   <NoticeCard {...notice} />
                 </div>
-              ))} */}
+              ))}
           </div>
         </div>
         <div className="self-stretch  flex-col justify-start items-start flex">
           <Typography variant="HeadingXLargeBold" className="px-4">
             인기 게시글
           </Typography>
-          {articles.data?.data.content.map((article) => (
+          {articles.data?.content.map((article) => (
             <ArticleCard
               {...article}
               key={article.articleId}
@@ -142,6 +145,12 @@ export default function HomeContainer() {
                   <ToggleLikeIcon article={article} />
                   <ToggleBoomarkIcon article={article} />
                 </>
+              }
+              actions={
+                <DropdownMenu
+                  actions={[]}
+                  menuId={`user_${article.articleId}`}
+                />
               }
             />
           ))}

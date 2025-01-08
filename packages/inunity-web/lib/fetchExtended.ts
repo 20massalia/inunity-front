@@ -7,6 +7,10 @@ import returnFetch, {
 // Use as a replacer of `RequestInit`
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   body?: object;
+  /**
+   * 쿼리를 바디로 넣으면 쿼리스트링을 생성해줍니다.
+   */
+  query?: Record<string,string>;
 };
 
 // Use as a replacer of `Response`
@@ -35,31 +39,51 @@ const parseJsonSafely = (text: string): object | string => {
   }
 };
 
+export interface ResponseWrapper<T> {
+  status: number;
+  message: string;
+  data: T;
+}
+export class CustomError extends Error {
+  code: number;
+  constructor(code: number, message?: string, options?: ErrorOptions) {
+    super(message, options);
+    this.code = code
+  }
+}
+
 // Write your own high order function to serialize request body and deserialize response body.
 export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
-  return async <T>(
-    url: FetchArgs[0],
-    init?: JsonRequestInit
-  ): Promise<JsonResponse<T>> => {
+  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<T> => {
+    const queryString = init?.query && new URLSearchParams(init?.query).toString()
+    url = queryString ? `${url}?${queryString}` : url;
+    
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body),
     });
+    const res = (
+      parseJsonSafely(await response.text()) as ResponseWrapper<T>
+    )
 
-    const body = handleDates(parseJsonSafely(await response.text()) as T);
-
-    return {
-      headers: response.headers,
-      ok: response.ok,
-      redirected: response.redirected,
-      status: response.status,
-      statusText: response.statusText,
-      type: response.type,
-      url: response.url,
-      body,
-    } as JsonResponse<T>;
+    if (200 <= res.status && res.status < 300) {
+      const data = handleDates(res.data) as T;
+      return data;
+    } else {
+      throw new CustomError(res.status, res.message);
+    }
+    // return {
+    //   headers: response.headers,
+    //   ok: response.ok,
+    //   redirected: response.redirected,
+    //   status: response.status,
+    //   statusText: response.statusText,
+    //   type: response.type,
+    //   url: response.url,
+    //   body,
+    // } as JsonResponse<T>;
   };
 };
 
@@ -68,7 +92,6 @@ export default returnFetchJson({
   // default options
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
   interceptors: {
-
     async response(response, requestArgs, fetch) {
       if (response.status >= 400) {
         throw await response.text().then(Error);
