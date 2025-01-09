@@ -25,8 +25,6 @@ export default function ArticleCard({ ...item }: ResponseArticleThumbnail & {bot
       avatarUrl={item.userImageUrl}
       bookmarkCount={0}
       onClick={() => {
-        // alert(item.articleId)
-        alert(`/article/1/${item.articleId}`)
         router.push(`/article/1/${item.articleId}`)
       }}
       isLiked={item.isLiked}
