@@ -4,12 +4,13 @@ import useEditComment from "./useEditComment";
 import useReportComment from "./useReportComment";
 import useSubmitComment from "./useSubmitComment";
 import useDeleteArticle from "./useDeleteArticle";
+import useReportArticle from "./useReportArticle";
 
 export default function useArticleDetailViewModel({ articleId }: { articleId: string }) {
   const article = useArticle(articleId);
 
   const submitComment = useSubmitComment();
-  const reportArticle = useReportComment();
+  const reportArticle = useReportArticle();
   const reportComment = useReportComment();
   const editComment = useEditComment();
   const deleteArticle = useDeleteArticle();

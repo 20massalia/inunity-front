@@ -1,17 +1,10 @@
 import {
-  InfiniteData,
   infiniteQueryOptions,
   queryOptions,
 } from "@tanstack/react-query";
-import {
-  generateMockArticle,
-  generateMockArticleThumbnails,
-} from "../model/ArticleMock";
 import ResponseArticle from "../model/ResponseAritcle";
-import { createPage } from "@/shared/utils/createPage";
 import Page from "@/shared/types/Page";
 import ResponseArticleThumbnail from "../model/ResponseArticleThumbnail";
-import returnFetch from "@/lib/return-fetch";
 import fetchExtended from "@/lib/fetchExtended";
 
 export enum SortType {
@@ -33,98 +26,60 @@ export interface ArticleFilter {
 }
 
 export default class ArticleQueries {
-  static readonly Keys = {
-    root: ["article"] as const,
-    byId: (id: string) => ["article", id],
-    infinite: (
-      categoryId?: number,
-      keyword?: string,
-      tags?: string[],
-      sort: [SortType, SortDirection] = [
-        SortType.Date,
-        SortDirection.Descending,
-      ]
-    ) => ["articles", categoryId, keyword, tags, sort],
-    featured: ["featuredArticle"],
-  };
+  // Define query key factory with hierarchical structure
+  private static readonly QueryKeys = {
+    all: ['articles'] as const,
+    lists: () => [...this.QueryKeys.all, 'list'] as const,
+    list: (filter?: ArticleFilter) => {
+      const { categoryId, keyword, tags, sort } = filter ?? {};
+      return [...this.QueryKeys.lists(), { categoryId, keyword, tags, sort }] as const;
+    },
+    details: () => [...this.QueryKeys.all, 'detail'] as const,
+    detail: (id: string) => [...this.QueryKeys.details(), id] as const,
+    featured: () => [...this.QueryKeys.lists(), 'featured'] as const,
+  } as const;
 
   static singleArticleQuery(id: string) {
-    const queryKey = this.Keys.byId(id);
     return queryOptions<ResponseArticle>({
-      queryKey,
-      queryFn: async ({ queryKey: [_, id] }) => {
-        // return generateMockArticle();
+      queryKey: this.QueryKeys.detail(id),
+      queryFn: async () => {
         return await fetchExtended<ResponseArticle>(`v1/articles/${id}`);
       },
     });
   }
 
   static featuredArticleQuery(length: number) {
-    const queryKey = this.Keys.featured;
     return queryOptions({
-      queryKey,
+      queryKey: this.QueryKeys.featured(),
       queryFn: async () => {
-        // return generateMockArticleThumbnails(length);
-        return await fetchExtended<Page<ResponseArticleThumbnail>>(
-          `v1/categories/1/articles`
-        );
+        return await fetchExtended<Page<ResponseArticleThumbnail>>(`v1/categories/1/articles`);
       },
     });
   }
 
   static infiniteArticleQuery(filter?: ArticleFilter) {
-    const { categoryId, keyword, tags, sort } = filter ?? {};
-    const queryKey = this.Keys.infinite(categoryId, keyword, tags, sort);
-
     return infiniteQueryOptions({
-      queryKey,
-      queryFn: async ({ pageParam, queryKey }) => {
-        const [_, categoryId, keyword, tags, sort] = queryKey;
-        console.log("fetching next page...", pageParam);
-        return await fetchExtended<Page<ResponseArticleThumbnail>>(
-          `v1/categories/${categoryId}/articles`,
-          {
-            query: { page: pageParam.toString(), size: "20" },
-            next: { revalidate: 3600 },
-          }
-        );
-
-        // return createPage(generateMockArticleThumbnails(20));
-        // const page = (await (
-        //   await fetch("http://localhost:8082/notices/v1/university?page=" + pageParam )
-        // ).json()) as Page<{
-        //   id: number;
-        //   title: string;
-        //   departmentName: string;
-        //   contentSummary: string;
-        //   likes: number;
-        //   bookmarks: number;
-        //   isLiked: boolean;
-        //   isBookmarked: boolean;
-        //   date: Date;
-        // }>;
-        // const pageConverted = {
-        //   ...page,
-        //   content: page.content.map(
-        //     (content) =>
-        //       ({
-        //         ...content,
-        //         articleId: content.id.toString(),
-        //         date: new Date(content.date).toDateString(),
-        //         author: content.departmentName,
-        //         authorOrg: "",
-        //         content: content.contentSummary,
-        //       } as ArticleDto)
-        //   ),
-        // };
-        // return pageConverted;
-        // // return createPage([dummyData]);
+      queryKey: this.QueryKeys.list(filter),
+      queryFn: async ({ pageParam }) => {
+        const { categoryId } = filter ?? {};
+        return await fetchExtended<Page<ResponseArticleThumbnail>>(`v1/categories/${categoryId}/articles`, {
+          query: { page: pageParam.toString(), size: "20" },
+          next: { revalidate: 3600 },
+        });
       },
       initialPageParam: 0,
-      getNextPageParam: (lastPage, allPages, lastPageParam) =>
-        lastPage.last ? undefined : lastPage.number + 1,
-      getPreviousPageParam: (firstPage, pages) =>
-        firstPage.first ? undefined : firstPage.number,
+      getNextPageParam: (lastPage) => lastPage.last ? undefined : lastPage.number + 1,
+      getPreviousPageParam: (firstPage) => firstPage.first ? undefined : firstPage.number,
     });
+  }
+
+  // Utility method to get query keys for invalidation
+  static getInvalidationKeys(id?: string) {
+    return {
+      all: this.QueryKeys.all,
+      lists: this.QueryKeys.lists(),
+      details: id ? this.QueryKeys.detail(id) : this.QueryKeys.details(),
+      featured: this.QueryKeys.featured(),
+    };
   }
 }

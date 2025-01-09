@@ -29,7 +29,7 @@ export default interface ResponseArticle {
   userImageUrl: string;
   isAnonymous: boolean;
   
-  articleId: string;
+  articleId: number;
   title: string;
   content: string;
   view: number;

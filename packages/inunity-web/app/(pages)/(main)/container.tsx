@@ -6,8 +6,10 @@ import { Card, ScrollView, Typography, useMenu } from "ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
+  faEdit,
   faPerson,
   faSearch,
+  faTrash,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -30,6 +32,7 @@ import banner3 from "@/app/banner3.jpg";
 import logo from "@/app/inunity.png";
 import computer from "@/app/computer.png";
 import { DropdownMenu } from "ui/src/DropdownMenu";
+import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
 
 export default function HomeContainer() {
   // ViewModel 이용
@@ -54,6 +57,11 @@ export default function HomeContainer() {
   }, [messageManager]);
 
   const router = useNativeRouter();
+  const user = {
+    userId: 1,
+  };
+
+  
 
   return (
     <>
@@ -146,12 +154,7 @@ export default function HomeContainer() {
                   <ToggleBoomarkIcon article={article} />
                 </>
               }
-              actions={
-                <DropdownMenu
-                  actions={[]}
-                  menuId={`user_${article.articleId}`}
-                />
-              }
+              actions={<ArticleListDropdownMenu article={article}/>}
             />
           ))}
         </div>

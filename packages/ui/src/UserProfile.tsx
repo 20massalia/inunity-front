@@ -37,7 +37,7 @@ export const UserProfile = ({
       <div className="flex gap-2">
         <div className=" flex justify-center items-center rounded-full w-12 aspect-square">
           <img
-            src={profileImage ?? "https://www.gravatar.com/avatar"}
+            src={profileImage ?? "/avatar.png"}
             className="rounded-full"
             style={{ WebkitUserSelect: "none" }}
           />

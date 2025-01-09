@@ -6,7 +6,7 @@ import useFeaturedArticles from "./useFeaturedArticles";
 export default function useHomeViewModel() {
   const articles = useFeaturedArticles(5);
   // Todo: 공지사항 필터링되는거 만들기 
-  const notices = useArticles({});
+  const notices = useArticles({categoryId: 1});
   const notifications = useNotification();
   return {
     articles,
