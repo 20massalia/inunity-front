@@ -30,15 +30,10 @@ import banner from "@/app/testbanner.png";
 import banner2 from "@/app/banner2.jpg";
 import banner3 from "@/app/banner3.jpg";
 import logo from "@/app/inunity.png";
-import computer from "@/assets/image/computer.png";
-import embedded from "@/assets/image/embedded.png";
-import network from "@/assets/image/network.png";
-import technology from "@/assets/image/technology.png";
-import recruitment from "@/assets/image/recruitment.png";
-import freeBoard from "@/assets/image/free-board.png";
-import jobReview from "@/assets/image/job-review.png";
-import qna from "@/assets/image/qna.png";
-import { DropdownMenu } from "ui/src/DropdownMenu";
+import localFont from "next/font/local";
+
+const myFont = localFont({ src: "../../../assets/fonts/TossFaceFontMac.ttf" });
+
 import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
 import useCategories from "@/entities/category/hooks/useCategories";
 
@@ -104,7 +99,7 @@ export default function HomeContainer() {
         }
       />
       <ScrollView className="bg-[#f8f8f8]  justify-start items-start flex ">
-        <Slider {...settings} className="w-full mb-5">
+        <Slider {...settings} className="w-full mb-7">
           {[banner, banner2, banner3].map((banner, idx) => (
             <div key={idx} className="pt-5 px-2">
               <Image
@@ -116,55 +111,58 @@ export default function HomeContainer() {
             </div>
           ))}
         </Slider>
-        <div className="flex flex-row flex-wrap p-3 justify-center items-center gap-1 gap-y-4">
+        <div className="flex flex-row flex-wrap py-3 justify-center items-start gap-1 gap-y-4">
           {[
             {
               label: "컴퓨터공학부",
-              image: computer,
+              image: "🧑‍💻",
               link: "/article/1",
             },
             {
               label: "임베디드시스템공학과",
-              image: embedded,
+              image: "🤖",
               link: "/article/2",
             },
             {
               label: "정보통신공학과",
-              image: network,
+              image: "🛜",
               link: "/article/3",
             },
             {
               label: "정보기술대학",
-              image: technology,
+              image: "🏛️",
               link: "/article/4",
             },
             {
               label: "자유게시판",
-              image: freeBoard,
+              image: "💬",
               link: "/article/5",
             },
             {
               label: "모집게시판",
-              image: recruitment,
+              image: "🙋🏻‍♂️",
               link: "/article/6",
             },
             {
               label: "질문게시판",
-              image: qna,
+              image: "⁉️",
               link: "/article/7",
             },
             {
               label: "취업후기",
-              image: jobReview,
+              image: "💼",
               link: "/article/8",
             },
           ].map((item) => (
             <div
-              className="flex flex-col items-center justify-center text-center w-24 gap-4"
+              className="flex flex-col items-center justify-start text-center w-[24%] gap-4"
               key={item.label}
               onClick={() => router.push(item.link)}
             >
-              <Image src={item.image} alt="link image" width={60} height={60} />
+              {/* <Image src={item.image} alt="link image" width={60} height={60} /> */}
+              <span className="text-5xl" style={myFont.style}>
+                {item.image}
+              </span>
               {item.label}
             </div>
           ))}
