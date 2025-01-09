@@ -30,9 +30,17 @@ import banner from "@/app/testbanner.png";
 import banner2 from "@/app/banner2.jpg";
 import banner3 from "@/app/banner3.jpg";
 import logo from "@/app/inunity.png";
-import computer from "@/app/computer.png";
+import computer from "@/assets/image/computer.png";
+import embedded from "@/assets/image/embedded.png";
+import network from "@/assets/image/network.png";
+import technology from "@/assets/image/technology.png";
+import recruitment from "@/assets/image/recruitment.png";
+import freeBoard from "@/assets/image/free-board.png";
+import jobReview from "@/assets/image/job-review.png";
+import qna from "@/assets/image/qna.png";
 import { DropdownMenu } from "ui/src/DropdownMenu";
 import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
+import useCategories from "@/entities/category/hooks/useCategories";
 
 export default function HomeContainer() {
   // ViewModel 이용
@@ -61,7 +69,7 @@ export default function HomeContainer() {
     userId: 1,
   };
 
-  
+  const categoryQuery = useCategories();
 
   return (
     <>
@@ -108,20 +116,58 @@ export default function HomeContainer() {
             </div>
           ))}
         </Slider>
-        <div className="flex flex-row flex-wrap p-3 justify-center items-center gap-1">
-          {new Array(8)
-            .fill({ label: "컴퓨터공학부", image: computer })
-            .map((item) => (
-              <div className="flex flex-col items-center" key={item.label}>
-                <Image
-                  src={item.image}
-                  alt="link image"
-                  width={60}
-                  height={60}
-                ></Image>
-                {item.label}
-              </div>
-            ))}
+        <div className="flex flex-row flex-wrap p-3 justify-center items-center gap-1 gap-y-4">
+          {[
+            {
+              label: "컴퓨터공학부",
+              image: computer,
+              link: "/article/1",
+            },
+            {
+              label: "임베디드시스템공학과",
+              image: embedded,
+              link: "/article/2",
+            },
+            {
+              label: "정보통신공학과",
+              image: network,
+              link: "/article/3",
+            },
+            {
+              label: "정보기술대학",
+              image: technology,
+              link: "/article/4",
+            },
+            {
+              label: "자유게시판",
+              image: freeBoard,
+              link: "/article/5",
+            },
+            {
+              label: "모집게시판",
+              image: recruitment,
+              link: "/article/6",
+            },
+            {
+              label: "질문게시판",
+              image: qna,
+              link: "/article/7",
+            },
+            {
+              label: "취업후기",
+              image: jobReview,
+              link: "/article/8",
+            },
+          ].map((item) => (
+            <div
+              className="flex flex-col items-center justify-center text-center w-24 gap-4"
+              key={item.label}
+              onClick={() => router.push(item.link)}
+            >
+              <Image src={item.image} alt="link image" width={60} height={60} />
+              {item.label}
+            </div>
+          ))}
         </div>
         <div className="self-stretch px-4 pt-6 pb-1 bg-[#f8f8f8] justify-between items-end inline-flex">
           <Typography variant="HeadingXLargeBold">학과 공지</Typography>
@@ -154,7 +200,7 @@ export default function HomeContainer() {
                   <ToggleBoomarkIcon article={article} />
                 </>
               }
-              actions={<ArticleListDropdownMenu article={article}/>}
+              actions={<ArticleListDropdownMenu article={article} />}
             />
           ))}
         </div>

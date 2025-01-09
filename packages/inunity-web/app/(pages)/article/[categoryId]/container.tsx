@@ -13,6 +13,7 @@ import useArticles from "@/entities/article/hooks/useArticles";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import ArticleCard from "@/entities/article/ui/ArticleCard";
+import useCategories from "@/entities/category/hooks/useCategories";
 
 export default function ArticleListContainer({
   categoryId,
@@ -23,17 +24,15 @@ export default function ArticleListContainer({
 
   const articleQuery = useArticles({categoryId});
   const articles = articleQuery.data?.pages.flatMap(page => page.content);
-
+  const categroies = useCategories();
+  const category = categroies.data?.find(category => category.id == categoryId);
   return (
     <>
       <AppBar
         center={
           <div className="flex flex-col">
-            <Typography className="text-xs font-bold text-center">
-              컴퓨터공학부
-            </Typography>
             <Typography variant="HeadingNormalBold" className="text-center">
-              공지사항
+              {category?.name}
             </Typography>
           </div>
         }
