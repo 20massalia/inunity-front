@@ -21,7 +21,7 @@ const COLORS = {
   stats: "text-[#0f1419]",
 };
 
-export const ListCard: React.FC<CardProps> = ({
+export const ListCard: React.FC<CardProps<'list'>> = ({
   avatarUrl,
   author,
   authorDescription,
@@ -37,7 +37,6 @@ export const ListCard: React.FC<CardProps> = ({
   profileSlot,
   bottomFeatureSlot,
 }) => {
-  const { scrollContainerRef } = useScrollView();
   return (
     <div
       onClick={onClick}

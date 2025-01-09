@@ -38,7 +38,7 @@ export function Card<T extends CardVariant>(props: CardProps<T>) {
   const { variant = "detailed", ...cardProps } = props;
 
   if (variant === "list") {
-    return <ListCard {...cardProps} />;
+    return <ListCard {...cardProps} title={undefined} />;
   }
 
   return <DetailedCard {...cardProps} />;

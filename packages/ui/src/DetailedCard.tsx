@@ -4,7 +4,7 @@ import React from "react";
 import { CardProps } from "./Card";
 
 
-export function DetailedCard(props: CardProps) {
+export function DetailedCard(props: CardProps<'detailed'>) {
   return (
     <div className="p-3 bg-white rounded border border-black/10 flex flex-col h-full">
       <img 
