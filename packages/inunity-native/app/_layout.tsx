@@ -47,7 +47,7 @@ export default function RootLayout() {
       console.error(e);
     }
     // 쿠키 싱크 성공 유무와 관계없이 통과.
-    console.log('cookie synced or not')
+    console.log("cookie synced or not");
     setCookieSynced(true);
   };
 
@@ -82,6 +82,7 @@ export default function RootLayout() {
               <Stack.Screen name="list" />
               <Stack.Screen name="notification/index" />
               <Stack.Screen name="notification/setting" />
+              <Stack.Screen name="license" options={{ title: "license" }} />
             </Stack>
           </ThemeProvider>
         </WebViewProvider>
