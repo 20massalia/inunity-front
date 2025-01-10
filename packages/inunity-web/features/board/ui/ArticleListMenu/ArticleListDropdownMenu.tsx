@@ -32,7 +32,7 @@ export default function ArticleListDropdownMenu({
   // Todo: Dummy User.
   const user = { userId: 2 };
 
-  const { scrollContainerRef } = useScrollView();
+  const scrollView = useScrollView(false);
 
   const editArticle = () => {
     router.push(`/article/edit/${article.articleId}`);
@@ -71,7 +71,7 @@ export default function ArticleListDropdownMenu({
         },
       ]}
       menuId={`article_${article.articleId}`}
-      scrollContainerRef={scrollContainerRef}
+      scrollContainerRef={scrollView?.scrollContainerRef}
     />
   );
 }
