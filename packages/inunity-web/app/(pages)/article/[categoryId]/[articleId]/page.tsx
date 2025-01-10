@@ -13,6 +13,7 @@ export default async function Page({
 }) {
   const queryOptions = ArticleQueries.singleArticleQuery(params.articleId);
   const articleQuery = await getDehydratedQuery(queryOptions);
+  console.log(articleQuery)
   return (
     <SafeAreaView>
       <Hydration queries={[articleQuery]}>

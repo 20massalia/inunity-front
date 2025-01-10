@@ -58,3 +58,6 @@ expo-env.d.ts
 .expo
 dist/
 web-build/
+
+android
+ios

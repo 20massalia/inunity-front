@@ -1,6 +1,6 @@
 export default {
   "expo": {
-    "name": "inunity-native",
+    "name": "INUnity",
     "slug": "inunity-native",
     "version": "1.0.0",
     "orientation": "portrait",

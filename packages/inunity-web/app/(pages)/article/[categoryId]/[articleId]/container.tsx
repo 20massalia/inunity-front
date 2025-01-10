@@ -11,24 +11,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import AppBar from "@/widgets/AppBar";
 import { useRouter } from "next/navigation";
-import BlockParser from "editor-react-parser";
+import BlockParser, { OutputData } from "editor-react-parser";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { DropdownMenu } from "ui/src/DropdownMenu";
-import useReportComment from "@/features/board/hooks/useReportComment";
-import useEditComment from "@/features/board/hooks/useEditComment";
-import useDeleteComment from "@/features/board/hooks/useDeleteComment";
-import useArticle from "@/entities/article/hooks/useArticle";
 import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
-import { editorJsData } from "@/lib/article";
-import {
-  generateMockComment,
-  generateMockCommentsWithReplies,
-} from "@/entities/article/model/ArticleMock";
-
-export const Viewer = () => {
+import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
+export const Viewer = ({ content }: { content: OutputData }) => {
   return (
     <div className="overflow-x-scroll">
-      <BlockParser data={editorJsData} />
+      <BlockParser data={content} />
     </div>
 
     // <Typography className="text-black">
@@ -69,10 +60,10 @@ export default function ArticleDetailContainer({
 
   const article = articleQuery.data;
   useEffect(() => {
-    messageManager?.log(JSON.stringify(article))
-  }, [article])
+    messageManager?.log(JSON.stringify(article));
+  }, [article]);
 
-  const comments = generateMockCommentsWithReplies(3);
+  const comments = article?.comments;
 
   useEffect(() => {
     if (!pageEvent) return;
@@ -103,27 +94,7 @@ export default function ArticleDetailContainer({
         }
         rightIcon={
           <>
-            <DropdownMenu
-              menuId={"article_detail_appbar"}
-              actions={[
-                {
-                  label: "수정",
-                  onClick: () => {
-                    // Todo: 수정 페이지로 변경 요망
-                    router.push(`/article/${categoryId}/write`);
-                  },
-                },
-                {
-                  label: "삭제",
-                  onClick: () => deleteArticle.mutate(article.articleId),
-                },
-                {
-                  label: "신고",
-                  onClick: () => reportArticle.mutate(article.articleId),
-                },
-                { label: "차단", onClick: () => undefined },
-              ]}
-            />
+            <ArticleListDropdownMenu article={article} />
             {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}
           </>
         }
@@ -132,21 +103,21 @@ export default function ArticleDetailContainer({
         <div className="flex flex-col gap-3 p-5 bg-white ">
           <UserProfile
             profileImage={article.userImageUrl}
-            name={article.nickname}
+            name={article.nickname ?? "익명"}
             introduction={article.department}
             id={article.userId}
           />
-          <Viewer />
+          <Viewer content={JSON.parse(article.content)} />
         </div>
         <div className="bg-white self-stretch flex flex-col items-start justify-start p-5 gap-3">
           <div className="flex flex-row items-center justify-center gap-1">
             <Typography variant="HeadingLargeBold">댓글&nbsp;</Typography>
             <Typography variant="HeadingNormalBold">
-              {comments.comments.length}
+              {article.commentNum}
             </Typography>
           </div>
           <div className="self-stretch flex flex-col items-start justify-start gap-3">
-            {comments.comments.map((comment) => (
+            {comments?.map((comment) => (
               <>
                 <div
                   className="flex flex-col justify-start self-stretch"
@@ -154,7 +125,7 @@ export default function ArticleDetailContainer({
                 >
                   <UserProfile
                     profileImage={comment.userImageUrl}
-                    name={comment.nickname}
+                    name={comment.nickname ?? "익명"}
                     introduction={comment.department}
                     id={comment.userId}
                     actions={
