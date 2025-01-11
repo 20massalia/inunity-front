@@ -12,6 +12,7 @@ import {
 } from "ui";
 import {
   ArticleDetailPageEventType,
+  CommentPayload,
   MessageEventType,
 } from "message-type/message-type";
 import {
@@ -85,18 +86,37 @@ export default function ArticleDetailContainer({
     messageManager?.log("Page Event arrived: ", pageEvent);
     if (pageEvent?.event === ArticleDetailPageEventType.SubmitComment) {
       const payload = { ...pageEvent.value, articleId };
-      // commentId가 있는 요청은 댓글 수정.
       if (pageEvent.value.commentId) editComment.mutate(payload);
-      submitComment.mutate(payload);
+      else submitComment.mutate(payload);
     }
   }, [pageEvent]);
 
   const router = useNativeRouter();
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState<CommentPayload>({
+    text: "",
+    isAnonymous: true,
+  });
   const [isAnonymous, setIsAnonymous] = useState(true);
-  if (!article) return <div>no data</div>;
   const { isWebView } = usePlatform();
 
+  useEffect(() => {
+    if (submitComment.isError || editComment.isError) {
+      alert("댓글 작성에 실패했어요..");
+      messageManager?.log(
+        JSON.stringify(submitComment.error),
+        JSON.stringify(editComment.error)
+      );
+    }
+  }, [submitComment.isError, editComment.isError]);
+
+  useEffect(() => {
+    if (deleteComment.isError) {
+      alert("댓글 삭제에 실패했어요..");
+      messageManager?.log(deleteComment.error);
+    }
+  }, [deleteComment.isError]);
+
+  if (!article) return <div>no data</div>;
   return (
     <>
       <AppBar
@@ -174,8 +194,14 @@ export default function ArticleDetailContainer({
                           {
                             label: "수정",
                             onClick: () => {
-                              if (!isWebView) inputRef.current?.focus();
-                              else
+                              if (!isWebView) {
+                                setComment({
+                                  text: comment.content,
+                                  commentId: comment.commentId,
+                                  isAnonymous: comment.isAnonymous,
+                                });
+                                inputRef.current?.focus();
+                              } else
                                 messageManager?.sendMessage(
                                   MessageEventType.Page,
                                   {
@@ -230,14 +256,16 @@ export default function ArticleDetailContainer({
           <div className="flex flex-row gap-4 ">
             <Input
               ref={inputRef}
-              value={comment}
-              setValue={setComment}
+              value={comment.text}
+              setValue={(v) => setComment((prev) => ({ ...prev, text: v }))}
               className="flex-1"
             />
             <Button
-              onClick={() =>
-                submitComment.mutate({ articleId, text: comment, isAnonymous })
-              }
+              onClick={() => {
+                if (comment.commentId)
+                  editComment.mutate({ articleId, ...comment });
+                else submitComment.mutate({ articleId, ...comment });
+              }}
             >
               작성
             </Button>

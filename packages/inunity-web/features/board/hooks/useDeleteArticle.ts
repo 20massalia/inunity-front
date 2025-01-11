@@ -11,7 +11,6 @@ export default function useDeleteArticle() {
       messageManager?.log("deleting article: ", articleId);
       await fetchExtended(`v1/articles/${articleId}`, {
         method: "DELETE",
-        next: { revalidate: 0 },
       });
       await queryClient.invalidateQueries({queryKey: ArticleQueries.getInvalidationKeys().all});
     },

@@ -4,16 +4,19 @@ import returnFetch, {
   ReturnFetchDefaultOptions,
 } from "./return-fetch";
 
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+
 // Use as a replacer of `RequestInit`
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body" | "next"> & {
   body?: object;
   next?: {
     revalidate: number;
-  }
+  };
   /**
    * 쿼리를 바디로 넣으면 쿼리스트링을 생성해줍니다.
    */
   query?: Record<string, string | number | undefined>;
+  method?: HttpMethod;
 };
 
 // Use as a replacer of `Response`
@@ -69,8 +72,9 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body),
-      credentials: 'include',
-      headers: method !== 'get'  ? {'Content-Type': 'application/json'} : undefined
+      credentials: "include",
+      headers:
+        method !== "get" ? { "Content-Type": "application/json" } : undefined,
     });
     const res = parseJsonSafely(await response.text()) as ResponseWrapper<T>;
 
