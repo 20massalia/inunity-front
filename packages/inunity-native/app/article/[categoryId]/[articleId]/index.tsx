@@ -9,20 +9,15 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import WebView from "react-native-webview";
 import { ThemedText } from "@/components/ThemedText";
-import AuthManager from "@/lib/AuthManager";
 import {
-  Message,
   MessageEventType,
   ArticleDetailPageEventType,
+  CommentPayload,
 } from "message-type/message-type";
 import {
-  parseMessage,
-  handleMessage,
   useMessageManager,
 } from "@/lib/MessageManager";
-import { StatusBar } from "expo-status-bar";
 import { NativeInput } from "@/components/NativeInput";
 import NativeCheckBox from "@/components/NativeCheckBox";
 import CustomWebView from "@/components/CustomWebView";
@@ -37,20 +32,20 @@ export default function Detail() {
   const { webViewRef } = useWebView("ArticleDetail");
   const messageManager = useMessageManager(webViewRef!);
 
-  const [comment, setComment] = useState("");
-  const [isAnonymous, setIsAnonymous] = useState(true);
+  const [comment, setComment] = useState<CommentPayload>({
+    text: "",
+    isAnonymous: true,
+  });
   const inputRef = useRef<TextInput>(null);
   const write = useCallback(() => {
-
-
     messageManager.sendMessage({
       event: MessageEventType.Page,
       value: {
         event: ArticleDetailPageEventType.SubmitComment,
-        value: { text: comment, isAnonymous },
+        value: comment,
       },
     });
-  }, [webViewRef, comment, isAnonymous, messageManager])
+  }, [webViewRef, comment, messageManager]);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -62,18 +57,30 @@ export default function Detail() {
           initialUrl={`${webViewOrigin}/article/${categoryId}/${articleId}`}
           id={"ArticleDetail"}
           pageEventHandler={(pageEvent) => {
-            if (pageEvent.event == 'inputFocus') inputRef.current?.focus()
+            switch (pageEvent.event) {
+              case ArticleDetailPageEventType.StartEditComment: {
+                // 댓글 정보 보존
+                setComment(pageEvent.value as CommentPayload);
+                inputRef.current?.focus();
+              }
+            }
           }}
         />
       </View>
       <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
         <View style={styles.anonymityWrapper}>
           <View style={styles.selectedStateWrapper}>
-            <NativeCheckBox checked={isAnonymous} setChecked={setIsAnonymous} />
+            <NativeCheckBox
+              checked={comment.isAnonymous}
+              setChecked={(checked) =>
+                setComment((prev) => ({ ...prev, isAnonymous: checked }))
+              }
+            />
             <ThemedText style={[styles.anonymityText, styles.textTypo]}>
               익명
             </ThemedText>
           </View>
+          {/* // Todo: 댓글 수정/작성 분기처리, 현재 수정중인 댓글 취소 기능 구현 */}
           <ThemedText
             onPress={write}
             style={[styles.submitText, styles.textTypo]}
@@ -82,9 +89,9 @@ export default function Detail() {
           </ThemedText>
         </View>
         <NativeInput
-        ref={inputRef}
-          value={comment}
-          setValue={setComment}
+          ref={inputRef}
+          value={comment.text}
+          setValue={(v) => setComment((prev) => ({ ...prev, text: v }))}
           placeholder="댓글을 입력해주세요."
         />
       </View>

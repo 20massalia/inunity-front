@@ -10,7 +10,10 @@ import {
   useMenu,
   UserProfile,
 } from "ui";
-import { ArticleDetailPageEventType, MessageEventType } from "message-type/message-type";
+import {
+  ArticleDetailPageEventType,
+  MessageEventType,
+} from "message-type/message-type";
 import {
   faChevronLeft,
   faEllipsisVertical,
@@ -159,7 +162,18 @@ export default function ArticleDetailContainer({
                             onClick: () => {
                               // Todo: focus input tag or native input
                               if (!isWebView) inputRef.current?.focus();
-                              else messageManager?.sendMessage(MessageEventType.Page, {event:'inputFocus'})
+                              else
+                                messageManager?.sendMessage(
+                                  MessageEventType.Page,
+                                  {
+                                    event: ArticleDetailPageEventType.StartEditComment,
+                                    value: {
+                                      text: comment.content,
+                                      isAnonymous: comment.isAnonymous,
+                                      commentId: comment.commentId,
+                                    },
+                                  }
+                                );
                             },
                           },
                           {
