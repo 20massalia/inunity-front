@@ -29,6 +29,7 @@ import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewM
 import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
 import { ClipLoader } from "react-spinners";
 import { usePlatform } from "@/lib/PlatformProvider";
+import LoadingOverlay from "@/shared/ui/LoadingOverlay";
 export const Viewer = ({ content }: { content: OutputData }) => {
   return (
     <div className="overflow-x-scroll">
@@ -83,7 +84,10 @@ export default function ArticleDetailContainer({
     if (!pageEvent) return;
     messageManager?.log("Page Event arrived: ", pageEvent);
     if (pageEvent?.event === ArticleDetailPageEventType.SubmitComment) {
-      submitComment.mutate({ ...pageEvent.value, articleId });
+      const payload = { ...pageEvent.value, articleId };
+      // commentId가 있는 요청은 댓글 수정.
+      if (pageEvent.value.commentId) editComment.mutate(payload);
+      submitComment.mutate(payload);
     }
   }, [pageEvent]);
 
@@ -91,7 +95,7 @@ export default function ArticleDetailContainer({
   const [comment, setComment] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
   if (!article) return <div>no data</div>;
-  const {isWebView} = usePlatform()
+  const { isWebView } = usePlatform();
 
   return (
     <>
@@ -115,6 +119,16 @@ export default function ArticleDetailContainer({
             {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}
           </>
         }
+      />
+      <LoadingOverlay
+        isLoading={[
+          submitComment,
+          reportComment,
+          reportArticle,
+          editComment,
+          deleteComment,
+          deleteArticle,
+        ].every((mutation) => mutation.isPending)}
       />
       <ScrollView
         className="text-black gap-2"
@@ -160,13 +174,13 @@ export default function ArticleDetailContainer({
                           {
                             label: "수정",
                             onClick: () => {
-                              // Todo: focus input tag or native input
                               if (!isWebView) inputRef.current?.focus();
                               else
                                 messageManager?.sendMessage(
                                   MessageEventType.Page,
                                   {
-                                    event: ArticleDetailPageEventType.StartEditComment,
+                                    event:
+                                      ArticleDetailPageEventType.StartEditComment,
                                     value: {
                                       text: comment.content,
                                       isAnonymous: comment.isAnonymous,
