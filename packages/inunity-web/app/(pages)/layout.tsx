@@ -37,11 +37,10 @@ export default function RootLayout({
         <Script id="inject-insets" strategy="beforeInteractive">
           {`
       // const topInset = document.querySelector('meta[name="top-inset"]')?.content;
-      if (topInset) {
-        document.documentElement.style.setProperty('--sat', '${topInset}px');
-      }
-    `}
-    
+      // if (topInset) {
+      //   document.documentElement.style.setProperty('--sat', '${topInset}px');
+      //   }
+        `}
         </Script>
         <Script id="inject-vh">
           {`const vh = window.innerHeight * 0.01;
@@ -50,7 +49,7 @@ export default function RootLayout({
         <style>{`:root { --sat: ${topInset}px; }`}</style>
       </head>
       <body
-        className={`${inter.className} h-real-screen sm:max-w-sm sm:fixed`}
+        className={`${inter.className} h-real-screen w-full sm:max-w-sm sm:fixed`}
         style={{ WebkitOverflowScrolling: "touch", left: "calc(50vw - 12rem)" }}
       >
         <Providers>{children}</Providers>

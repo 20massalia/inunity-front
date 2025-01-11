@@ -184,7 +184,7 @@ export default function HomeContainer() {
               ))}
           </div>
         </div>
-        <div className="self-stretch  flex-col justify-start items-start flex">
+        <div className="self-stretch  flex-col justify-start items-start flex gap-1">
           <Typography variant="HeadingXLargeBold" className="px-4">
             인기 게시글
           </Typography>
@@ -195,7 +195,7 @@ export default function HomeContainer() {
               bottomFeatureSlot={
                 <>
                   <ToggleLikeIcon article={article} />
-                  <ToggleBoomarkIcon article={article} />
+                  {/* <ToggleBoomarkIcon article={article} /> */}
                 </>
               }
               actions={<ArticleListDropdownMenu article={article} />}

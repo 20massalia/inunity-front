@@ -23,8 +23,9 @@ const CustomTabBar = ({
         const label = options.title || route.name;
         const pathname = (route.params as { pathname?: string }).pathname;
         const webViewPathName = new URL(webView.webViews['index']).pathname;
+        if (!pathname) return;
 
-        const isFocused = pathname === webViewPathName;
+        const isFocused = webViewPathName.startsWith(pathname)
 
         const onPress = () => {
           const event = navigation.emit({

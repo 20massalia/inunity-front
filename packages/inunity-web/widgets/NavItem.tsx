@@ -18,7 +18,7 @@ export default function NavItem({
 }) {
   const pathname = usePathname();
 
-  const color = route == pathname ? "primary" : "[#999999]";
+  const color = pathname.startsWith(route) ? "primary" : "[#999999]";
   return (
     <Link href={route} className="flex-1">
       <div
