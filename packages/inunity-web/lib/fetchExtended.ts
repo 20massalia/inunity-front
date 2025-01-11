@@ -10,7 +10,7 @@ type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   /**
    * 쿼리를 바디로 넣으면 쿼리스트링을 생성해줍니다.
    */
-  query?: Record<string,string>;
+  query?: Record<string, string | number | undefined>;
 };
 
 // Use as a replacer of `Response`
@@ -48,7 +48,7 @@ export class CustomError extends Error {
   code: number;
   constructor(code: number, message?: string, options?: ErrorOptions) {
     super(message, options);
-    this.code = code
+    this.code = code;
   }
 }
 
@@ -57,16 +57,16 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
   return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<T> => {
-    const queryString = init?.query && new URLSearchParams(init?.query).toString()
+    const queryString =
+      init?.query &&
+      new URLSearchParams(JSON.parse(JSON.stringify(init?.query))).toString();
     url = queryString ? `${url}?${queryString}` : url;
-    
+
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body),
     });
-    const res = (
-      parseJsonSafely(await response.text()) as ResponseWrapper<T>
-    )
+    const res = parseJsonSafely(await response.text()) as ResponseWrapper<T>;
 
     if (200 <= res.status && res.status < 300) {
       const data = handleDates(res.data) as T;

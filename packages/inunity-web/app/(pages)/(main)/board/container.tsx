@@ -2,17 +2,6 @@
 
 import {
   faSearch,
-  faClipboard,
-  faClipboardList,
-  faComments,
-  faBriefcase,
-  faHandHoldingHeart,
-  faExclamationTriangle,
-  faTrophy,
-  faBook,
-  faLaptopCode,
-  faMicrochip,
-  faSignal,
   IconName,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
@@ -25,18 +14,7 @@ import { Divider, Input, SimpleListItem, Typography } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import useCategories from "@/entities/category/hooks/useCategories";
 
-const icons = [
-  "clipboard",
-  "clipboard-list",
-  "comments",
-  "briefcase",
-  "hand-holding-heart",
-  "exclamation-triangle",
-  "trophy",
-  "book",
-  "laptop-code",
-  "microchip",
-];
+const icons = ["school", "laptop-code", "microchip", "wifi", 'person-circle-question'] as IconName[];
 
 export default function BoardListContainer() {
   const [searchValue, setSearchValue] = useState("");
@@ -66,7 +44,7 @@ export default function BoardListContainer() {
             <SimpleListItem
               text={menu.name}
               key={menu.id}
-              leftIcon={<FontAwesomeIcon icon={menu.icon as IconName} />}
+              leftIcon={<FontAwesomeIcon icon={menu.icon} />}
               onClick={() => {
                 router.push(`/article/${menu.id}`);
               }}
