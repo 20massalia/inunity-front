@@ -300,6 +300,7 @@ export default function ProfileContainer({
       content: <SkillsTabContent />,
     },
   ];
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
     <div className="flex flex-col w-full max-w-md mx-auto bg-white">
@@ -376,7 +377,11 @@ export default function ProfileContainer({
 
       {/* 탭 영역 */}
       <div className="mt-6 px-4 pb-8">
-        <SwipeableTabs tabs={tabs} />
+        <SwipeableTabs
+          tabs={tabs}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
       </div>
     </div>
   );
