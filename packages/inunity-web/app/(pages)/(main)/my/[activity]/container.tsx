@@ -1,6 +1,11 @@
 "use client";
 
-import { ArticleListItemProps, ScrollView, SwipeableTabs, Typography } from "ui";
+import {
+  ArticleListItemProps,
+  ScrollView,
+  SwipeableTabs,
+  Typography,
+} from "ui";
 import NotificationItem from "@/features/notification/ui/NotificationItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faGear } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +18,7 @@ import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import { useState } from "react";
 
+const activities = ["article", "comment"];
 export default function ActivityListContainer({
   activity,
 }: {
@@ -20,7 +26,8 @@ export default function ActivityListContainer({
 }) {
   const router = useNativeRouter();
   const articleQuery = useArticles();
-  const [activeTab, setActiveTab] = useState(activity == 'article' ? 0 : 1);
+  const tabIndex = activities.findIndex((v) => v == activity);
+
   return (
     <>
       <AppBar
@@ -30,8 +37,12 @@ export default function ActivityListContainer({
         }
       />
       <SwipeableTabs
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
+        activeTab={tabIndex}
+        setActiveTab={(tab) => {
+          router.replace(
+            activities[typeof tab === "function" ? tab(tabIndex) : tab]
+          );
+        }}
         tabs={[
           {
             id: 0,
@@ -39,29 +50,47 @@ export default function ActivityListContainer({
             content: (
               <div className="p-5 gap-3 flex flex-col">
                 <ScrollView>
-
-                {articleQuery.data?.pages
-                  .flatMap((page) => page.content)
-                  .map((article) => (
-                    <ArticleCard
-                      {...article}
-                      key={article.articleId}
-                      bottomFeatureSlot={
-                        <>
-                          <ToggleLikeIcon article={article} />
-                          <ToggleBoomarkIcon article={article} />
-                        </>
-                      }
-                    />
-                  ))}
+                  {articleQuery.data?.pages
+                    .flatMap((page) => page.content)
+                    .map((article) => (
+                      <ArticleCard
+                        {...article}
+                        key={article.articleId}
+                        bottomFeatureSlot={
+                          <>
+                            <ToggleLikeIcon article={article} />
+                            <ToggleBoomarkIcon article={article} />
+                          </>
+                        }
+                      />
+                    ))}
                 </ScrollView>
               </div>
             ),
           },
           {
             id: 1,
-            title: "시스템",
-            content: <div className="p-5 gap-3 flex flex-col"></div>,
+            title: "댓글단 글",
+            content: (
+              <div className="p-5 gap-3 flex flex-col">
+                <ScrollView>
+                  {articleQuery.data?.pages
+                    .flatMap((page) => page.content)
+                    .map((article) => (
+                      <ArticleCard
+                        {...article}
+                        key={article.articleId}
+                        bottomFeatureSlot={
+                          <>
+                            <ToggleLikeIcon article={article} />
+                            <ToggleBoomarkIcon article={article} />
+                          </>
+                        }
+                      />
+                    ))}
+                </ScrollView>
+              </div>
+            ),
           },
         ]}
       ></SwipeableTabs>

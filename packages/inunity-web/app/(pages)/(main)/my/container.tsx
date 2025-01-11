@@ -25,7 +25,7 @@ export default function MyPageContainer() {
       label: "작성글",
       value: "32",
       icon: <FontAwesomeIcon icon={faEdit} className="w-4 h-4" />,
-      link: "/my/post",
+      link: "/my/article",
     },
     {
       label: "댓글",
@@ -94,7 +94,7 @@ export default function MyPageContainer() {
           <div
             className="p-4 border-b"
             onClick={() => {
-              router.push("/my/post");
+              router.push("/my/article");
             }}
           >
             <Typography
