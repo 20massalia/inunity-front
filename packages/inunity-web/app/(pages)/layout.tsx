@@ -17,6 +17,8 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import Script from "next/script";
 import { headers } from "next/headers";
+import { platformResolver } from "@/lib/PlatformResolver";
+import { userAgent } from "next/server";
 config.autoAddCss = false;
 
 export default function RootLayout({
@@ -25,6 +27,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const topInset = Number(headers().get("Top-Inset")) || 0;
+  const heads = headers();
+  const ua = userAgent({headers: heads}).ua
+  const platform = platformResolver(ua);
+  
 
   return (
     <html lang="en" className="overscroll-none ">
@@ -52,7 +58,7 @@ export default function RootLayout({
         className={`${inter.className} h-real-screen w-full sm:max-w-sm sm:fixed`}
         style={{ WebkitOverflowScrolling: "touch", left: "calc(50vw - 12rem)" }}
       >
-        <Providers>{children}</Providers>
+        <Providers platform={platform}>{children}</Providers>
       </body>
     </html>
   );

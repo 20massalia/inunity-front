@@ -36,19 +36,26 @@ export function getQueryClient() {
 
 import { MessageProvider } from "./MessageContext";
 import { useEffect } from "react";
-import DevInsetsRestorer from "@/lib/DevInsetsRestorer";
+import { Platform } from "@/lib/PlatformResolver";
+import { PlatformProvider } from "@/lib/PlatformProvider";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  platform,
+}: {
+  children: React.ReactNode;
+  platform: Platform;
+}) {
   const queryClient = getQueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {process.env.NODE_ENV === "development" && <DevInsetsRestorer />}
-
       <ReactQueryDevtools initialIsOpen={false} />
-      <MenuProvider>
-        <MessageProvider>{children}</MessageProvider>
-      </MenuProvider>
+      <PlatformProvider platform={platform}>
+        <MenuProvider>
+          <MessageProvider>{children}</MessageProvider>
+        </MenuProvider>
+      </PlatformProvider>
     </QueryClientProvider>
   );
 }

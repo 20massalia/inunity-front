@@ -151,7 +151,7 @@ export default function ArticleSearchContainer({
             bottomFeatureSlot={
               <>
                 <ToggleLikeIcon article={article} />
-                <ToggleBoomarkIcon article={article} />
+                {/* <ToggleBoomarkIcon article={article} /> */}
               </>
             }
           />

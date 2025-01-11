@@ -28,7 +28,7 @@ import { DropdownMenu } from "ui/src/DropdownMenu";
 import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
 import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
 import { ClipLoader } from "react-spinners";
-import { usePlatform } from "@/hooks/usePlatform";
+import { usePlatform } from "@/lib/PlatformProvider";
 export const Viewer = ({ content }: { content: OutputData }) => {
   return (
     <div className="overflow-x-scroll">
@@ -90,8 +90,8 @@ export default function ArticleDetailContainer({
   const router = useNativeRouter();
   const [comment, setComment] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
-  const { isWebView } = usePlatform();
   if (!article) return <div>no data</div>;
+  const {isWebView} = usePlatform()
 
   return (
     <>
