@@ -6,34 +6,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dynamic from "next/dynamic";
 const Editor = dynamic(() => import("@/shared/ui/Editor"), { ssr: false });
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CheckBox, Input, Typography } from "ui";
 import AppBar from "@/widgets/AppBar";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import useSubmitArticle from "@/features/board/hooks/useSubmitArticle";
-import { useMessageManager } from "@/shared/ui/MessageContext";
-import LoadingOverlay from "@/shared/ui/LoadingOverlay";
+import useEditArticle from "@/features/board/hooks/useEditArticle";
+import useArticle from "@/entities/article/hooks/useArticle";
+import safeJsonParse from "message-type/safeParseJson";
 
-export default function ArticleWriteContainer({
-  categoryId,
+export default function ArticleEditContainer({
+  articleId,
 }: {
-  categoryId: number;
+  articleId: number;
 }) {
-  const [title, setTitle] = useState("");
-  const [data, setData] = useState<OutputData>();
+  const article = useArticle(articleId);
+  const [title, setTitle] = useState(article.data?.title ?? '');
+  const [data, setData] = useState<OutputData>(
+    safeJsonParse<OutputData>(article.data?.content ?? "{}") ??
+      ({} as OutputData)
+  );
   const router = useNativeRouter();
   const [isAnonymous, setIsAnonymous] = useState(true);
-  const submitArticle = useSubmitArticle();
-  const {messageManager} = useMessageManager();
-  useEffect(() => {
-    if (submitArticle.isSuccess) {
-      alert("글을 작성했어요! 🎉");
-      router.back();
-    } else if (submitArticle.isError) {
-      messageManager?.log(submitArticle.error)
-      alert('글 작성에 실패했어요.. 🥲')
-    }
-  }, [submitArticle.isSuccess, submitArticle.isError]);
+  const editArticle = useEditArticle();
 
   return (
     <>
@@ -54,13 +49,12 @@ export default function ArticleWriteContainer({
         rightIcon={
           <div
             onClick={() => {
-              if (confirm("글을 작성할까요?"))
-                submitArticle.mutate({
-                  categoryId,
-                  title,
-                  content: JSON.stringify(data),
-                  isAnonymous,
-                });
+              editArticle.mutate({
+                articleId,
+                title,
+                content: JSON.stringify(data),
+                isAnonymous,
+              });
             }}
           >
             <Typography variant="HeadingSmallBold" className="text-nowrap">
@@ -69,7 +63,6 @@ export default function ArticleWriteContainer({
           </div>
         }
       />
-      <LoadingOverlay isLoading={submitArticle.isPending  }/>
       <div className="flex-1 p-5 overflow-scroll">
         <div className="flex flex-row justify-end">
           <CheckBox checked={isAnonymous} setChecked={setIsAnonymous} />

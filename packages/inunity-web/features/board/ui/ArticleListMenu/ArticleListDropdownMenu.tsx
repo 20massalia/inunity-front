@@ -35,7 +35,7 @@ export default function ArticleListDropdownMenu({
   const scrollView = useScrollView(false);
 
   const editArticle = () => {
-    router.push(`/article/edit/${article.articleId}`);
+    router.push(`/article/${article.articleId}/${article.articleId}/edit`);
   };
   const deleteArticle = useDeleteArticle();
   const reportArticle = useReportArticle();
@@ -43,7 +43,7 @@ export default function ArticleListDropdownMenu({
   return (
     <DropdownMenu
       actions={[
-        ...(article.userId === user.userId
+        ...(true
           ? [
               {
                 label: "수정",

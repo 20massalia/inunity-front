@@ -6,7 +6,7 @@ import useSubmitComment from "./useSubmitComment";
 import useDeleteArticle from "./useDeleteArticle";
 import useReportArticle from "./useReportArticle";
 
-export default function useArticleDetailViewModel({ articleId }: { articleId: string }) {
+export default function useArticleDetailViewModel({ articleId }: { articleId: number }) {
   const article = useArticle(articleId);
 
   const submitComment = useSubmitComment();

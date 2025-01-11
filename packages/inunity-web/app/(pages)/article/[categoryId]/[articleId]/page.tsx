@@ -9,7 +9,7 @@ import { headers } from "next/headers";
 export default async function Page({
   params,
 }: {
-  params: { categoryId: string; articleId: string };
+  params: { categoryId: number; articleId: number };
 }) {
   const queryOptions = ArticleQueries.singleArticleQuery(params.articleId);
   const articleQuery = await getDehydratedQuery(queryOptions);

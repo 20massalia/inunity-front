@@ -68,7 +68,8 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body),
-      credentials: 'include'
+      credentials: 'include',
+      headers: init?.method?.toLowerCase() === 'post' ? {'Content-Type': 'application/json'} : undefined
     });
     const res = parseJsonSafely(await response.text()) as ResponseWrapper<T>;
 

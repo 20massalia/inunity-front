@@ -35,11 +35,11 @@ export default class ArticleQueries {
       ] as const;
     },
     details: () => [...this.QueryKeys.all, "detail"] as const,
-    detail: (id: string) => [...this.QueryKeys.details(), id] as const,
+    detail: (id: number) => [...this.QueryKeys.details(), id] as const,
     featured: () => [...this.QueryKeys.lists(), "featured"] as const,
   } as const;
 
-  static singleArticleQuery(id: string) {
+  static singleArticleQuery(id: number) {
     return queryOptions<ResponseArticle>({
       queryKey: this.QueryKeys.detail(id),
       queryFn: async () => {
@@ -107,7 +107,7 @@ export default class ArticleQueries {
   }
 
   // Utility method to get query keys for invalidation
-  static getInvalidationKeys(id?: string) {
+  static getInvalidationKeys(id?: number) {
     return {
       all: this.QueryKeys.all,
       lists: this.QueryKeys.lists(),

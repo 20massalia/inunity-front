@@ -43,8 +43,8 @@ export default function ArticleDetailContainer({
   categoryId,
   articleId,
 }: {
-  categoryId: string;
-  articleId: string;
+  categoryId: number;
+  articleId: number;
 }) {
   const { messageManager, pageEvent } = useMessageManager();
 
