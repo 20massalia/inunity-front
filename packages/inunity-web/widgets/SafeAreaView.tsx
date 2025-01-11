@@ -5,7 +5,6 @@ import { headers } from "next/headers";
 import { userAgent } from "next/server";
 
 const SafeAreaView = (props: React.PropsWithChildren<{className?: string}>) => {
-  // const { os, isWebView } = usePlatform();
   const heads = headers();
   const ua = userAgent({headers: heads}).ua
 

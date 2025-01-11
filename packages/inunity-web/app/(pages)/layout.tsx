@@ -17,6 +17,8 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import Script from "next/script";
 import { headers } from "next/headers";
+import { platformResolver } from "@/lib/PlatformResolver";
+import { userAgent } from "next/server";
 config.autoAddCss = false;
 
 export default function RootLayout({
@@ -24,7 +26,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const topInset = Number(headers().get('Top-Inset')) || 0;
+  const topInset = Number(headers().get("Top-Inset")) || 0;
+  const heads = headers();
+  const ua = userAgent({headers: heads}).ua
+  const platform = platformResolver(ua);
+  
 
   return (
     <html lang="en" className="overscroll-none ">
@@ -33,18 +39,26 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
+        <meta name="top-inset" content={topInset.toString()} />
+        <Script id="inject-insets" strategy="beforeInteractive">
+          {`
+      // const topInset = document.querySelector('meta[name="top-inset"]')?.content;
+      // if (topInset) {
+      //   document.documentElement.style.setProperty('--sat', '${topInset}px');
+      //   }
+        `}
+        </Script>
         <Script id="inject-vh">
           {`const vh = window.innerHeight * 0.01;
           document.documentElement.style.setProperty('--vh', \`\$\{vh\}px\`); `}
         </Script>
         <style>{`:root { --sat: ${topInset}px; }`}</style>
-
       </head>
       <body
-        className={`${inter.className} h-real-screen sm:max-w-sm sm:fixed`}
-        style={{ WebkitOverflowScrolling: "touch", left: 'calc(50vw - 12rem)' }}
+        className={`${inter.className} h-real-screen w-full sm:max-w-sm sm:fixed`}
+        style={{ WebkitOverflowScrolling: "touch", left: "calc(50vw - 12rem)" }}
       >
-        <Providers>{children}</Providers>
+        <Providers platform={platform}>{children}</Providers>
       </body>
     </html>
   );

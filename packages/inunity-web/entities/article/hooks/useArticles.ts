@@ -1,10 +1,10 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import ArticleDto from "../model/ArticleDto";
 import { generateMockArticleThumbnails } from "../model/ArticleMock";
-import ArticleQueries from "./ArticleQueries";
+import ArticleQueries, { ArticleFilter } from "./ArticleQueries";
 
-export default function useArticles() {
-  const queryOptions = ArticleQueries.infiniteArticleQuery();
+export default function useArticles(filter: ArticleFilter) {
+  const queryOptions = ArticleQueries.infiniteArticleQuery(filter);
   const articles = useInfiniteQuery({...queryOptions,});
   return articles
 }

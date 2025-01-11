@@ -1,9 +1,17 @@
 // WebView context and types
-import { createContext, useState, useContext, useRef, useEffect, MutableRefObject } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+  MutableRefObject,
+} from "react";
 import { Alert } from "react-native";
 import WebView from "react-native-webview";
 import { registerDevMenuItems } from "expo-dev-menu";
 import AuthManager, { CookieName } from "@/lib/AuthManager";
+import { Href, router } from "expo-router";
 
 export type WebViewContextType = {
   webViewRefs: React.MutableRefObject<Record<string, WebView | null>>;
@@ -15,19 +23,20 @@ export type WebViewContextType = {
   setIsLoading: (isLoading: boolean) => void;
 };
 
-export const webViewOrigin = process.env.EXPO_PUBLIC_WEB_URL ?? "http://localhost:3000/";
+export const webViewOrigin =
+  process.env.EXPO_PUBLIC_WEB_URL ?? "http://localhost:3000/";
 const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
 
 export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
   const [activeWebView, setActiveWebView] = useState<string>();
   const [webViews, setWebViews] = useState({ index: webViewOrigin });
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Single MutableRefObject to store all WebView references
   const webViewRefs = useRef<Record<string, WebView | null>>({});
 
   const setUrl = (webViewId: string, url: string) => {
-    setWebViews(prev => ({ ...prev, [webViewId]: url }));
+    setWebViews((prev) => ({ ...prev, [webViewId]: url }));
   };
 
   useEffect(() => {
@@ -35,31 +44,47 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
       {
         name: "Set WebView URL",
         callback: () => {
-          Alert.prompt(
-            "디버그 메뉴",
-            "WebView URL을 입력해주세요.",
-            [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
+          Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: (value) => {
+                if (activeWebView) setUrl(activeWebView, value ?? "");
               },
-              {
-                text: "OK",
-                onPress: (value) => {
-                  if (activeWebView) setUrl(activeWebView, value ?? '');
-                },
-              },
-            ]
-          );
+            },
+          ]);
         },
       },
       {
         name: "Get cookies from manager",
         callback: async () => {
-          const cookies = await AuthManager.getCookieFromManager(CookieName.AccessToken);
+          const cookies = await AuthManager.getCookieFromManager(
+            CookieName.AccessToken
+          );
           console.info(cookies);
           Alert.alert("디버그", JSON.stringify(cookies));
+        },
+      },
+      {
+        name: "push to route",
+        callback: async () => {
+          Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: (value) => {
+                if (value ) router.push(value as Href<string>);
+              },
+            },
+          ]);
         },
       },
     ];
@@ -86,7 +111,9 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
 export const useWebView = (webViewId: string) => {
   const webView = useContext(WebViewContext);
   if (!webView) {
-    throw new Error("useWebView must be used within <WebViewProvider> component!");
+    throw new Error(
+      "useWebView must be used within <WebViewProvider> component!"
+    );
   }
 
   const setUrl = (url: string) => webView.setUrl(webViewId, url);
@@ -97,4 +124,3 @@ export const useWebView = (webViewId: string) => {
     webViewRef: webView.webViewRefs.current[webViewId] || null,
   };
 };
-

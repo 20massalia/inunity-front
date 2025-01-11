@@ -1,11 +1,11 @@
 export default {
   "expo": {
-    "name": "inunity-native",
+    "name": "INUnity",
     "slug": "inunity-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "inunity",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash.png",

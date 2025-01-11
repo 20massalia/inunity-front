@@ -6,7 +6,21 @@ import { useMessageManager } from "@/lib/MessageManager";
 import { MessageEventType, NavigationEvent } from "message-type/message-type";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
-import { Colors } from "@/constants/Colors";
+
+function isCurrentRoute(basePath: string, currentPath: string): boolean {
+  // 경로 끝의 '/' 제거
+  const normalizedBasePath = basePath.replace(/\/$/, '');
+  const normalizedCurrentPath = currentPath.replace(/\/$/, '');
+
+  // 루트 경로('/')에 대한 특별 처리
+  if (normalizedBasePath === '' && normalizedCurrentPath !== '') {
+    return false;
+  }
+
+  // 정확히 일치하거나 서브경로인 경우 true 반환
+  return normalizedCurrentPath === normalizedBasePath || 
+         normalizedCurrentPath.startsWith(normalizedBasePath + '/');
+}
 
 const CustomTabBar = ({
   state,
@@ -23,8 +37,9 @@ const CustomTabBar = ({
         const label = options.title || route.name;
         const pathname = (route.params as { pathname?: string }).pathname;
         const webViewPathName = new URL(webView.webViews['index']).pathname;
+        if (!pathname) return;
 
-        const isFocused = pathname === webViewPathName;
+        const isFocused = isCurrentRoute(pathname, webViewPathName)
 
         const onPress = () => {
           const event = navigation.emit({

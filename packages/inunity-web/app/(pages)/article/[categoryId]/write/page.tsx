@@ -2,7 +2,7 @@ import ArticleWriteContainer from "@/app/(pages)/article/[categoryId]/write/cont
 import SafeAreaView from "@/widgets/SafeAreaView";
 
 
-export default function Page({params}: {params: {categoryId: string}}) {
+export default function Page({params}: {params: {categoryId: number}}) {
   return (
     <SafeAreaView>
     

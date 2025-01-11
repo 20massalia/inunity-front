@@ -2451,15 +2451,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@editorjs/raw@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "@editorjs/raw@npm:2.5.0"
-  dependencies:
-    "@codexteam/icons": "npm:^0.0.4"
-  checksum: 10c0/0d62668eb1d3d926b80fdf00e26d085b9c52d055869c14f12ee17a5b4abe507c76eb4b7dc0b6d81402f5d8142bb1821bb147f9cd0e530078af8edc1dc268ed6b
-  languageName: node
-  linkType: hard
-
 "@editorjs/simple-image@npm:^1.6.0":
   version: 1.6.0
   resolution: "@editorjs/simple-image@npm:1.6.0"
@@ -10199,7 +10190,6 @@ __metadata:
     "@editorjs/list": "npm:^2.0.0"
     "@editorjs/paragraph": "npm:^2.11.6"
     "@editorjs/quote": "npm:^2.7.2"
-    "@editorjs/raw": "npm:^2.5.0"
     "@editorjs/simple-image": "npm:^1.6.0"
     "@editorjs/table": "npm:^2.4.2"
     "@faker-js/faker": "npm:^9.3.0"

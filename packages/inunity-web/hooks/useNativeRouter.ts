@@ -1,10 +1,10 @@
 "use client";
 
+import { usePlatform } from "@/lib/PlatformProvider";
 import { useMessageManager } from "@/shared/ui/MessageContext";
 import { MessageEventType } from "message-type/message-type";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import { usePlatform } from "./usePlatform";
 
 export function useNativeRouter() {
   const router = useRouter();

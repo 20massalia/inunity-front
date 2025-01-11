@@ -18,9 +18,10 @@ export const ScrollContext = createContext<ScrollContextType | undefined>(
 
 
 
-export function useScrollView() {
+export function useScrollView(safe?: boolean) {
+  if (safe === undefined) safe = true;
   const context = useContext(ScrollContext);
-  if (context === undefined) {
+  if (context === undefined && safe) {
     throw new Error("useScrollView must be used within a ScrollView");
   }
   return context;

@@ -1,8 +1,20 @@
 "use client";
 import { useMessageManager } from "@/shared/ui/MessageContext";
-import { useEffect, useRef } from "react";
-import { ScrollView, Typography, useMenu, UserProfile } from "ui";
-import { ArticleDetailPageEventType } from "message-type/message-type";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Button,
+  CheckBox,
+  Input,
+  ScrollView,
+  Typography,
+  useMenu,
+  UserProfile,
+} from "ui";
+import {
+  ArticleDetailPageEventType,
+  CommentPayload,
+  MessageEventType,
+} from "message-type/message-type";
 import {
   faChevronLeft,
   faEllipsisVertical,
@@ -11,24 +23,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import AppBar from "@/widgets/AppBar";
 import { useRouter } from "next/navigation";
-import BlockParser from "editor-react-parser";
+import BlockParser, { OutputData } from "editor-react-parser";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { DropdownMenu } from "ui/src/DropdownMenu";
-import useReportComment from "@/features/board/hooks/useReportComment";
-import useEditComment from "@/features/board/hooks/useEditComment";
-import useDeleteComment from "@/features/board/hooks/useDeleteComment";
-import useArticle from "@/entities/article/hooks/useArticle";
 import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
-import { editorJsData } from "@/lib/article";
-import {
-  generateMockComment,
-  generateMockCommentsWithReplies,
-} from "@/entities/article/model/ArticleMock";
-
-export const Viewer = () => {
+import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
+import { ClipLoader } from "react-spinners";
+import { usePlatform } from "@/lib/PlatformProvider";
+import LoadingOverlay from "@/shared/ui/LoadingOverlay";
+export const Viewer = ({ content }: { content: OutputData }) => {
   return (
     <div className="overflow-x-scroll">
-      <BlockParser data={editorJsData} />
+      <BlockParser data={content} />
     </div>
 
     // <Typography className="text-black">
@@ -52,8 +58,8 @@ export default function ArticleDetailContainer({
   categoryId,
   articleId,
 }: {
-  categoryId: string;
-  articleId: string;
+  categoryId: number;
+  articleId: number;
 }) {
   const { messageManager, pageEvent } = useMessageManager();
 
@@ -68,20 +74,49 @@ export default function ArticleDetailContainer({
   } = useArticleDetailViewModel({ articleId });
 
   const article = articleQuery.data;
+  useEffect(() => {
+    messageManager?.log(JSON.stringify(article));
+  }, [article]);
 
-  const comments = generateMockCommentsWithReplies(3);
+  const comments = article?.comments;
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!pageEvent) return;
     messageManager?.log("Page Event arrived: ", pageEvent);
     if (pageEvent?.event === ArticleDetailPageEventType.SubmitComment) {
-      submitComment.mutate(pageEvent.value);
+      const payload = { ...pageEvent.value, articleId };
+      if (pageEvent.value.commentId) editComment.mutate(payload);
+      else submitComment.mutate(payload);
     }
   }, [pageEvent]);
 
   const router = useNativeRouter();
-  if (!article) return <div>no data</div>;
+  const [comment, setComment] = useState<CommentPayload>({
+    text: "",
+    isAnonymous: true,
+  });
+  const [isAnonymous, setIsAnonymous] = useState(true);
+  const { isWebView } = usePlatform();
 
+  useEffect(() => {
+    if (submitComment.isError || editComment.isError) {
+      alert("댓글 작성에 실패했어요..");
+      messageManager?.log(
+        JSON.stringify(submitComment.error),
+        JSON.stringify(editComment.error)
+      );
+    }
+  }, [submitComment.isError, editComment.isError]);
+
+  useEffect(() => {
+    if (deleteComment.isError) {
+      alert("댓글 삭제에 실패했어요..");
+      messageManager?.log(deleteComment.error);
+    }
+  }, [deleteComment.isError]);
+
+  if (!article) return <div>no data</div>;
   return (
     <>
       <AppBar
@@ -100,50 +135,48 @@ export default function ArticleDetailContainer({
         }
         rightIcon={
           <>
-            <DropdownMenu
-              menuId={"article_detail_appbar"}
-              actions={[
-                {
-                  label: "수정",
-                  onClick: () => {
-                    // Todo: 수정 페이지로 변경 요망
-                    router.push(`/article/${categoryId}/write`);
-                  },
-                },
-                {
-                  label: "삭제",
-                  onClick: () => deleteArticle.mutate(article.articleId),
-                },
-                {
-                  label: "신고",
-                  onClick: () => reportArticle.mutate(article.articleId),
-                },
-                { label: "차단", onClick: () => undefined },
-              ]}
-            />
+            <ArticleListDropdownMenu article={article} />
             {/* <FontAwesomeIcon icon={faEllipsisVertical} className="text-2xl" onClick={} /> */}
           </>
         }
       />
-      <ScrollView className="text-black gap-2">
+      <LoadingOverlay
+        isLoading={[
+          submitComment,
+          reportComment,
+          reportArticle,
+          editComment,
+          deleteComment,
+          deleteArticle,
+        ].every((mutation) => mutation.isPending)}
+      />
+      <ScrollView
+        className="text-black gap-2"
+        onRefresh={() => {
+          articleQuery.refetch();
+        }}
+      >
+        {articleQuery.isRefetching && (
+          <div className="flex flex-row justify-center">{<ClipLoader />}</div>
+        )}
         <div className="flex flex-col gap-3 p-5 bg-white ">
           <UserProfile
             profileImage={article.userImageUrl}
-            name={article.nickname}
+            name={article.nickname ?? "익명"}
             introduction={article.department}
             id={article.userId}
           />
-          <Viewer />
+          <Viewer content={JSON.parse(article.content)} />
         </div>
         <div className="bg-white self-stretch flex flex-col items-start justify-start p-5 gap-3">
           <div className="flex flex-row items-center justify-center gap-1">
             <Typography variant="HeadingLargeBold">댓글&nbsp;</Typography>
             <Typography variant="HeadingNormalBold">
-              {comments.comments.length}
+              {article.commentNum}
             </Typography>
           </div>
           <div className="self-stretch flex flex-col items-start justify-start gap-3">
-            {comments.comments.map((comment) => (
+            {comments?.map((comment) => (
               <>
                 <div
                   className="flex flex-col justify-start self-stretch"
@@ -151,17 +184,52 @@ export default function ArticleDetailContainer({
                 >
                   <UserProfile
                     profileImage={comment.userImageUrl}
-                    name={comment.nickname}
+                    name={comment.nickname ?? "익명"}
                     introduction={comment.department}
                     id={comment.userId}
                     actions={
                       <DropdownMenu
                         menuId={`comment_${comment.commentId}`}
                         actions={[
-                          { label: "수정", onClick: () => {} },
-                          { label: "삭제", onClick: () => {} },
-                          { label: "신고", onClick: () => {} },
-                          { label: "차단", onClick: () => {} },
+                          {
+                            label: "수정",
+                            onClick: () => {
+                              if (!isWebView) {
+                                setComment({
+                                  text: comment.content,
+                                  commentId: comment.commentId,
+                                  isAnonymous: comment.isAnonymous,
+                                });
+                                inputRef.current?.focus();
+                              } else
+                                messageManager?.sendMessage(
+                                  MessageEventType.Page,
+                                  {
+                                    event:
+                                      ArticleDetailPageEventType.StartEditComment,
+                                    value: {
+                                      text: comment.content,
+                                      isAnonymous: comment.isAnonymous,
+                                      commentId: comment.commentId,
+                                    },
+                                  }
+                                );
+                            },
+                          },
+                          {
+                            label: "삭제",
+                            onClick: () => {
+                              if (confirm("댓글을 정말로 삭제할까요?"))
+                                deleteComment.mutate(comment.commentId);
+                            },
+                          },
+                          {
+                            label: "신고",
+                            onClick: () => {
+                              if (confirm("댓글을 정말로 신고할까요?"))
+                                reportComment.mutate(comment.commentId);
+                            },
+                          },
                         ]}
                       />
                     }
@@ -179,6 +247,31 @@ export default function ArticleDetailContainer({
           </div>
         </div>
       </ScrollView>
+      {!isWebView && (
+        <div className="flex flex-col p-3">
+          <div className="flex flex-row gap-2">
+            <CheckBox checked={isAnonymous} setChecked={setIsAnonymous} />
+            익명
+          </div>
+          <div className="flex flex-row gap-4 ">
+            <Input
+              ref={inputRef}
+              value={comment.text}
+              setValue={(v) => setComment((prev) => ({ ...prev, text: v }))}
+              className="flex-1"
+            />
+            <Button
+              onClick={() => {
+                if (comment.commentId)
+                  editComment.mutate({ articleId, ...comment });
+                else submitComment.mutate({ articleId, ...comment });
+              }}
+            >
+              작성
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

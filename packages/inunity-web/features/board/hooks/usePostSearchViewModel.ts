@@ -8,7 +8,7 @@ export default function useArticleSearchViewModel({
   keyword,
   tags,
 }: {
-  categoryId: string;
+  categoryId:number;
   keyword: string;
   tags: string[];
 }) {

@@ -1,6 +1,4 @@
-import EditorJS from "@editorjs/editorjs";
 import Code from "@editorjs/code";
-import Embed from "@editorjs/embed";
 import ImageTool from '@editorjs/image';
 import InlineCode from "@editorjs/inline-code";
 import List from "@editorjs/list";
@@ -8,8 +6,6 @@ import Quote from "@editorjs/quote";
 import Table from "@editorjs/table";
 import Paragraph from "@editorjs/paragraph";
 import Header from "@editorjs/header";
-import Raw from "@editorjs/raw";
-import SimpleImage from '@editorjs/simple-image'
 
 export const EDITOR_TOOLS = {
   code: Code,
@@ -48,7 +44,7 @@ export const EDITOR_TOOLS = {
               success: 0,
             };
           }
-        },   uploadByUrl(url) {
+        }, uploadByUrl(url) {
           // URL을 그대로 반환
           return Promise.resolve({
             success: 1,
