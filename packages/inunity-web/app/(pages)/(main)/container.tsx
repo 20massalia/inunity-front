@@ -36,6 +36,7 @@ const myFont = localFont({ src: "../../../assets/fonts/TossFaceFontMac.ttf" });
 
 import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
 import useCategories from "@/entities/category/hooks/useCategories";
+import { ClipLoader } from "react-spinners";
 
 export default function HomeContainer() {
   // ViewModel 이용
@@ -98,7 +99,17 @@ export default function HomeContainer() {
           </div>
         }
       />
-      <ScrollView className="bg-[#f8f8f8]  justify-start items-start flex ">
+
+      <ScrollView
+        className="bg-[#f8f8f8]  justify-start items-start flex text-black gap-2"
+        onRefresh={() => {
+          articles.refetch();
+          notices.refetch();
+        }}
+      >
+        {(articles.isRefetching || notices.isRefetching) && (
+          <div className="flex flex-row justify-center w-full">{<ClipLoader />}</div>
+        )}
         <Slider {...settings} className="w-full mb-7">
           {[banner, banner2, banner3].map((banner, idx) => (
             <div key={idx} className="pt-5 px-2">

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Typography } from "ui";
+import { isCurrentRoute, Typography } from "ui";
 
 export default function NavItem({
   icon,
@@ -17,8 +17,10 @@ export default function NavItem({
   route: Route;
 }) {
   const pathname = usePathname();
+  console.log(route, pathname)
 
-  const color = pathname.startsWith(route) ? "primary" : "[#999999]";
+  const color = isCurrentRoute(route, pathname)? "primary" : "[#999999]";
+
   return (
     <Link href={route} className="flex-1">
       <div

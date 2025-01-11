@@ -1,8 +1,16 @@
 "use client";
 import { useMessageManager } from "@/shared/ui/MessageContext";
-import { useEffect, useRef } from "react";
-import { ScrollView, Typography, useMenu, UserProfile } from "ui";
-import { ArticleDetailPageEventType } from "message-type/message-type";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Button,
+  CheckBox,
+  Input,
+  ScrollView,
+  Typography,
+  useMenu,
+  UserProfile,
+} from "ui";
+import { ArticleDetailPageEventType, MessageEventType } from "message-type/message-type";
 import {
   faChevronLeft,
   faEllipsisVertical,
@@ -16,6 +24,8 @@ import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { DropdownMenu } from "ui/src/DropdownMenu";
 import useArticleDetailViewModel from "@/features/board/hooks/usePostDetailViewModel";
 import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
+import { ClipLoader } from "react-spinners";
+import { usePlatform } from "@/hooks/usePlatform";
 export const Viewer = ({ content }: { content: OutputData }) => {
   return (
     <div className="overflow-x-scroll">
@@ -64,16 +74,20 @@ export default function ArticleDetailContainer({
   }, [article]);
 
   const comments = article?.comments;
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!pageEvent) return;
     messageManager?.log("Page Event arrived: ", pageEvent);
     if (pageEvent?.event === ArticleDetailPageEventType.SubmitComment) {
-      submitComment.mutate(pageEvent.value);
+      submitComment.mutate({ ...pageEvent.value, articleId });
     }
   }, [pageEvent]);
 
   const router = useNativeRouter();
+  const [comment, setComment] = useState("");
+  const [isAnonymous, setIsAnonymous] = useState(true);
+  const { isWebView } = usePlatform();
   if (!article) return <div>no data</div>;
 
   return (
@@ -99,7 +113,15 @@ export default function ArticleDetailContainer({
           </>
         }
       />
-      <ScrollView className="text-black gap-2">
+      <ScrollView
+        className="text-black gap-2"
+        onRefresh={() => {
+          articleQuery.refetch();
+        }}
+      >
+        {articleQuery.isRefetching && (
+          <div className="flex flex-row justify-center">{<ClipLoader />}</div>
+        )}
         <div className="flex flex-col gap-3 p-5 bg-white ">
           <UserProfile
             profileImage={article.userImageUrl}
@@ -132,10 +154,28 @@ export default function ArticleDetailContainer({
                       <DropdownMenu
                         menuId={`comment_${comment.commentId}`}
                         actions={[
-                          { label: "수정", onClick: () => {} },
-                          { label: "삭제", onClick: () => {} },
-                          { label: "신고", onClick: () => {} },
-                          { label: "차단", onClick: () => {} },
+                          {
+                            label: "수정",
+                            onClick: () => {
+                              // Todo: focus input tag or native input
+                              if (!isWebView) inputRef.current?.focus();
+                              else messageManager?.sendMessage(MessageEventType.Page, {event:'inputFocus'})
+                            },
+                          },
+                          {
+                            label: "삭제",
+                            onClick: () => {
+                              if (confirm("댓글을 정말로 삭제할까요?"))
+                                deleteComment.mutate(comment.commentId);
+                            },
+                          },
+                          {
+                            label: "신고",
+                            onClick: () => {
+                              if (confirm("댓글을 정말로 신고할까요?"))
+                                reportComment.mutate(comment.commentId);
+                            },
+                          },
                         ]}
                       />
                     }
@@ -153,6 +193,29 @@ export default function ArticleDetailContainer({
           </div>
         </div>
       </ScrollView>
+      {!isWebView && (
+        <div className="flex flex-col p-3">
+          <div className="flex flex-row gap-2">
+            <CheckBox checked={isAnonymous} setChecked={setIsAnonymous} />
+            익명
+          </div>
+          <div className="flex flex-row gap-4 ">
+            <Input
+              ref={inputRef}
+              value={comment}
+              setValue={setComment}
+              className="flex-1"
+            />
+            <Button
+              onClick={() =>
+                submitComment.mutate({ articleId, text: comment, isAnonymous })
+              }
+            >
+              작성
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

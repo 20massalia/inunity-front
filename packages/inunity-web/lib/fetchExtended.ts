@@ -65,11 +65,12 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
       new URLSearchParams(JSON.parse(JSON.stringify(init?.query))).toString();
     url = queryString ? `${url}?${queryString}` : url;
 
+    const method = init?.method?.toLowerCase();
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body),
       credentials: 'include',
-      headers: init?.method?.toLowerCase() === 'post' ? {'Content-Type': 'application/json'} : undefined
+      headers: method !== 'get'  ? {'Content-Type': 'application/json'} : undefined
     });
     const res = parseJsonSafely(await response.text()) as ResponseWrapper<T>;
 

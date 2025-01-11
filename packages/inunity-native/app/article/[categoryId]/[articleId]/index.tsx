@@ -39,6 +39,7 @@ export default function Detail() {
 
   const [comment, setComment] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
+  const inputRef = useRef<TextInput>(null);
   const write = useCallback(() => {
 
 
@@ -60,6 +61,9 @@ export default function Detail() {
         <CustomWebView
           initialUrl={`${webViewOrigin}/article/${categoryId}/${articleId}`}
           id={"ArticleDetail"}
+          pageEventHandler={(pageEvent) => {
+            if (pageEvent.event == 'inputFocus') inputRef.current?.focus()
+          }}
         />
       </View>
       <View style={[styles.commentInputContainer, styles.inputFlexBox]}>
@@ -78,6 +82,7 @@ export default function Detail() {
           </ThemedText>
         </View>
         <NativeInput
+        ref={inputRef}
           value={comment}
           setValue={setComment}
           placeholder="댓글을 입력해주세요."
