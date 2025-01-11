@@ -1,3 +1,5 @@
+"use client";
+
 import ArticleDto from "@/entities/article/model/ArticleDto";
 import ResponseArticleThumbnail from "@/entities/article/model/ResponseArticleThumbnail";
 import fetchExtended from "@/lib/fetchExtended";
@@ -43,7 +45,7 @@ export default function ToggleLikeIcon({ article }: ToggleLikeProps) {
 
       try {
         // 서버 요청 시도
-        await fetchExtended(`v1/articles/${id}/like`);
+        await fetchExtended(`v1/articles/${id}/like`, {method: 'POST'});
       } catch (error) {
         // 서버 요청 실패 시 캐시를 무효화하고 데이터를 다시 가져옴
         queryClient.invalidateQueries({ queryKey: ["articles", "list"] });

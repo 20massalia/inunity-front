@@ -5,8 +5,11 @@ import returnFetch, {
 } from "./return-fetch";
 
 // Use as a replacer of `RequestInit`
-type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
+type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body" | "next"> & {
   body?: object;
+  next?: {
+    revalidate: number;
+  }
   /**
    * 쿼리를 바디로 넣으면 쿼리스트링을 생성해줍니다.
    */
@@ -65,6 +68,7 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body),
+      credentials: 'include'
     });
     const res = parseJsonSafely(await response.text()) as ResponseWrapper<T>;
 
