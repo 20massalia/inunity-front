@@ -15,13 +15,12 @@ import {
   ArticleDetailPageEventType,
   CommentPayload,
 } from "message-type/message-type";
-import {
-  useMessageManager,
-} from "@/lib/MessageManager";
+import { useMessageManager } from "@/lib/MessageManager";
 import { NativeInput } from "@/components/NativeInput";
 import NativeCheckBox from "@/components/NativeCheckBox";
 import CustomWebView from "@/components/CustomWebView";
 import { useWebView, webViewOrigin } from "@/components/useWebView";
+import Entypo from "@expo/vector-icons/Entypo";
 
 export default function Detail() {
   const { articleId, categoryId } = useLocalSearchParams<{
@@ -88,6 +87,21 @@ export default function Detail() {
             작성
           </ThemedText>
         </View>
+        {comment.commentId && (
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <ThemedText>댓글 수정중</ThemedText>
+            <Entypo
+              name="cross"
+              size={24}
+              color="black"
+              onPress={() =>
+                setComment((prev) => ({ ...prev, commentId: undefined }))
+              }
+            />
+          </View>
+        )}
         <NativeInput
           ref={inputRef}
           value={comment.text}
