@@ -32,7 +32,9 @@
     "next": "14.2.15",
     "open-graph-scraper": "^6.8.3",
     "react-icons": "^5.4.0",
+    "react-slick": "^0.30.3",
     "react-spinners": "^0.15.0",
+    "slick-carousel": "^1.8.1",
     "ui": "workspace:^"
   },
   "peerDependencies": {
@@ -50,6 +52,8 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-slick": "^0",
+    "@types/slick-carousel": "^1",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "message-type": "workspace:^",

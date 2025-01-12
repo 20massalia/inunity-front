@@ -16,6 +16,7 @@ const inter = Inter({ subsets: ["latin"] }); // 변수를 선언하고, 함수�
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import Script from "next/script";
+import { headers } from "next/headers";
 config.autoAddCss = false;
 
 export default function RootLayout({
@@ -23,6 +24,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const topInset = Number(headers().get('Top-Inset')) || 0;
+
   return (
     <html lang="en" className="overscroll-none ">
       <head>
@@ -34,10 +37,12 @@ export default function RootLayout({
           {`const vh = window.innerHeight * 0.01;
           document.documentElement.style.setProperty('--vh', \`\$\{vh\}px\`); `}
         </Script>
+        <style>{`:root { --sat: ${topInset}px; }`}</style>
+
       </head>
       <body
-        className={`${inter.className} h-real-screen  `}
-        style={{ WebkitOverflowScrolling: "touch" }}
+        className={`${inter.className} h-real-screen sm:max-w-sm sm:fixed`}
+        style={{ WebkitOverflowScrolling: "touch", left: 'calc(50vw - 12rem)' }}
       >
         <Providers>{children}</Providers>
       </body>
