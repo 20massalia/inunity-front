@@ -6,14 +6,12 @@ import { ScrollContext } from "./contexts/ScrollContext";
 
 export type ScrollViewProps = {
   className?: string;
-  spinner?: React.ReactNode;
   onRefresh?: () => void;
   onReachBottom?: (entry: IntersectionObserverEntry) => void;
 };
 export const ScrollView: React.FC<React.PropsWithChildren<ScrollViewProps>> = ({
   children,
   className,
-  spinner,
   onRefresh,
   onReachBottom,
 }) => {

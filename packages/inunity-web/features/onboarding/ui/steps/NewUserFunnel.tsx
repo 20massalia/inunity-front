@@ -7,6 +7,7 @@ import GoogleSignin from "@/features/onboarding/ui/steps/GoogleSignIn";
 import CertificateAttach from "./CertificateAttach";
 import NewUserInfo from "./NewUserInfo";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import fetchExtended from "@/lib/fetchExtended";
 
 interface NewUserFunnelProps {
   onComplete: () => void;
@@ -83,15 +84,33 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
               setContext((prev) => ({ ...prev, ...mergedContext }));
             },
           }}
+          onDone={async () => {
+            try {
+              await fetchExtended("v1/users/", {
+                method: "PUT",
+                body: {
+                  userName: context.name,
+                  nickName: context.nickname,
+                  graduationDate: context.graduationDate,
+                  isGraduation: Boolean(context.graduationDate),
+                },
+              });
+              history.push("Google", {});
+            } catch (e) {
+              alert("사용자 정보가 제대로 입력되지 않았어요 🥲");
+            }
+          }}
         />
       )}
-      Google={({ history }) => {
+      Google={({history}) => {
+        // 학교 웸 메일이 없는 경우 증명서 제출 페이지로 이동
         const handleAttachCertificate = () => {
           history.push("Certificate", {});
           setStep("Certificate");
         };
 
         return <GoogleSignin onAttachCertificate={handleAttachCertificate} />;
+
       }}
       Certificate={() => (
         <CertificateAttach

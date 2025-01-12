@@ -36,22 +36,26 @@ export function getQueryClient() {
 
 import { MessageProvider } from "./MessageContext";
 import { useEffect } from "react";
-import { MessageManager } from "@/lib/MessageManager";
+import { Platform } from "@/lib/PlatformResolver";
+import { PlatformProvider } from "@/lib/PlatformProvider";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  platform,
+}: {
+  children: React.ReactNode;
+  platform: Platform;
+}) {
   const queryClient = getQueryClient();
-  useEffect(() => {
-    const m = new MessageManager(window.ReactNativeWebView);
-    m.log(getComputedStyle(document.documentElement).getPropertyValue("--sat"))
-      
-  });
+
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <MenuProvider>
-        <MessageProvider>{children}</MessageProvider>
-      </MenuProvider>
+      <PlatformProvider platform={platform}>
+        <MenuProvider>
+          <MessageProvider>{children}</MessageProvider>
+        </MenuProvider>
+      </PlatformProvider>
     </QueryClientProvider>
   );
-  return children;
 }

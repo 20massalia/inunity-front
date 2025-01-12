@@ -1,6 +1,4 @@
-import EditorJS from "@editorjs/editorjs";
 import Code from "@editorjs/code";
-import Embed from "@editorjs/embed";
 import ImageTool from '@editorjs/image';
 import InlineCode from "@editorjs/inline-code";
 import List from "@editorjs/list";
@@ -8,9 +6,7 @@ import Quote from "@editorjs/quote";
 import Table from "@editorjs/table";
 import Paragraph from "@editorjs/paragraph";
 import Header from "@editorjs/header";
-import Raw from "@editorjs/raw";
-import SimpleImage from '@editorjs/simple-image'
-
+import uploadImage from "./uploadImage";
 export const EDITOR_TOOLS = {
   code: Code,
   paragraph: { class: Paragraph, inlineToolbar: true },
@@ -30,25 +26,17 @@ export const EDITOR_TOOLS = {
          */
         async uploadByFile(file) {
           try {
-            const { body: presignResult } = await fetchExtended(`/api/media?filename=${file.name}`);
-
-            await fetch(presignResult.preSignedUrl, {
-              method: "PUT",
-              body: file,
-            });
+            const url = await uploadImage('pictures', file)
             return {
-              success: 1,
-              file: {
-                url: `/api/media/${presignResult.file.mediaId}/HIGH`
-              }
-            };
+              success: 1, file: { url }
+            }
           } catch (e) {
-            console.log(e);
-            return {
-              success: 0,
-            };
+            console.error(e)
+            return { success: 0 }
           }
-        },   uploadByUrl(url) {
+
+        },
+        uploadByUrl(url) {
           // URL을 그대로 반환
           return Promise.resolve({
             success: 1,

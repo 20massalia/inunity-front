@@ -82,42 +82,51 @@ export function DropdownMenu({
   }, [isMenuOpen, scrollContainerRef]);
 
   return (
-    <div
-      ref={menuTriggerRef}
-      data-menu-id={menuId}
-      className="w-6 h-6 relative flex justify-end"
-      onClick={toggleMenu}
-    >
-      <FontAwesomeIcon
-        icon={faEllipsisVertical}
-        fontSize={24}
-        color="#7E7E7E"
-      />
-      {isMenuOpen && actions && actions.length > 0 && (
+    <>
+      {isMenuOpen && (
         <div
-          ref={menuContainerRef}
-          className={`absolute right-0 w-48 bg-[rgba(250,250,250,1)] rounded-xl shadow-2xl z-10`}
-          style={{
-            ...(menuPosition === "bottom"
-              ? { top: "100%", marginTop: "0.5rem" }
-              : { bottom: "100%", marginBottom: "0.5rem" }),
-          }}
-        >
-          {actions.map((action, index) => (
-            <button
-              key={index}
-              className={`block w-full text-left px-4 py-2 text-sm border-b 
+          className="fixed inset-0 bg-transparent z-10"
+          onClick={() => setOpenMenuId(null)} // 메뉴 닫기
+        />
+      )}
+
+      <div
+        ref={menuTriggerRef}
+        data-menu-id={menuId}
+        className="w-6 h-6 relative flex justify-end"
+        onClick={toggleMenu}
+      >
+        <FontAwesomeIcon
+          icon={faEllipsisVertical}
+          fontSize={24}
+          color="#7E7E7E"
+        />
+        {isMenuOpen && actions && actions.length > 0 && (
+          <div
+            ref={menuContainerRef}
+            className={`absolute right-0 w-48 bg-[rgba(250,250,250,1)] rounded-xl shadow-2xl z-10`}
+            style={{
+              ...(menuPosition === "bottom"
+                ? { top: "100%", marginTop: "0.5rem" }
+                : { bottom: "100%", marginBottom: "0.5rem" }),
+            }}
+          >
+            {actions.map((action, index) => (
+              <button
+                key={index}
+                className={`block w-full text-left px-4 py-2 text-sm border-b 
                 [&:not(:last-child)]:border-b-[#EFF3F4] 
                 hover:bg-[rgba(226,226,226)] 
                 last:rounded-b-xl first:rounded-t-xl`}
-              onClick={(e) => handleActionClick(action, e)}
-            >
-              {action.icon && <span className="mr-2">{action.icon}</span>}
-              {action.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+                onClick={(e) => handleActionClick(action, e)}
+              >
+                {action.icon && <span className="mr-2">{action.icon}</span>}
+                {action.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { usePlatform } from "@/hooks/usePlatform";
 import { MessageManager } from "@/lib/MessageManager";
+import { usePlatform } from "@/lib/PlatformProvider";
 
 import { MessageEventType, NavigationEvent, PageEvent, PageEventType } from 'message-type/message-type';
 import { usePathname, useRouter } from 'next/navigation';

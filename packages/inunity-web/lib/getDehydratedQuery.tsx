@@ -32,7 +32,7 @@ export default async function getDehydratedQuery<
   }
 }
 
-export async function getDehydratedInfiniteState<
+export async function getDehydratedInfiniteQuery<
   TQueryFnData = unknown,
   TError = Error,
   TData = TQueryFnData,

@@ -13,27 +13,35 @@ import useArticles from "@/entities/article/hooks/useArticles";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import ArticleCard from "@/entities/article/ui/ArticleCard";
+import useCategories from "@/entities/category/hooks/useCategories";
+import { useCallback } from "react";
+import { ClipLoader } from "react-spinners";
 
 export default function ArticleListContainer({
   categoryId,
 }: {
-  categoryId: string;
+  categoryId: number;
 }) {
   const router = useNativeRouter();
 
-  const articleQuery = useArticles();
-  const articles = articleQuery.data?.pages.flatMap(page => page.content);
+  const articleQuery = useArticles({ categoryId });
+  const articles = articleQuery.data?.pages.flatMap((page) => page.content);
+  const categroies = useCategories();
+  const category = categroies.data?.find(
+    (category) => category.id == categoryId
+  );
+  const onReachBottom = useCallback(() => {
+    console.log("loading next page!");
+    if (!articleQuery.isFetching) articleQuery.fetchNextPage();
+  }, [articleQuery]);
 
   return (
     <>
       <AppBar
         center={
           <div className="flex flex-col">
-            <Typography className="text-xs font-bold text-center">
-              컴퓨터공학부
-            </Typography>
             <Typography variant="HeadingNormalBold" className="text-center">
-              공지사항
+              {category?.name}
             </Typography>
           </div>
         }
@@ -59,7 +67,16 @@ export default function ArticleListContainer({
           </div>
         }
       />
-      <ScrollView className="gap-2 ">
+      <ScrollView
+        className=" gap-3 pt-3"
+        onReachBottom={onReachBottom} // 최하단으로 스크롤됐을 때 이벤트. isLoading: false일 때 fetchNextPage() 호출해주기.
+        onRefresh={() => {
+          articleQuery.refetch();
+        }}
+      >
+        {articleQuery.isRefetching && (
+          <div className="flex flex-row justify-center">{<ClipLoader />}</div>
+        )}
         {!articleQuery.isLoading &&
           articles?.map((item) => (
             <ArticleCard
@@ -73,6 +90,11 @@ export default function ArticleListContainer({
               }
             />
           ))}
+        {articleQuery.isFetchingNextPage && (
+          <div className="self-stretch flex justify-center flex-row">
+            <ClipLoader size={50} />
+          </div>
+        )}
       </ScrollView>
     </>
   );

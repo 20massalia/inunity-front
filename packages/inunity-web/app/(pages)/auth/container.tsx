@@ -98,8 +98,8 @@ export default function AuthContainer() {
                 돌아오신 걸 환영해요!
               </>
             }
-            onNext={() => router.push("/")}
-          />
+            onNext={() => router.replace("/")}
+            />
         )}
         NewUser={({ history }) => (
           <NewUserFunnel

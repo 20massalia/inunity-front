@@ -1,7 +1,9 @@
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Button, Input, Typography, CheckBox } from "ui";
 import { DateInput } from "../DateInput";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import FadeInOutStep from "./FadeInOutStep";
 
 interface NewUserInfoProps {
   context: {
@@ -10,6 +12,7 @@ interface NewUserInfoProps {
     graduationDate?: string;
   };
   history: any;
+  onDone: () => void;
 }
 
 export default function NewUserInfo({ context, history }: NewUserInfoProps) {
@@ -73,25 +76,48 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
     }
   };
 
+  const [shown, setShown] = useState(true); // 텍스트가 보이는지 여부
+
   return (
-    <div className="h-dvh flex flex-col mx-5">
-      <Typography variant="HeadingLargeBold" className="mb-4">
-        서비스 이용에 필요한
-        <br />몇 가지 정보를 입력해주세요.
-      </Typography>
-      <Input
-        placeholder="이름"
-        value={form.name}
-        setValue={(value) => updateField("name", value)}
-        className="mt-16"
-      />
-      <Input
-        placeholder="사용할 닉네임"
-        value={form.nickname}
-        setValue={(value) => updateField("nickname", value)}
-        className="mt-16"
-      />
-      <div className="flex items-center justify-between mt-4 w-full h-[50px]">
+    <FadeInOutStep shown={shown} onExit={handleSubmit}>
+      <div className="flex flex-col gap-4">
+        <Typography variant="HeadingLargeBold" className="mb-4">
+          서비스 이용에 필요한
+          <br />몇 가지 정보를 입력해주세요.
+        </Typography>
+        <Input
+          placeholder="이름"
+          value={form.name}
+          setValue={(value) => updateField("name", value)}
+          className="mt-16"
+        />
+        <Input
+          placeholder="사용할 닉네임"
+          value={form.nickname}
+          setValue={(value) => updateField("nickname", value)}
+          className="mt-16"
+        />
+        <AnimatePresence>
+          {form.isGraduated && (
+            <motion.div
+              initial={{ opacity: 0 }} // 시작 상태: 투명도 0, 위로부터 -50px
+              animate={{ opacity: 1 }} // 애니메이션 완료 상태: 투명도 1, 원래 위치
+              exit={{ opacity: 0 }} // 사라질 때 애니메이션
+              transition={{
+                duration: 0.4, // 애니메이션 시간 (1초)
+                ease: "easeOut", // 이징 함수 (부드러운 움직임)
+              }}
+            >
+              <DateInput
+                placeholder="졸업 날짜"
+                value={form.graduationDate}
+                setValue={(value) => updateField("graduationDate", value)}
+                className="w-32"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="flex items-center gap-2 h-full">
           <CheckBox
             checked={form.isGraduated}
@@ -104,21 +130,13 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
           />
           <Typography>졸업 여부</Typography>
         </div>
-        {form.isGraduated && (
-          <DateInput
-            placeholder="졸업 날짜"
-            value={form.graduationDate}
-            setValue={(value) => updateField("graduationDate", value)}
-            className="w-32"
-          />
-        )}
       </div>
 
       <div className="mt-auto mb-5 flex flex-col gap-4">
-        <Button variant="primary" size="large" onClick={handleSubmit}>
+        <Button variant="primary" size="large" onClick={() => setShown(false)}>
           계속하기
         </Button>
       </div>
-    </div>
+    </FadeInOutStep>
   );
 }

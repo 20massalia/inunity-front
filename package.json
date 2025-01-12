@@ -6,6 +6,7 @@
     "nextapp": "yarn workspace inunity-web",
     "nativeapp": "yarn workspace inunity-native ",
     "run-ios": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run ios",
+    "run-android": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run android",
     "run-ios-sim": "EXPO_PUBLIC_WEB_URL=http://localhost:3000; yarn nextapp run dev & yarn nativeapp run ios",
     "start": "yarn nextapp run dev & EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000 yarn nativeapp start",
     "startsim": "yarn nextapp run dev & EXPO_PUBLIC_WEB_URL=http://localhost:3000 yarn nativeapp start",

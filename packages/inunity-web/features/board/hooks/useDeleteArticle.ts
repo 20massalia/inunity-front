@@ -1,9 +1,18 @@
+import ArticleQueries from "@/entities/article/hooks/ArticleQueries";
+import fetchExtended from "@/lib/fetchExtended";
 import { useMessageManager } from "@/shared/ui/MessageContext";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function useDeleteArticle() {
-  const {messageManager} = useMessageManager();
-  return useMutation({mutationFn: async (articleId: string) => {
-    messageManager?.log('deleting article: ', articleId)
-  }});
+  const { messageManager } = useMessageManager();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (articleId: number) => {
+      messageManager?.log("deleting article: ", articleId);
+      await fetchExtended(`v1/articles/${articleId}`, {
+        method: "DELETE",
+      });
+      await queryClient.invalidateQueries({queryKey: ArticleQueries.getInvalidationKeys().all});
+    },
+  });
 }

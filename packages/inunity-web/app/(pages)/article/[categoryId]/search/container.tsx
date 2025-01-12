@@ -22,7 +22,7 @@ import { Chip, ScrollView } from "ui";
 export default function ArticleSearchContainer({
   categoryId,
 }: {
-  categoryId: string;
+  categoryId: number;
 }) {
   const router = useNativeRouter();
 
@@ -136,7 +136,6 @@ export default function ArticleSearchContainer({
       {/* Article List Area Start */}
       <ScrollView
         className=" gap-3 pt-3"
-        spinner={<ClipLoader />}
         onReachBottom={onReachBottom} // 최하단으로 스크롤됐을 때 이벤트. isLoading: false일 때 fetchNextPage() 호출해주기.
         onRefresh={() => {
           articleQuery.refetch();
@@ -152,7 +151,7 @@ export default function ArticleSearchContainer({
             bottomFeatureSlot={
               <>
                 <ToggleLikeIcon article={article} />
-                <ToggleBoomarkIcon article={article} />
+                {/* <ToggleBoomarkIcon article={article} /> */}
               </>
             }
           />

@@ -1,27 +1,36 @@
 "use client";
 
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 interface MenuContextType {
   openMenuId: string | null;
   setOpenMenuId: (id: string | null) => void;
 }
 
-export const MenuContext = createContext<MenuContextType>({openMenuId: null, setOpenMenuId: () => {}});
+export const MenuContext = createContext<MenuContextType>({
+  openMenuId: null,
+  setOpenMenuId: () => {},
+});
 
-export const MenuProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+export const MenuProvider: React.FC<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (openMenuId && !(event.target as Element).closest(`[data-menu-id="${openMenuId}"]`)) {
+      if (
+        openMenuId &&
+        !(event.target as Element).closest(`[data-menu-id="${openMenuId}"]`)
+      ) {
+        event.stopPropagation();
         setOpenMenuId(null);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openMenuId]);
 
@@ -32,11 +41,10 @@ export const MenuProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   );
 };
 
-export function useMenu () {
+export function useMenu() {
   const context = useContext(MenuContext);
   if (context === undefined) {
-    throw new Error('useMenu must be used within a MenuProvider');
+    throw new Error("useMenu must be used within a MenuProvider");
   }
   return context;
-};
-
+}

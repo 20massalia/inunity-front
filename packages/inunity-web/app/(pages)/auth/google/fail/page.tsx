@@ -1,15 +1,14 @@
-'use client';
+import GoogleLoginFailPage from "./container";
+import SafeAreaView from "@/widgets/SafeAreaView";
 
-import { useMessageManager } from "@/shared/ui/MessageContext";
-import { useEffect } from "react";
-
-export default function Page({ params }: { params: { code : string; message: string; } }) {
-  const {code, message} = params;
-  const m = useMessageManager();
-  useEffect(() => {
-    m.messageManager?.log(params.code, params.message)
-  }, [params])
-  return <div>
-    {code} | {message}
-  </div>
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { code: number; message: string };
+}) {
+  return (
+    <SafeAreaView>
+      <GoogleLoginFailPage {...searchParams} />
+    </SafeAreaView>
+  );
 }

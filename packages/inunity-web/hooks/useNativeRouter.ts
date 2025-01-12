@@ -1,10 +1,10 @@
 "use client";
 
+import { usePlatform } from "@/lib/PlatformProvider";
 import { useMessageManager } from "@/shared/ui/MessageContext";
 import { MessageEventType } from "message-type/message-type";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import { usePlatform } from "./usePlatform";
 
 export function useNativeRouter() {
   const router = useRouter();
@@ -20,6 +20,15 @@ export function useNativeRouter() {
     [isWebView, messageManager, router]
   );
 
+  const customReplace = useCallback(
+    (url: string) => {
+      if (isWebView)
+        messageManager?.sendMessage(MessageEventType.Navigation, { path: url, replace: true });
+      else router.replace(url);
+    },
+    [isWebView, messageManager, router]
+  );
+
   const customBack = useCallback(() => {
     if (isWebView) messageManager?.sendMessage(MessageEventType.Navigation, -1);
     else router.back();
@@ -28,6 +37,7 @@ export function useNativeRouter() {
   return {
     ...router,
     push: customPush,
+    replace: customReplace,
     back: customBack,
   };
 }

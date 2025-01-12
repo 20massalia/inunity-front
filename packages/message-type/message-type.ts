@@ -9,18 +9,21 @@ export enum MessageEventType {
 }
 
 export enum ArticleDetailPageEventType {
-  SubmitComment = 'submit_comment'
+  SubmitComment = 'submit_comment',
+  StartEditComment = 'start_edit_comment'
 }
 
 export type PageEventType = ArticleDetailPageEventType;
 
 export type CommentPayload = {
+  commentId?: number;
   text: string;
   isAnonymous: boolean;
 }
 
 type PageEventMap = {
   [ArticleDetailPageEventType.SubmitComment]: CommentPayload;
+  [ArticleDetailPageEventType.StartEditComment]: CommentPayload;
 }
 
 export type PageEvent<T extends PageEventType> = {
@@ -45,6 +48,7 @@ export type CustomMessageListenerType = Partial<{
 
 export interface NavigationParam {
   path: string;
+  replace?: boolean;
   params?: Record<string, unknown>
 }
 

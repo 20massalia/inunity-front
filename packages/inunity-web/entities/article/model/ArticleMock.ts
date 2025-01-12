@@ -4,6 +4,9 @@ import ResponseComment from '@/entities/comment/model/ResponseComment';
 import ResponseReplyComment from '@/entities/comment/model/ResponseReplyComment';
 import ResponseArticle from './ResponseAritcle';
 
+faker.seed(123);
+
+
 export function generateMockReplyComment(): ResponseReplyComment {
   return {
     replyCommentId: faker.number.int({ min: 1, max: 10000 }),
@@ -14,7 +17,7 @@ export function generateMockReplyComment(): ResponseReplyComment {
     userImageUrl: faker.image.avatar(),
     content: faker.lorem.sentence(),
     isOwner: faker.datatype.boolean(),
-    createAt: faker.date.recent()
+    createAt: new Date('2025-01-01 00:00:00')
   };
 }
 
@@ -28,7 +31,7 @@ export function generateMockComment(): ResponseComment {
     userImageUrl: faker.image.avatar(),
     content: faker.lorem.paragraph(),
     isOwner: faker.datatype.boolean(),
-    createAt: faker.date.recent()
+    createAt: new Date('2025-01-01 00:00:00')
   };
 }
 
@@ -41,15 +44,15 @@ export function generateMockArticle(): ResponseArticle {
     nickname: faker.person.fullName(),
     userImageUrl: faker.image.avatar(),
     isAnonymous: faker.datatype.boolean(),
-    articleId: faker.string.uuid(),
+    articleId: faker.number.int({min: 0, max: 10000}),
     title: faker.lorem.sentence(),
     content: faker.lorem.paragraphs(),
     view: faker.number.int({ min: 0, max: 1000 }),
     isOwner: faker.datatype.boolean(),
     likeNum: faker.number.int({ min: 0, max: 500 }),
     isLiked: faker.datatype.boolean(),
-    createAt: faker.date.recent(),
-    updatedAt: faker.date.recent(),
+    createAt: new Date('2025-01-01 00:00:00'),
+    updatedAt: new Date('2025-01-01 00:00:00'),
     commentNum: commentCount,
     comments: Array(commentCount)
       .fill(null)
@@ -64,11 +67,11 @@ export function generateMockArticleThumbnail(): ResponseArticleThumbnail {
     nickname: faker.person.fullName(),
     userImageUrl: faker.image.avatar(),
     isAnonymous: faker.datatype.boolean(),
-    articleId: faker.string.uuid(),
+    articleId: faker.number.int({min: 1, max: 10000}),
     title: faker.lorem.sentence(),
     content: faker.lorem.paragraph(),
-    createAt: faker.date.recent(),
-    updatedAt: faker.date.recent(),
+    createAt: new Date('2025-01-01 00:00:00'),
+    updatedAt: new Date('2025-01-01 00:00:00'),
     commentNum: faker.number.int({ min: 0, max: 50 }),
     likeNum: faker.number.int({ min: 0, max: 200 }),
     isLiked: faker.datatype.boolean()
