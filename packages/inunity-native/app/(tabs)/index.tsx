@@ -29,8 +29,8 @@ export default function Index() {
   useEffect(() => {
     AuthManager.getCookieFromManager(CookieName.AccessToken).then((cookie) => {
       console.info(cookie);
-      if (!cookie) router.replace("/auth");
-      SplashScreen.hideAsync();
+      // if (!cookie) router.replace("/auth");
+      // SplashScreen.hideAsync();
     });
   }, [cookie]);
 
