@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import FadeInOutStep from "./FadeInOutStep";
 
 interface CertificateAttachProps {
   onAttachCertificate: () => void;
@@ -28,8 +29,11 @@ export default function CertificateAttach({
     }
   };
 
+  const [shown, setShown] = useState(true)
+
   return (
-    <div className="min-h-dvh flex flex-col mx-5">
+    <FadeInOutStep shown={shown} onExit={onAttachCertificate}>
+      <div className="flex flex-col gap-3">
       <Typography variant="HeadingLargeBold" className="mb-4">
         증명서 첨부
       </Typography>
@@ -50,15 +54,19 @@ export default function CertificateAttach({
         <input
           id="file-upload"
           type="file"
-          className="hidden"
+          style={{display:'none'}}
+          
           onChange={handleFileChange}
         />
       </div>
+      </div>
+
+    
       <div className="mt-auto mb-5 flex flex-col">
-        <Button variant="primary" size="large" onClick={onAttachCertificate}>
+        <Button variant="primary" size="large" onClick={() => setShown(false)}>
           계속하기
         </Button>
       </div>
-    </div>
+    </FadeInOutStep>
   );
 }

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import { WebViewProvider, useWebView } from "../../components/useWebView";
 import { useMessageManager } from "@/lib/MessageManager";
 import { MessageEventType, NavigationEvent } from "message-type/message-type";
@@ -91,6 +91,8 @@ const CustomTabBar = ({
 };
 
 export default function TabLayout() {
+
+
   return (
     <Tabs
       screenOptions={{

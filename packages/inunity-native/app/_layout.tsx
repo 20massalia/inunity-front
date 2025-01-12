@@ -30,12 +30,6 @@ export default function RootLayout() {
   const [cookieSynced, setCookieSynced] = useState(false);
   const [cycleManagerInitialized, setCycleManagerInitialized] = useState(false);
 
-  useEffect(() => {
-    if (loaded && cookieSynced && cycleManagerInitialized) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, cookieSynced, cycleManagerInitialized]);
-
   const syncCookie = async () => {
     // 스토리지에 쿠키가 있으면 꺼내서 셋.
     try {
@@ -63,7 +57,7 @@ export default function RootLayout() {
 
   useNotification();
 
-  if (!loaded) {
+  if (!loaded || !cookieSynced || !cycleManagerInitialized) {
     return null;
   }
 
@@ -73,6 +67,7 @@ export default function RootLayout() {
         <WebViewProvider>
           <ThemeProvider value={DefaultTheme}>
             <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="auth/index" />
               <Stack.Screen name="+not-found" />
               <Stack.Screen name="article/[categoryId]/index" />
               <Stack.Screen name="article/[categoryId]/write" />

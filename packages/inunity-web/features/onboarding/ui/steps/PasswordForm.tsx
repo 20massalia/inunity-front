@@ -1,6 +1,9 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 import { Button, Input, Typography } from "ui";
+import FadeInOutStep from "./FadeInOutStep";
 
 interface PasswordFormStepProps {
   studentNumber: string;
@@ -15,20 +18,24 @@ export default function PasswordFormStep({
   setPassword,
   handlePasswordFormSubmit,
 }: PasswordFormStepProps) {
+  const [shown, setShown] = useState(true); // 텍스트가 보이는지 여부
+
   return (
-    <div className="h-dvh flex flex-col mx-5">
-      <Typography variant="HeadingLargeBold" className="mb-4">
-        학내 포탈에서 사용하는
-        <br />
-        비밀번호를 입력해주세요.
-      </Typography>
-      <Input
-        value={password}
-        setValue={setPassword}
-        placeholder="포탈 비밀번호"
-        masked
-        className="mt-6"
-      />
+    <FadeInOutStep onExit={handlePasswordFormSubmit} shown={shown}>
+      <div className="flex flex-col gap-3">
+        <Typography variant="HeadingLargeBold" className="mb-4">
+          학내 포탈에서 사용하는
+          <br />
+          비밀번호를 입력해주세요.
+        </Typography>
+        <Input
+          value={password}
+          setValue={setPassword}
+          placeholder="포탈 비밀번호"
+          masked
+          className="self-stretch"
+        />
+      </div>
       <div className="mt-auto mb-5 flex flex-col gap-4">
         <Button
           variant="primary"
@@ -38,6 +45,6 @@ export default function PasswordFormStep({
           계속하기
         </Button>
       </div>
-    </div>
+    </FadeInOutStep>
   );
 }
