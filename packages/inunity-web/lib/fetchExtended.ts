@@ -74,7 +74,9 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
       body: init?.body && JSON.stringify(init.body),
       credentials: "include",
       headers:
-        method !== "get" ? { "Content-Type": "application/json" } : undefined,
+        method !== "get"
+          ? {  "Content-Type": "application/json", ...init?.headers, }
+          : undefined,
     });
     const res = parseJsonSafely(await response.text()) as ResponseWrapper<T>;
 
@@ -82,7 +84,7 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
       const data = handleDates(res.data) as T;
       return data;
     } else {
-      throw new CustomError(res.status, res.message);
+      throw new CustomError(response.status, res.message);
     }
     // return {
     //   headers: response.headers,
