@@ -52,9 +52,9 @@ export default function RootLayout() {
   };
 
   useEffect(() => {
-    syncCookie().then(() => {
+    // syncCookie().then(() => {
       setCookieSynced(true);
-    });
+    // });
     if (!cycleManagerInitialized) {
       AppLifecycleHandler.init();
       setCycleManagerInitialized(true);

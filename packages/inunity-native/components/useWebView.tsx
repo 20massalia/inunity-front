@@ -6,6 +6,7 @@ import {
   useRef,
   useEffect,
   MutableRefObject,
+  PropsWithChildren,
 } from "react";
 import { Alert } from "react-native";
 import WebView from "react-native-webview";
@@ -27,7 +28,7 @@ export const webViewOrigin =
   process.env.EXPO_PUBLIC_WEB_URL ?? "http://localhost:3000/";
 const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
 
-export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
+export const WebViewProvider = ({ children }: PropsWithChildren) => {
   const [activeWebView, setActiveWebView] = useState<string>();
   const [webViews, setWebViews] = useState({ index: webViewOrigin });
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +73,7 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
       {
         name: "push to route",
         callback: async () => {
-          Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
+          Alert.prompt("디버그 메뉴", "route를 입력해주세요.", [
             {
               text: "Cancel",
               onPress: () => console.log("Cancel Pressed"),

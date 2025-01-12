@@ -20,7 +20,6 @@ export interface UserProfileProps {
   /** 드롭다운 메뉴 아이템 */
   actions?: React.ReactNode;
   isVerified?: boolean;
-  id: number;
 }
 
 /** 글, 댓글에서 사용자 프로필 컴포넌트 */
@@ -29,7 +28,6 @@ export const UserProfile = ({
   name,
   introduction,
   actions,
-  id,
   isVerified,
 }: UserProfileProps) => {
   return (
