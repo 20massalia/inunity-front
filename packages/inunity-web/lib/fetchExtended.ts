@@ -84,6 +84,14 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
       const data = handleDates(res.data) as T;
       return data;
     } else {
+      if (response.status == 401) {
+        // Todo: refresh
+        try {
+          await fetchExtended('v1/auth/refresh',)
+        } catch (e) {
+          window.location.href = '/auth'
+        }
+      }
       throw new CustomError(response.status, res.message);
     }
     // return {
@@ -100,7 +108,7 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
 };
 
 // Create an extended fetch function and use it instead of the global fetch.
-export default returnFetchJson({
+const fetchExtended = returnFetchJson({
   // default options
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
   interceptors: {
@@ -112,3 +120,5 @@ export default returnFetchJson({
     },
   },
 });
+
+export default fetchExtended
