@@ -10,9 +10,10 @@ interface NewUserInfoProps {
     graduationYear?: string;
   };
   history: any;
+  onDone: () => void;
 }
 
-export default function NewUserInfo({ context, history }: NewUserInfoProps) {
+export default function NewUserInfo({ context, history, onDone }: NewUserInfoProps) {
   const [name, setName] = useState(context.name || "");
   const [nickname, setNickname] = useState(context.nickname || "");
   const [graduationYear, setGraduationYear] = useState(
@@ -24,14 +25,11 @@ export default function NewUserInfo({ context, history }: NewUserInfoProps) {
     history.replace("Info", { ...context, [key]: value });
   };
 
-  const handleSubmit = () => {
-    history.push("Google", {});
-  };
 
   const [shown, setShown] = useState(true); // 텍스트가 보이는지 여부
 
   return (
-    <FadeInOutStep shown={shown} onExit={handleSubmit}>
+    <FadeInOutStep shown={shown} onExit={onDone}>
       <div className="flex flex-col gap-4">
         <Typography variant="HeadingLargeBold" className="mb-4">
           서비스 이용에 필요한

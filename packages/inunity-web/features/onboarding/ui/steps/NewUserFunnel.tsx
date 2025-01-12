@@ -6,6 +6,7 @@ import TextOnly from "@/features/onboarding/ui/steps/TextOnly";
 import GoogleSignin from "@/features/onboarding/ui/steps/GoogleSignIn";
 import CertificateAttach from "./CertificateAttach";
 import NewUserInfo from "./NewUserInfo";
+import fetchExtended from "@/lib/fetchExtended";
 
 interface NewUserFunnelProps {
   onComplete: () => void;
@@ -28,26 +29,6 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
     initial: { step: "Introduction", context: {} },
   });
 
-
-  // pathname 감지해서 구글 로그인 성공/실패 시 처리
-  // Todo: auth/google/success or fail 페이지에서 처리 필요. or /auth#success나 /auth#fail로 처리
-
-  // const pathname = usePathname();
-  // useEffect(() => {
-  //   if (pathname === "/auth/google/success") {
-  //     // 구글 로그인 성공 시에는 onComplete()
-  //     onComplete();
-  //   } else if (pathname.startsWith("/auth/google/fail")) {
-  //     const urlParams = new URLSearchParams(window.location.search);
-  //     const code = urlParams.get("code");
-  //     const message = urlParams.get("message");
-
-  //     alert(`Google 로그인 실패\nCode: ${code}\nMessage: ${message}`);
-  //     // 실패 시 Google 단계로 이동
-  //     history.push("Google", {});
-  //   }
-  // }, [pathname, onComplete, history]);
-
   return (
     <Render
       Introduction={() => {
@@ -69,7 +50,26 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
         );
       }}
       Info={({ context }) => (
-        <NewUserInfo context={context} history={history} />
+        <NewUserInfo
+          context={context}
+          history={history}
+          onDone={async () => {
+            try {
+              await fetchExtended("v1/users/", {
+                method: "PUT",
+                body: {
+                  userName: context.name,
+                  nickName: context.nickname,
+                  graduationDate: context.graduationYear,
+                  isGraduation: Boolean(context.graduationYear),
+                },
+              });
+              history.push("Google", {});
+            } catch (e) {
+              alert('사용자 정보가 제대로 입력되지 않았어요 🥲')
+            }
+          }}
+        />
       )}
       Google={() => {
         // 학교 웸 메일이 없는 경우 증명서 제출 페이지로 이동
@@ -77,11 +77,7 @@ export function NewUserFunnel({ onComplete }: NewUserFunnelProps) {
           history.push("Certificate", {});
         };
 
-        return (
-          <GoogleSignin
-            onAttachCertificate={handleAttachCertificate}
-          />
-        );
+        return <GoogleSignin onAttachCertificate={handleAttachCertificate} />;
       }}
       Certificate={() => {
         return <CertificateAttach onAttachCertificate={onComplete} />;
