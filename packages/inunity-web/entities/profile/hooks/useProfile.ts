@@ -1,4 +1,3 @@
-"use client";
 import { useQuery } from "@tanstack/react-query";
 import ProfileDto from "../model/ProfileDto";
 import ProfileQueries from "./ProfileQueries";
