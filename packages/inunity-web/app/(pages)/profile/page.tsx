@@ -1,26 +1,15 @@
+"use client";
+
 import React from "react";
 import ProfileContainer from "./container";
 import SafeAreaView from "@/widgets/SafeAreaView";
-import { getOGData } from "@/lib/ogFetcher";
 
-/**
- * (pages)/profile/page.tsx
- * - 로그인된 사용자의 "내 프로필"을 보여줌
- * - userId를 명시적으로 넘기지 않아도 됨 (내 아이디로 판단)
- */
-export default async function Page() {
-  // 임시 프로젝트 링크 리스트
-  const projectLinks = [
-    "https://github.com/Your-Lie-in-April/server",
-    "https://github.com/NFCoffee/frontend",
-  ];
-
-  // OG 데이터 가져오기
-  const ogData = await Promise.all(projectLinks.map((link) => getOGData(link)));
-
+export default function Page() {
+  // 여기는 본인 프로필이므로 userId가 없다 치고,
+  // 로그인 된 상태에서 백엔드가 본인 것으로 인지한다고 가정
   return (
     <SafeAreaView>
-      <ProfileContainer ogData={ogData} />
+      <ProfileContainer />
     </SafeAreaView>
   );
 }
