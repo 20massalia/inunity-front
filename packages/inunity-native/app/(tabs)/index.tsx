@@ -1,5 +1,5 @@
 import CustomWebView from "@/components/CustomWebView";
-import { useWebView, webViewOrigin } from "@/components/useWebView";
+import { useWebViewWithId, webViewOrigin } from "@/components/useWebView";
 import { isLightColor } from "@/lib/ColorUtil";
 import {
   parseMessage,
@@ -22,10 +22,9 @@ import AuthManager from "@/lib/AuthManager";
 import React from "react";
 
 export default function Index() {
-  const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebView("index");
+  const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebViewWithId("index");
   const [cookie, setCookie] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
-  console.log(insets.top);
 
   return (
     <WebView

@@ -19,7 +19,7 @@ import { useMessageManager } from "@/lib/MessageManager";
 import { NativeInput } from "@/components/NativeInput";
 import NativeCheckBox from "@/components/NativeCheckBox";
 import CustomWebView from "@/components/CustomWebView";
-import { useWebView, webViewOrigin } from "@/components/useWebView";
+import { useWebViewWithId, webViewOrigin } from "@/components/useWebView";
 import Entypo from "@expo/vector-icons/Entypo";
 
 export default function Detail() {
@@ -28,7 +28,7 @@ export default function Detail() {
     categoryId: string;
   }>();
 
-  const { webViewRef } = useWebView("ArticleDetail");
+  const { webViewRef } = useWebViewWithId("ArticleDetail");
   const messageManager = useMessageManager(webViewRef!);
 
   const [comment, setComment] = useState<CommentPayload>({

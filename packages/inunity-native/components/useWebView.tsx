@@ -4,16 +4,9 @@ import {
   useState,
   useContext,
   useRef,
-  useEffect,
-  MutableRefObject,
   PropsWithChildren,
 } from "react";
-import { Alert } from "react-native";
 import WebView from "react-native-webview";
-import { registerDevMenuItems } from "expo-dev-menu";
-import AuthManager, { CookieName } from "@/lib/AuthManager";
-import { Href, router } from "expo-router";
-import CookieManager from "@react-native-cookies/cookies";
 
 export type WebViewContextType = {
   webViewRefs: React.MutableRefObject<Record<string, WebView | null>>;
@@ -27,7 +20,7 @@ export type WebViewContextType = {
 
 export const webViewOrigin =
   process.env.EXPO_PUBLIC_WEB_URL ?? "http://localhost:3000/";
-const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
+export const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
 
 export const WebViewProvider = ({ children }: PropsWithChildren) => {
   const [activeWebView, setActiveWebView] = useState<string>();
@@ -41,120 +34,6 @@ export const WebViewProvider = ({ children }: PropsWithChildren) => {
     setWebViews((prev) => ({ ...prev, [webViewId]: url }));
   };
 
-  useEffect(() => {
-    const devMenuItems = [
-      {
-        name: "Set WebView URL",
-        callback: () => {
-          Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            {
-              text: "OK",
-              onPress: (value) => {
-                if (activeWebView) setUrl(activeWebView, value ?? "");
-              },
-            },
-          ]);
-        },
-      },
-      {
-        name: "Get cookies from manager",
-        callback: () => {
-          Alert.alert("디버그 메뉴", "어떤 쿠키를 까볼까요?", [
-            {
-              text: "브라우저",
-              onPress: async () => {
-                const cookies = await AuthManager.getCookieFromManager(
-                  CookieName.AccessToken
-                );
-
-                alert(cookies);
-                console.info(cookies);
-              },
-              style: "cancel",
-            },
-            {
-              text: "네이티브 스토리지",
-              onPress: async () => {
-                const [accessCookie, refreshCookie] = [
-                  await AuthManager.getCookieFromStorage(
-                    CookieName.AccessToken
-                  ),
-                  await AuthManager.getCookieFromStorage(
-                    CookieName.RefreshToken
-                  ),
-                ];
-
-                console.info(accessCookie, refreshCookie);
-                alert(JSON.stringify([accessCookie, refreshCookie]));
-              },
-            },
-          ]);
-        },
-      },
-      {
-        name: "set cookie from storage",
-        callback: async () => {
-          const cookie = await AuthManager.getCookieFromStorage(
-            CookieName.AccessToken
-          );
-          if (!cookie) {
-            console.error("no cookie");
-            return;
-          }
-          const setSuccess = await CookieManager.set(
-            "https://server.inunity.club",
-            cookie,
-            true
-          );
-          // await AuthManager.setCookieToManager(cookie)
-          const updated = await CookieManager.getAll(true);
-          console.log("cookie set", setSuccess, updated);
-        },
-      },
-      {
-        name: "clear cookies",
-        callback: async () => {
-          Alert.alert("디버그 메뉴", "어떤 쿠키를 지울까요?", [
-            {
-              text: "브라우저",
-              onPress: () => CookieManager.clearAll(),
-              style: "cancel",
-            },
-            {
-              text: "네이티브 스토리지",
-              onPress: () => {
-                AuthManager.clearCookieFromStorage(CookieName.AccessToken);
-              },
-            },
-          ]);
-        },
-      },
-      {
-        name: "push to route",
-        callback: async () => {
-          Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            {
-              text: "OK",
-              onPress: (value) => {
-                if (value) router.push(value as Href<string>);
-              },
-            },
-          ]);
-        },
-      },
-    ];
-    registerDevMenuItems(devMenuItems);
-  }, []);
 
   return (
     <WebViewContext.Provider
@@ -173,7 +52,7 @@ export const WebViewProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const useWebView = (webViewId: string) => {
+export const useWebViewWithId = (webViewId: string) => {
   const webView = useContext(WebViewContext);
   if (!webView) {
     throw new Error(
@@ -188,4 +67,16 @@ export const useWebView = (webViewId: string) => {
     setUrl,
     webViewRef: webView.webViewRefs.current[webViewId] || null,
   };
+};
+
+
+
+export const useWebView = () => {
+  const webView = useContext(WebViewContext);
+  if (!webView) {
+    throw new Error(
+      "useWebView must be used within <WebViewProvider> component!"
+    );
+  }
+  return webView;
 };

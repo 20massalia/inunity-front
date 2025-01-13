@@ -1,5 +1,6 @@
 import { AppState, AppStateStatus, Platform, BackHandler } from "react-native";
-import AuthManager, { CookieName } from "./AuthManager";
+import AuthManager from "./AuthManager";
+import { Cookies } from "@react-native-cookies/cookies";
 
 interface CrashInfo {
   message: string;
@@ -33,30 +34,24 @@ class AppLifecycleHandler {
   }
 
   public init(): void {
-    // 앱 상태 변화 리스너 등록
     AppState.addEventListener("change", this.handleAppStateChange);
 
-    // Android 백버튼 처리
     if (Platform.OS === "android") {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
     }
 
-    // 예기치 않은 에러 처리
     this.setupErrorBoundary();
   }
 
   private handleAppStateChange(nextAppState: AppStateStatus): void {
-    // 백그라운드 전환 감지
     console.info(this.appState, nextAppState);
-    if (
-      this.appState.match(/active|foreground/) &&
-      nextAppState === "background"
-    ) {
-      console.info("background 진입!");
+    
+    if (this.appState.match(/active|foreground/) && nextAppState === "background") {
+      console.info("[AppLifecycleHandler] Background 진입");
       this.onBackground();
     }
-    // 포그라운드 전환 감지
     else if (this.appState === "background" && nextAppState === "active") {
+      console.info("[AppLifecycleHandler] Foreground 진입");
       this.onForeground();
     }
 
@@ -64,25 +59,15 @@ class AppLifecycleHandler {
   }
 
   private handleBackButton() {
-    // Android 백버튼 처리 로직
-    // true를 반환하면 기본 동작 방지
     this.saveAppState();
     return false;
   }
 
   private setupErrorBoundary(): void {
-    // 전역 에러 핸들러
     ErrorUtils.setGlobalHandler(async (error: Error) => {
       await this.onCrash(error);
-
-      // Firebase Crashlytics나 다른 크래시 리포팅 서비스로 에러 전송
       if (__DEV__) {
         console.error(error);
-      } else {
-        // await analytics().logEvent('app_crash', {
-        // error: error.message,
-        // stack: error.stack
-        // });
       }
     });
   }
@@ -92,7 +77,7 @@ class AppLifecycleHandler {
       await this.saveAppState();
       await this.disconnectNetwork();
     } catch (error) {
-      console.error("Background transition failed:", error);
+      console.error("[AppLifecycleHandler] Background transition failed:", error);
     }
   }
 
@@ -105,7 +90,7 @@ class AppLifecycleHandler {
         await this.syncWithServer();
       }
     } catch (error) {
-      console.error("Foreground transition failed:", error);
+      console.error("[AppLifecycleHandler] Foreground transition failed:", error);
     }
   }
 
@@ -122,13 +107,12 @@ class AppLifecycleHandler {
       };
       await this.saveLastCrashInfo(crashInfo);
     } catch (e) {
-      console.error("Crash handler failed:", e);
+      console.error("[AppLifecycleHandler] Crash handler failed:", e);
     }
   }
 
   private getCurrentScreen(): string {
-    // 현재 화면 정보 반환 로직 구현
-    return "MainScreen"; // 실제 구현 필요
+    return "MainScreen";
   }
 
   private async syncWithServer(): Promise<void> {
@@ -136,29 +120,42 @@ class AppLifecycleHandler {
   }
 
   private async saveAppState(): Promise<void> {
-    // 앱 상태 저장 구현
-    const [accessCookie, refreshCookle] = [
-      await AuthManager.getCookieFromManager(CookieName.AccessToken),
-      await AuthManager.getCookieFromManager(CookieName.RefreshToken),
-    ];
-    if (!accessCookie || !refreshCookle) return;
-    console.info(
-      `[AppLifecycleHandler] 앱의 중지가 감지되어 쿠키를 저장합니다.`
-    );
-    await AuthManager.saveCookieToStorage(CookieName.AccessToken, accessCookie);
-    await AuthManager.saveCookieToStorage(
-      CookieName.RefreshToken,
-      refreshCookle
-    );
+    try {
+      const cookies = await AuthManager.getAllCookiesFromManager();
+      
+      if (Object.keys(cookies).length === 0) {
+        console.info("[AppLifecycleHandler] No cookies found to save");
+        return;
+      }
+
+      console.info("[AppLifecycleHandler] 앱의 중지가 감지되어 모든 쿠키를 저장합니다.");
+      await AuthManager.saveBulkCookiesToStorage(cookies);
+      
+    } catch (error) {
+      console.error("[AppLifecycleHandler] Failed to save cookies:", error);
+    }
   }
 
-  private async restoreAppState(): Promise<null> {
-    // 앱 상태 복구 구현
-    const cookie = await AuthManager.getCookieFromStorage(
-      CookieName.AccessToken
-    );
-    console.info(cookie);
-    return null;
+  private async restoreAppState(): Promise<AppStateData | null> {
+    try {
+      const storedCookies = await AuthManager.getAllCookiesFromStorage();
+      
+      if (Object.keys(storedCookies).length === 0) {
+        console.info("[AppLifecycleHandler] No stored cookies found");
+        return null;
+      }
+
+      console.info("[AppLifecycleHandler] 앱이 재시작되어 쿠키를 복구합니다.");
+      await AuthManager.setBulkCookiesToManager(storedCookies);
+      
+      return {
+        lastActiveAt: Date.now(),
+        cleanExit: true
+      };
+    } catch (error) {
+      console.error("[AppLifecycleHandler] Failed to restore cookies:", error);
+      return null;
+    }
   }
 
   private async disconnectNetwork(): Promise<void> {
