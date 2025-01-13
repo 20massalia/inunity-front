@@ -48,6 +48,7 @@ export type CustomMessageListenerType = Partial<{
 
 export interface NavigationParam {
   path: string;
+  replace?: boolean;
   params?: Record<string, unknown>
 }
 

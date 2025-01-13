@@ -15,7 +15,7 @@ export default function ToggleBoomarkIcon({ article }: ToggleBookmarkProps) {
   const {isBookmarked, bookmarks} = {isBookmarked: false, bookmarks: 40}
 
   const toggleBookmark = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (id: number) => {
       // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
       const prevArticle = queryClient.getQueryData<ArticleDto[]>(["articles"]);
       queryClient.setQueryData(

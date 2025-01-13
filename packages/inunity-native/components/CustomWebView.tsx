@@ -39,13 +39,17 @@ export default function CustomWebView({
           webViewRefs.current[id] = node;
         }
       }}
-     
       source={{
         uri: `${initialUrl}`,
         headers: {
-          'Top-Inset': `${insets.top}`,
+          "Top-Inset": `${insets.top}`,
         },
       }}
+      thirdPartyCookiesEnabled
+      domStorageEnabled
+      incognito={false}
+      webviewDebuggingEnabled
+      javaScriptEnabled
       onNavigationStateChange={props.onNavigationStateChange}
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       sharedCookiesEnabled
@@ -65,11 +69,18 @@ export default function CustomWebView({
           [MessageEventType.Navigation]: () => {
             const navigation = message.value as NavigationEvent;
             if (navigation === -1) router.back();
-            else
-              router.push({
-                pathname: navigation.path as any,
-                params: navigation.params as any,
-              });
+            else {
+              if (navigation.replace)
+                router.replace({
+                  pathname: navigation.path as any,
+                  params: navigation.params as any,
+                });
+              else
+                router.push({
+                  pathname: navigation.path as any,
+                  params: navigation.params as any,
+                });
+            }
           },
           [MessageEventType.ThemeColor]: () => {
             const color = message.value as string;

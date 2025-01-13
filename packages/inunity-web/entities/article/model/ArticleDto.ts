@@ -8,7 +8,7 @@ export default interface ArticleDto {
   date: string;
   likes: number;
   bookmarks: number;
-  articleId: string;
+  articleId: number;
   isLiked: boolean;
   isBookmarked: boolean;
 }

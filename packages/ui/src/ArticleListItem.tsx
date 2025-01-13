@@ -58,7 +58,7 @@ export const ArticleListItem: React.FC<ArticleListItemProps> = ({
 }) => {
   // const isMenuOpen = isMenuOpened
   // const setIsMenuOpen = (value: boolean) =>
-  const {scrollContainerRef} = useScrollView();
+  const scrollContext = useScrollView();
   return (
     <div
       onClick={onClick}
@@ -72,7 +72,7 @@ export const ArticleListItem: React.FC<ArticleListItemProps> = ({
         actions={
           <DropdownMenu
             menuId={`article_${articleId}`}
-            scrollContainerRef={scrollContainerRef}
+            scrollContainerRef={scrollContext?.scrollContainerRef}
             actions={[
               {
                 label: "수정",

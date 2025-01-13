@@ -20,7 +20,6 @@ import AppBar from "../../../widgets/AppBar";
 import NoticeCard from "@/features/notice/ui/NoticeCard";
 import useHomeViewModel from "../../../features/home/useHomeViewModel";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
-import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import ArticleCard from "@/entities/article/ui/ArticleCard";
 import Slider, { Settings } from "react-slick";
 import Image from "next/image";
@@ -61,9 +60,6 @@ export default function HomeContainer() {
   }, [messageManager]);
 
   const router = useNativeRouter();
-  const user = {
-    userId: 1,
-  };
 
   const categoryQuery = useCategories();
 
