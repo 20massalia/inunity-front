@@ -4,7 +4,6 @@ import {
   useState,
   useContext,
   useRef,
-  useEffect,
   PropsWithChildren,
 } from "react";
 import WebView from "react-native-webview";

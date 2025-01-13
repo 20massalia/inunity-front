@@ -23,8 +23,8 @@ export default function Index() {
       setKeyboardHeight(e.endCoordinates.height);
     };
 
-    Keyboard.addListener("keyboardWillShow", handleKeyboardEvents);
-    Keyboard.addListener("keyboardWillHide", () => setKeyboardHeight(0));
+    Keyboard.addListener("keyboardDidShow", handleKeyboardEvents);
+    Keyboard.addListener("keyboardDidHide", () => setKeyboardHeight(0));
 
     return () => {
       Keyboard.removeAllListeners("keyboardWillShow");
@@ -33,11 +33,12 @@ export default function Index() {
 
   return (
     <KeyboardAvoidingView
-      keyboardVerticalOffset={Platform.OS === "ios" ? keyboardHeight : 0}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={keyboardHeight }
       style={{ flex: 1 }}
     >
       <View
-        style={{ height: Dimensions.get("screen").height - keyboardHeight, paddingBottom: 10 }}
+        style={{ height: Dimensions.get("window").height - keyboardHeight, paddingBottom: 10 }}
       >
         <CustomWebView initialUrl={`${webViewOrigin}/auth`} id={"Auth"} />
       </View>
