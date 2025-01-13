@@ -49,6 +49,11 @@ export default function CustomWebView({
       onNavigationStateChange={props.onNavigationStateChange}
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       sharedCookiesEnabled
+      thirdPartyCookiesEnabled
+      domStorageEnabled
+      incognito={false}
+      webviewDebuggingEnabled
+      javaScriptEnabled
       onLoadStart={() => setIsLoading(true)}
       onLoadEnd={() => setIsLoading(false)}
       onMessage={(event) => {

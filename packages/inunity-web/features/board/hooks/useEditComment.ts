@@ -10,6 +10,21 @@ export default function useEditComment() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: CommentPayload & { articleId: number }) => {
+      try {
+        await fetchExtended(`v1/articles/comment`, {
+          method: "PUT",
+          body: {
+            isAnonymous: payload.isAnonymous,
+            content: payload.text,
+            commentId: payload.commentId
+          },
+        });
+      } catch (e) {
+        queryClient.invalidateQueries();
+        throw e;
+      }
+    },
+    onMutate: async (payload: CommentPayload & { articleId: number }) => {
       messageManager?.log(
         "[useEditComment] submitting: ",
         JSON.stringify(payload)
@@ -33,18 +48,6 @@ export default function useEditComment() {
         ArticleQueries.getInvalidationKeys(payload.articleId).details,
         { ...query, comments: optimisticComments }
       );
-      try {
-        await fetchExtended(`v1/articles/${payload.articleId}/comment`, {
-          method: "PUT",
-          body: {
-            isAnonymous: payload.isAnonymous,
-            content: payload.text,
-          },
-        });
-      } catch (e) {
-        queryClient.invalidateQueries();
-        throw e;
-      }
-    },
+    }
   });
 }

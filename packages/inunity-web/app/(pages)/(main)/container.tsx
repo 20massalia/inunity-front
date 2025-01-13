@@ -108,7 +108,9 @@ export default function HomeContainer() {
         }}
       >
         {(articles.isRefetching || notices.isRefetching) && (
-          <div className="flex flex-row justify-center w-full">{<ClipLoader />}</div>
+          <div className="flex flex-row justify-center w-full">
+            {<ClipLoader />}
+          </div>
         )}
         <Slider {...settings} className="w-full mb-7">
           {[banner, banner2, banner3].map((banner, idx) => (
@@ -199,19 +201,21 @@ export default function HomeContainer() {
           <Typography variant="HeadingXLargeBold" className="px-4">
             인기 게시글
           </Typography>
-          {articles.data?.content.map((article) => (
-            <ArticleCard
-              {...article}
-              key={article.articleId}
-              bottomFeatureSlot={
-                <>
-                  <ToggleLikeIcon article={article} />
-                  {/* <ToggleBoomarkIcon article={article} /> */}
-                </>
-              }
-              actions={<ArticleListDropdownMenu article={article} />}
-            />
-          ))}
+          {articles.data?.pages
+            ?.flatMap((page) => page.content)
+            ?.map((article) => (
+              <ArticleCard
+                {...article}
+                key={article.articleId}
+                bottomFeatureSlot={
+                  <>
+                    <ToggleLikeIcon article={article} />
+                    {/* <ToggleBoomarkIcon article={article} /> */}
+                  </>
+                }
+                actions={<ArticleListDropdownMenu article={article} />}
+              />
+            ))}
         </div>
       </ScrollView>
     </>

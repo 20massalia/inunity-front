@@ -48,14 +48,22 @@ export default class ArticleQueries {
     });
   }
 
-  static featuredArticleQuery(length: number) {
-    return queryOptions({
+  static featuredArticleQuery() {
+    return infiniteQueryOptions({
       queryKey: this.QueryKeys.featured(),
-      queryFn: async () => {
+      queryFn: async ({ pageParam }) => {
         return await fetchExtended<Page<ResponseArticleThumbnail>>(
-          `v1/categories/1/articles`
+          `v1/popular/articles`,
+          {
+            query: { page: pageParam, size: 10 },
+          }
         );
       },
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) =>
+        lastPage.last ? undefined : lastPage.number + 1,
+      getPreviousPageParam: (firstPage) =>
+        firstPage.first ? undefined : firstPage.number,
     });
   }
 

@@ -6,46 +6,56 @@ import fetchExtended from "@/lib/fetchExtended";
 import Page from "@/shared/types/Page";
 import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { Typography } from "ui";
 
 export type ToggleLikeProps = {
   article: ResponseArticleThumbnail;
 };
 
+// Todo: Infinite data에 대해 됨. 모든 리스트를 인피니티로 변경 필요.
 export default function ToggleLikeIcon({ article }: ToggleLikeProps) {
   const queryClient = useQueryClient();
   const { likeNum: likeCount, isLiked: liked } = article;
   const toggleLike = useMutation({
     mutationFn: async (id: number) => {
       // Optimistic Update. 제대로 서버에서 요청이 완료될 것을 상정.
-      const prevArticles = queryClient.getQueriesData<
-        Page<ResponseArticleThumbnail>
+      const prevDatas = queryClient.getQueriesData<
+        InfiniteData<Page<ResponseArticleThumbnail>>
       >({ queryKey: ["articles", "list"] });
-      prevArticles.forEach(([queryKey, articles]) => {
-        if (articles && Array.isArray(articles.content)) {
-          const updatedArticles = {
-            ...articles,
-            content: articles.content.map((article) =>
-              article.articleId === id
-                ? {
-                    ...article,
-                    isLiked: !article.isLiked,
-                    likeNum: article.isLiked
-                      ? article.likeNum - 1
-                      : article.likeNum + 1,
-                  }
-                : article
-            ),
-          };
 
-          queryClient.setQueryData(queryKey, updatedArticles);
+      prevDatas.forEach(([queryKey, data]) => {
+        if (data) {
+          const updatedData = {
+            ...data,
+            pages: data.pages.map((page) => ({
+              ...page,
+              content: page.content.map((article) =>
+                article.articleId === id
+                  ? {
+                      ...article,
+                      isLiked: !article.isLiked,
+                      likeNum: article.isLiked
+                        ? article.likeNum - 1
+                        : article.likeNum + 1,
+                    }
+                  : article
+              ),
+            })),
+          };
+          console.log(updatedData);
+
+          queryClient.setQueryData(queryKey, updatedData);
         }
       });
 
       try {
         // 서버 요청 시도
-        await fetchExtended(`v1/articles/${id}/like`, {method: 'POST'});
+        await fetchExtended(`v1/articles/${id}/like`, { method: "POST" });
       } catch (error) {
         // 서버 요청 실패 시 캐시를 무효화하고 데이터를 다시 가져옴
         queryClient.invalidateQueries({ queryKey: ["articles", "list"] });
