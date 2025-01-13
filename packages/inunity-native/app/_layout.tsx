@@ -12,7 +12,7 @@ import useNotification from "@/hooks/useNotification";
 import { WebViewProvider } from "@/components/useWebView";
 import AuthManager, { CookieName } from "@/lib/AuthManager";
 import AppLifecycleHandler from "@/lib/AppLifecycleHandler";
-import { Cookie } from "@react-native-cookies/cookies";
+import { Cookie, Cookies } from "@react-native-cookies/cookies";
 import useCookies from "@/hooks/useCookies";
 import DevMenu from "@/components/DevMenu";
 
@@ -40,12 +40,19 @@ export default function RootLayout() {
     isError: isCookieError,
   } = useCookies();
 
-  const checkCookieValidity = async (url: string, cookie: Cookie) => {
-    if (!cookie) {
+  const checkCookieValidity = async (url: string, cookies: Cookies) => {
+    if (!cookies) {
       throw new Error("No cookie provided");
     }
 
-    const cookieString = `${cookie.name}=${cookie.value}`;
+    const cookieString = Object.entries(cookies)
+      .map(([key, value]) => `${key}=${value.value}`)
+      .join("; ");
+    console.log(cookieString);
+    console.log(
+      "JSESSIONID=47F348F2C4f976C9fE346663DB3D70875C; accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDIyMDE1NDMiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sIm1lbWJlcklkIjo0LCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzM2ODEwMTk0LCJleHAiOjE3MzY4MTM3OTR9.GnqqyXRWl_rpI7rvMpTHp144rDtSZi6vDr_JhRH4iew; refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDIyMDE1NDMiLCJ1c2VySWQiOjQsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3MzY4MTAxOTQsImV4cCI6MTczNjgxMDc5NH0.tOexdnMCmT0m96j6yRlxSFQmbMOmZWyvmeIXMf9vg_4"
+    );
+
     const res = await fetch(url, {
       headers: {
         cookie: cookieString,
@@ -54,7 +61,7 @@ export default function RootLayout() {
     });
 
     if (!res.ok) {
-      throw new Error(res.status.toString());
+      throw new Error(`${res.status} | ${JSON.stringify(await res.json())}`);
     }
 
     const body = (await res.json()) as ApiResponse;
@@ -80,7 +87,7 @@ export default function RootLayout() {
       }
 
       // Validate access token
-      await checkCookieValidity(`${API_BASE_URL}/auth/test`, accessToken);
+      await checkCookieValidity(`${API_BASE_URL}/auth/test`, cookies);
       console.log("Access token valid", accessToken);
 
       // Set cookie in WebView

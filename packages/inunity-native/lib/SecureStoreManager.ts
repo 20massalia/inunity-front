@@ -6,6 +6,7 @@ import { CookieName } from "./AuthManager";
 
 export default class SecureStoreManager {
   static async save(key: CookieName, value: any) {
+    console.debug(`[SecureStoreManager] saving ${key} cookie on store: `, value )
     await SecureStore.setItemAsync(key, JSON.stringify(value));
   }
   static async get(key: CookieName) {

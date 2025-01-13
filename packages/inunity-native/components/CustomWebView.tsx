@@ -50,6 +50,7 @@ export default function CustomWebView({
       incognito={false}
       webviewDebuggingEnabled
       javaScriptEnabled
+      sharedCookiesEnabled
       onNavigationStateChange={props.onNavigationStateChange}
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       onLoadStart={() => setIsLoading(true)}
