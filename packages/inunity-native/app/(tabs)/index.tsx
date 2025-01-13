@@ -1,5 +1,5 @@
 import CustomWebView from "@/components/CustomWebView";
-import { useWebView, webViewOrigin } from "@/components/useWebView";
+import { useWebViewWithId, webViewOrigin } from "@/components/useWebView";
 import { isLightColor } from "@/lib/ColorUtil";
 import {
   parseMessage,
@@ -22,17 +22,9 @@ import AuthManager, { CookieName } from "@/lib/AuthManager";
 import React from "react";
 
 export default function Index() {
-  const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebView("index");
+  const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebViewWithId("index");
   const [cookie, setCookie] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
-
-  useEffect(() => {
-    AuthManager.getCookieFromManager(CookieName.AccessToken).then((cookie) => {
-      console.info(cookie);
-      // if (!cookie) router.replace("/auth");
-      // SplashScreen.hideAsync();
-    });
-  }, [cookie]);
 
   return (
     <WebView
@@ -60,8 +52,8 @@ export default function Index() {
       incognito={false}
       webviewDebuggingEnabled
       javaScriptEnabled
-      userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       sharedCookiesEnabled
+      userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       onLoadStart={() => setIsLoading(true)}
       onLoadEnd={() => setIsLoading(false)}
       onMessage={(event) => {

@@ -1,58 +1,106 @@
 import { Platform } from "react-native";
 import SecureStoreManager from "./SecureStoreManager";
-import CookieManager, { Cookie } from "@react-native-cookies/cookies";
+import CookieManager, { Cookie, Cookies } from "@react-native-cookies/cookies";
 import safeJsonParse from "message-type/safeParseJson";
 
-export const enum CookieName {
+export enum CookieName {
   AccessToken = "accessToken",
   RefreshToken = "refreshToken",
+  SessionId = "JSESSIONID",
 }
 
 export default class AuthManager {
+  private static readonly BASE_URL = "https://server.inunity.club";
+  private static readonly COOKIE_KEYS = Object.values(CookieName);
+
   /**
-   * CookieManager를 이용해 WebView에 저장된 쿠키를 가져옵니다.
-   * @returns
+   * CookieManager를 이용해 WebView에 저장된 모든 쿠키를 가져옵니다.
+   * @returns {Promise<Cookies>} 모든 쿠키 객체
    */
-  static async getCookieFromManager(cookieName: CookieName) {
-    const cookies =
-      Platform.OS === "ios"
-        ? await CookieManager.getAll(true)
-        : await CookieManager.get("https://server.inunity.club");
-
-    return cookies[cookieName];
+  static async getAllCookiesFromManager(): Promise<Cookies> {
+    return Platform.OS === "ios"
+      ? await CookieManager.getAll(true)
+      : await CookieManager.get(this.BASE_URL);
   }
 
-  static async getCookiesFromManager() {
-    const cookies =
-      Platform.OS === "ios"
-        ? await CookieManager.getAll(true)
-        : await CookieManager.get("https://server.inunity.club");
-
-    return cookies;
+  /**
+   * 특정 쿠키를 WebView에 설정합니다.
+   * @param cookie 설정할 쿠키 객체
+   */
+  static async setCookieToManager(cookie: Cookie): Promise<void> {
+    await CookieManager.set(this.BASE_URL, cookie, true);
   }
 
-  static async setCookieToManager(cookie: Cookie) {
-    await CookieManager.set("https://server.inunity.club", cookie, true);
+  /**
+   * 여러 쿠키를 한번에 WebView에 설정합니다.
+   * @param cookies 설정할 쿠키 객체들
+   */
+  static async setBulkCookiesToManager(cookies: Cookies): Promise<void> {
+    await Promise.all(
+      Object.entries(cookies).map(([key, cookie]) =>
+        CookieManager.set(this.BASE_URL, cookie, true)
+      )
+    );
   }
 
-  static async getCookieFromStorage(cookieName: CookieName) {
-    const cookie = await SecureStoreManager.get(cookieName);
+  /**
+   * SecureStore에서 모든 쿠키를 가져옵니다.
+   * @returns {Promise<Cookies>} 저장된 모든 쿠키 객체
+   */
+  static async getAllCookiesFromStorage(): Promise<Cookies> {
+    const cookiesObject: Cookies = {};
 
-    if (!cookie) throw Error("No Cookies in storage!");
-    const parsedCookie = safeJsonParse<Cookie>(cookie);
-    if (parsedCookie === null) {
-      console.error("쿠키 파싱 실패");
-      return;
-    }
+    await Promise.all(
+      this.COOKIE_KEYS.map(async (key) => {
+        const cookieStr = await SecureStoreManager.get(key);
+        if (cookieStr) {
+          const parsedCookie = safeJsonParse<Cookie>(cookieStr);
+          if (parsedCookie !== null) {
+            cookiesObject[key] = JSON.parse(JSON.stringify(parsedCookie));
+          } else {
+            console.error(`쿠키 파싱 실패: ${key}`);
+          }
+        }
+      })
+    );
 
-    return JSON.parse(JSON.stringify(parsedCookie)) as Cookie;
+    return cookiesObject;
   }
 
-  static async saveCookieToStorage(cookieName: CookieName, cookie: Cookie) {
-    SecureStoreManager.save(cookieName, JSON.stringify(cookie));
+  /**
+   * SecureStore에 여러 쿠키를 저장합니다.
+   * @param cookies 저장할 쿠키 객체들
+   */
+  static async saveBulkCookiesToStorage(cookies: Cookies): Promise<void> {
+    await Promise.all(
+      Object.entries(cookies).map(([key, cookie]) => {
+        if (key in CookieName)
+          SecureStoreManager.save(key as CookieName, JSON.stringify(cookie));
+      })
+    );
   }
 
-  static async clearCookieFromStorage(cookieName: CookieName) {
-    SecureStoreManager.clear(cookieName);
+  /**
+   * SecureStore에서 모든 쿠키를 삭제합니다.
+   */
+  static async clearAllCookiesFromStorage(): Promise<void> {
+    this.COOKIE_KEYS.forEach((key) => SecureStoreManager.clear(key));
+  }
+
+  /**
+   * WebView의 모든 쿠키를 삭제합니다.
+   */
+  static async clearAllCookiesFromManager(): Promise<void> {
+    await CookieManager.clearAll();
+  }
+
+  /**
+   * 모든 저장소(WebView, SecureStore)의 쿠키를 삭제합니다.
+   */
+  static async clearAllCookies(): Promise<void> {
+    await Promise.all([
+      this.clearAllCookiesFromStorage(),
+      this.clearAllCookiesFromManager(),
+    ]);
   }
 }

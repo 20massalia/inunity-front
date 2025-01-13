@@ -1,5 +1,5 @@
 import WebView, { WebViewProps } from "react-native-webview";
-import { useWebView, webViewOrigin } from "./useWebView";
+import { useWebViewWithId, webViewOrigin } from "./useWebView";
 import { Platform } from "react-native";
 import {
   handleMessage,
@@ -29,7 +29,7 @@ export default function CustomWebView({
   pageEventHandler?: (pageEvent: PageEvent<any>) => void;
   initialUrl: string;
 } & WebViewProps) {
-  const { setIsLoading, isLoading, webViewRefs } = useWebView(id);
+  const { setIsLoading, isLoading, webViewRefs } = useWebViewWithId(id);
   const insets = useSafeAreaInsets();
 
   return (
@@ -52,7 +52,6 @@ export default function CustomWebView({
       javaScriptEnabled
       onNavigationStateChange={props.onNavigationStateChange}
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
-      sharedCookiesEnabled
       onLoadStart={() => setIsLoading(true)}
       onLoadEnd={() => setIsLoading(false)}
       onMessage={(event) => {

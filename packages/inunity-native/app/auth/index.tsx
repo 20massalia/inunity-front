@@ -1,5 +1,5 @@
 import CustomWebView from "@/components/CustomWebView";
-import { useWebView, webViewOrigin } from "@/components/useWebView";
+import { useWebViewWithId, webViewOrigin } from "@/components/useWebView";
 import { useState, useEffect } from "react";
 import {
   Dimensions,

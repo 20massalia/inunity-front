@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { router, Tabs } from "expo-router";
-import { WebViewProvider, useWebView } from "../../components/useWebView";
+import { WebViewProvider, useWebViewWithId } from "../../components/useWebView";
 import { useMessageManager } from "@/lib/MessageManager";
 import { MessageEventType, NavigationEvent } from "message-type/message-type";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
@@ -27,7 +27,7 @@ const CustomTabBar = ({
   descriptors,
   navigation,
 }: BottomTabBarProps) => {
-  const webView = useWebView("index");
+  const webView = useWebViewWithId("index");
   const messageManager = useMessageManager(webView.webViewRef!);
 
   return (

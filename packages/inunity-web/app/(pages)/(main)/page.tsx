@@ -14,8 +14,8 @@ export default async function Page() {
   const noticeQueryOptions = ArticleQueries.infiniteArticleQuery({categoryId: 1});
   const noticesQuery = await getDehydratedInfiniteQuery(noticeQueryOptions);
   
-  const articleQueryOptions = ArticleQueries.featuredArticleQuery(5);
-  const articleQuery = await getDehydratedQuery(articleQueryOptions);
+  const articleQueryOptions = ArticleQueries.featuredArticleQuery();
+  const articleQuery = await getDehydratedInfiniteQuery(articleQueryOptions);
 
   const categoryQuery = await getDehydratedQuery(CategoryQuery.list());
   
