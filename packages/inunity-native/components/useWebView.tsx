@@ -6,6 +6,7 @@ import {
   useRef,
   useEffect,
   MutableRefObject,
+  PropsWithChildren,
 } from "react";
 import { Alert } from "react-native";
 import WebView from "react-native-webview";
@@ -28,7 +29,7 @@ export const webViewOrigin =
   process.env.EXPO_PUBLIC_WEB_URL ?? "http://localhost:3000/";
 const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
 
-export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
+export const WebViewProvider = ({ children }: PropsWithChildren) => {
   const [activeWebView, setActiveWebView] = useState<string>();
   const [webViews, setWebViews] = useState({ index: webViewOrigin });
   const [isLoading, setIsLoading] = useState(true);
@@ -79,11 +80,17 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
             {
               text: "네이티브 스토리지",
               onPress: async () => {
-                const cookie = await AuthManager.getCookieFromStorage(
-                  CookieName.AccessToken
-                );
-                console.info(cookie);
-                alert(JSON.stringify(cookie));
+                const [accessCookie, refreshCookie] = [
+                  await AuthManager.getCookieFromStorage(
+                    CookieName.AccessToken
+                  ),
+                  await AuthManager.getCookieFromStorage(
+                    CookieName.RefreshToken
+                  ),
+                ];
+
+                console.info(accessCookie, refreshCookie);
+                alert(JSON.stringify([accessCookie, refreshCookie]));
               },
             },
           ]);
@@ -92,7 +99,9 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
       {
         name: "set cookie from storage",
         callback: async () => {
-          const cookie = await AuthManager.getCookieFromStorage(CookieName.AccessToken);
+          const cookie = await AuthManager.getCookieFromStorage(
+            CookieName.AccessToken
+          );
           if (!cookie) {
             console.error("no cookie");
             return;
