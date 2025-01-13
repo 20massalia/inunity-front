@@ -75,7 +75,7 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
       credentials: "include",
       headers:
         method !== "get"
-          ? {  "Content-Type": "application/json", ...init?.headers, }
+          ? { "Content-Type": "application/json", ...init?.headers }
           : undefined,
     });
     const res = parseJsonSafely(await response.text()) as ResponseWrapper<T>;
@@ -111,14 +111,6 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
 const fetchExtended = returnFetchJson({
   // default options
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
-  interceptors: {
-    async response(response, requestArgs, fetch) {
-      if (response.status >= 400) {
-        throw await response.text().then(Error);
-      }
-      return response;
-    },
-  },
 });
 
 export default fetchExtended

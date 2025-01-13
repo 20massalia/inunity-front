@@ -3,6 +3,7 @@
 import { useFunnel } from "@use-funnel/browser";
 import InputForm from "@/features/onboarding/ui/steps/InputForm";
 import CertificateAttach from "./CertificateAttach";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface CertificateSetupFunnelProps {
   onComplete: () => void;
@@ -11,6 +12,12 @@ interface CertificateSetupFunnelProps {
 export function CertificateSetupFunnel({
   onComplete,
 }: CertificateSetupFunnelProps) {
+  const [step, setStep] = useLocalStorage("certificate_setup_step", "Attach");
+  const [context, setContext] = useLocalStorage(
+    "certificate_setup_context",
+    {}
+  );
+
   const funnel = useFunnel<{
     Attach: Record<string, never>;
     SignInOptions: { studentNumber?: string };
@@ -31,6 +38,7 @@ export function CertificateSetupFunnel({
         <CertificateAttach
           onAttachCertificate={() => {
             history.push("SignInOptions", {});
+            setStep("SignInOptions");
           }}
         />
       )}
@@ -42,11 +50,22 @@ export function CertificateSetupFunnel({
               name: "studentNumber",
               placeholder: "아이디",
               value: context.studentNumber || "",
-              setValue: (studentNumber) =>
-                history.replace("SignInOptions", { ...context, studentNumber }),
+              setValue: (studentNumber) => {
+                setContext((prev) => ({
+                  ...prev,
+                  studentNumber,
+                }));
+                history.replace("SignInOptions", {
+                  ...context,
+                  studentNumber,
+                });
+              },
             },
           ]}
-          onSubmit={() => history.push("PasswordForm", {})}
+          onSubmit={() => {
+            history.push("PasswordForm", {});
+            setStep("PasswordForm");
+          }}
         />
       )}
       PasswordForm={({ context, history }) => (
@@ -57,11 +76,22 @@ export function CertificateSetupFunnel({
               name: "password",
               placeholder: "비밀번호",
               value: context.password || "",
-              setValue: (password) =>
-                history.replace("PasswordForm", { ...context, password }),
+              setValue: (password) => {
+                setContext((prev) => ({
+                  ...prev,
+                  password,
+                }));
+                history.replace("PasswordForm", {
+                  ...context,
+                  password,
+                });
+              },
             },
           ]}
-          onSubmit={() => history.push("UserInfoForm", {})}
+          onSubmit={() => {
+            history.push("UserInfoForm", {});
+            setStep("UserInfoForm");
+          }}
         />
       )}
       UserInfoForm={({ context, history }) => (
@@ -72,18 +102,37 @@ export function CertificateSetupFunnel({
               name: "name",
               placeholder: "이름",
               value: context.name || "",
-              setValue: (name) =>
-                history.replace("UserInfoForm", { ...context, name }),
+              setValue: (name) => {
+                setContext((prev) => ({
+                  ...prev,
+                  name,
+                }));
+                history.replace("UserInfoForm", {
+                  ...context,
+                  name,
+                });
+              },
             },
             {
               name: "graduationYear",
               placeholder: "졸업 연월",
               value: context.graduationYear || "",
-              setValue: (graduationYear) =>
-                history.replace("UserInfoForm", { ...context, graduationYear }),
+              setValue: (graduationYear) => {
+                setContext((prev) => ({
+                  ...prev,
+                  graduationYear,
+                }));
+                history.replace("UserInfoForm", {
+                  ...context,
+                  graduationYear,
+                });
+              },
             },
           ]}
-          onSubmit={onComplete}
+          onSubmit={() => {
+            onComplete();
+            setStep("Complete");
+          }}
         />
       )}
     />

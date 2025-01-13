@@ -6,7 +6,7 @@ import {
   handleMessage,
   useMessageManager,
 } from "@/lib/MessageManager";
-import { router } from "expo-router";
+import { Navigator, router, SplashScreen } from "expo-router";
 import { setStatusBarStyle } from "expo-status-bar";
 import {
   MessageEventType,
@@ -18,14 +18,21 @@ import WebView from "react-native-webview";
 import { MutableRefObject, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CookieManager from "@react-native-cookies/cookies";
-import AuthManager from "@/lib/AuthManager";
+import AuthManager, { CookieName } from "@/lib/AuthManager";
 import React from "react";
 
 export default function Index() {
   const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebView("index");
   const [cookie, setCookie] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
-  console.log(insets.top);
+
+  useEffect(() => {
+    AuthManager.getCookieFromManager(CookieName.AccessToken).then((cookie) => {
+      console.info(cookie);
+      // if (!cookie) router.replace("/auth");
+      // SplashScreen.hideAsync();
+    });
+  }, [cookie]);
 
   return (
     <WebView
@@ -35,11 +42,10 @@ export default function Index() {
           webViewRefs.current["index"] = node;
         }
       }}
- 
       source={{
         uri: webViewOrigin,
         headers: {
-          'Top-Inset': `${insets.top}`,
+          "Top-Inset": `${insets.top}`,
         },
         // uri: 'http://localhost:3000/test'
         // uri: 'https://inunity-server.squidjiny.com/v1/auth/test'

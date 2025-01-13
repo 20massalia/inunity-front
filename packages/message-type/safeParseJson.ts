@@ -6,7 +6,7 @@ export default function safeJsonParse<T>(json: string): T | null {
   try {
     const parsed = JSON.parse(json);
     if (typeof parsed === 'string') {
-      console.warn("파싱 결과가 여전히 문자열입니다. 중첩된 JSON 문자열일 수 있습니다.");
+      console.log("파싱 결과가 여전히 문자열입니다. 중첩된 JSON 문자열일 수 있습니다.");
       return safeJsonParse<T>(parsed);
     }
     return parsed as T;

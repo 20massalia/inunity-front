@@ -111,7 +111,7 @@ export default function RootLayout() {
 
   useNotification();
 
-  if (!loaded) {
+  if (!loaded  || !cycleManagerInitialized) {
     return null;
   }
 
@@ -121,6 +121,7 @@ export default function RootLayout() {
         <WebViewProvider>
           <ThemeProvider value={DefaultTheme}>
             <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="auth/index" />
               <Stack.Screen name="+not-found" />
               <Stack.Screen name="article/[categoryId]/index" />
               <Stack.Screen name="article/[categoryId]/write" />
