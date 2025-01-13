@@ -85,7 +85,6 @@ export default function ArticleListContainer({
               bottomFeatureSlot={
                 <>
                   <ToggleLikeIcon article={item} />
-                  <ToggleBoomarkIcon article={item} />
                 </>
               }
             />
