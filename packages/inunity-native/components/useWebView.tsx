@@ -12,6 +12,7 @@ import WebView from "react-native-webview";
 import { registerDevMenuItems } from "expo-dev-menu";
 import AuthManager, { CookieName } from "@/lib/AuthManager";
 import { Href, router } from "expo-router";
+import CookieManager from "@react-native-cookies/cookies";
 
 export type WebViewContextType = {
   webViewRefs: React.MutableRefObject<Record<string, WebView | null>>;
@@ -61,12 +62,67 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
       },
       {
         name: "Get cookies from manager",
+        callback: () => {
+          Alert.alert("디버그 메뉴", "어떤 쿠키를 까볼까요?", [
+            {
+              text: "브라우저",
+              onPress: async () => {
+                const cookies = await AuthManager.getCookieFromManager(
+                  CookieName.AccessToken
+                );
+
+                alert(cookies);
+                console.info(cookies);
+              },
+              style: "cancel",
+            },
+            {
+              text: "네이티브 스토리지",
+              onPress: async () => {
+                const cookie = await AuthManager.getCookieFromStorage(
+                  CookieName.AccessToken
+                );
+                console.info(cookie);
+                alert(JSON.stringify(cookie));
+              },
+            },
+          ]);
+        },
+      },
+      {
+        name: "set cookie from storage",
         callback: async () => {
-          const cookies = await AuthManager.getCookieFromManager(
-            CookieName.AccessToken
+          const cookie = await AuthManager.getCookieFromStorage(CookieName.AccessToken);
+          if (!cookie) {
+            console.error("no cookie");
+            return;
+          }
+          const setSuccess = await CookieManager.set(
+            "https://server.inunity.club",
+            cookie,
+            true
           );
-          console.info(cookies);
-          Alert.alert("디버그", JSON.stringify(cookies));
+          // await AuthManager.setCookieToManager(cookie)
+          const updated = await CookieManager.getAll(true);
+          console.log("cookie set", setSuccess, updated);
+        },
+      },
+      {
+        name: "clear cookies",
+        callback: async () => {
+          Alert.alert("디버그 메뉴", "어떤 쿠키를 지울까요?", [
+            {
+              text: "브라우저",
+              onPress: () => CookieManager.clearAll(),
+              style: "cancel",
+            },
+            {
+              text: "네이티브 스토리지",
+              onPress: () => {
+                AuthManager.clearCookieFromStorage(CookieName.AccessToken);
+              },
+            },
+          ]);
         },
       },
       {
@@ -81,7 +137,7 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
             {
               text: "OK",
               onPress: (value) => {
-                if (value ) router.push(value as Href<string>);
+                if (value) router.push(value as Href<string>);
               },
             },
           ]);

@@ -1,10 +1,11 @@
 import { Platform } from "react-native";
-import SecureStoreManager, { SecureStorageKey } from "./SecureStoreManager";
+import SecureStoreManager from "./SecureStoreManager";
 import CookieManager, { Cookie } from "@react-native-cookies/cookies";
 import safeJsonParse from "message-type/safeParseJson";
 
-export enum CookieName {
+export const enum CookieName {
   AccessToken = "accessToken",
+  RefreshToken = "refreshToken",
 }
 
 export default class AuthManager {
@@ -16,31 +17,42 @@ export default class AuthManager {
     const cookies =
       Platform.OS === "ios"
         ? await CookieManager.getAll(true)
-        : await CookieManager.get(process.env.EXPO_PUBLIC_WEB_URL);
+        : await CookieManager.get("https://server.inunity.club");
 
-    return cookies[cookieName]
+    return cookies[cookieName];
+  }
+
+  static async getCookiesFromManager() {
+    const cookies =
+      Platform.OS === "ios"
+        ? await CookieManager.getAll(true)
+        : await CookieManager.get("https://server.inunity.club");
+
+    return cookies;
   }
 
   static async setCookieToManager(cookie: Cookie) {
-    await CookieManager.set(process.env.EXPO_PUBLIC_WEB_URL, cookie);
+    await CookieManager.set("https://server.inunity.club", cookie, true);
   }
 
-  static async getCookieFromStorage() {
-    const cookie = await SecureStoreManager.get(SecureStorageKey.Cookie);
-    console.log('typeof cookie:', typeof cookie); // 'string'인지 확인
+  static async getCookieFromStorage(cookieName: CookieName) {
+    const cookie = await SecureStoreManager.get(cookieName);
 
-    if (!cookie) throw Error('No Cookies in storage!');
+    if (!cookie) throw Error("No Cookies in storage!");
     const parsedCookie = safeJsonParse<Cookie>(cookie);
-    console.log(parsedCookie, typeof parsedCookie);
     if (parsedCookie === null) {
-      console.error('쿠키 파싱 실패');
+      console.error("쿠키 파싱 실패");
       return;
     }
-    
-    return JSON.parse(JSON.stringify(parsedCookie)) as Cookie
+
+    return JSON.parse(JSON.stringify(parsedCookie)) as Cookie;
   }
 
-  static async saveCookieToStorage(cookie: Cookie) {
-    SecureStoreManager.save(SecureStorageKey.Cookie, JSON.stringify(cookie));
+  static async saveCookieToStorage(cookieName: CookieName, cookie: Cookie) {
+    SecureStoreManager.save(cookieName, JSON.stringify(cookie));
+  }
+
+  static async clearCookieFromStorage(cookieName: CookieName) {
+    SecureStoreManager.clear(cookieName);
   }
 }
