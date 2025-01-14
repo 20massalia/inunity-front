@@ -10,9 +10,9 @@ export interface RequestCreateUpdateContract {
 export default interface ProfileDto {
   nickname: string;
   description: string;
-  graduateDate: string;
-  isGraduation: boolean;
-  isAnonymous: boolean;
+  graduateDate?: string;
+  isGraduation?: boolean;
+  isAnonymous?: boolean;
   organization: string;
   job: string;
   contracts: RequestCreateUpdateContract[];
