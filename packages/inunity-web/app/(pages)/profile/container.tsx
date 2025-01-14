@@ -381,7 +381,7 @@ export default function ProfileContainer({
 
   return (
     <div className="h-full flex flex-col">
-      <LoadingOverlay isLoading={false} />
+      <LoadingOverlay isLoading={isPending} />
       {/* 상단 배너 */}
       <div
         className="relative w-full h-44"

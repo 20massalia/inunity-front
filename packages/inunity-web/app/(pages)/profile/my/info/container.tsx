@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import fetchExtended from "@/lib/fetchExtended";
 import { ContractType } from "@/entities/profile/model/ProfileDto";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import LoadingOverlay from "@/shared/ui/LoadingOverlay";
 
 interface RequestCreateUpdateContract {
   contractId?: number;
@@ -31,6 +32,7 @@ export default function MyInfo() {
   const [profileImageUrl, setProfileImageUrl] = useState<string>("");
   const [newImageFile, setNewImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true); // Overall loading state
 
   const [nickname, setNickname] = useState("");
   const [description, setDescription] = useState("");
@@ -51,6 +53,7 @@ export default function MyInfo() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
+        setLoading(true);
         const response = await fetchExtended<{
           id: number;
           profileImageUrl: string | null;
@@ -63,6 +66,8 @@ export default function MyInfo() {
         setProfileImageUrl(response.profileImageUrl || "");
       } catch (error) {
         console.error("Failed to fetch user information:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -100,6 +105,7 @@ export default function MyInfo() {
     if (!profileData) return;
 
     try {
+      setLoading(true);
       let imageUrl = profileImageUrl;
 
       if (newImageFile) {
@@ -128,10 +134,14 @@ export default function MyInfo() {
           onError: (err) => {
             console.error("수정 실패:", err);
           },
+          onSettled: () => {
+            setLoading(false);
+          },
         }
       );
     } catch (error) {
       console.error("Failed to update profile:", error);
+      setLoading(false);
     }
   };
 
@@ -144,10 +154,9 @@ export default function MyInfo() {
     }
   };
 
-  if (!profileData) return <div>Loading...</div>;
-
   return (
     <div className="flex-col items-center overflow-hidden">
+      <LoadingOverlay isLoading={loading} />
       <AppBar
         center={
           <Typography variant="HeadingNormalBold">프로필 기본 정보</Typography>

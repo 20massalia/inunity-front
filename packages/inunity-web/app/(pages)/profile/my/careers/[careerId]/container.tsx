@@ -11,6 +11,7 @@ import useCareer from "@/entities/profile/hooks/useCareer";
 import useEditCareer from "@/features/profile/hooks/useEditCareer";
 import usePostCareer from "@/features/profile/hooks/usePostCareer";
 import { useQueryClient } from "@tanstack/react-query";
+import LoadingOverlay from "@/shared/ui/LoadingOverlay";
 
 interface MyCareerProps {
   // careerId가 없으면 생성 모드
@@ -24,6 +25,7 @@ export default function MyCareer({ careerId }: MyCareerProps) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [position, setPosition] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const router = useNativeRouter();
   const queryClient = useQueryClient();
@@ -74,6 +76,8 @@ export default function MyCareer({ careerId }: MyCareerProps) {
       return;
     }
 
+    setLoading(true);
+
     if (isEditMode) {
       // === 수정 모드 ===
       editCareer(
@@ -86,12 +90,14 @@ export default function MyCareer({ careerId }: MyCareerProps) {
         },
         {
           onSuccess: () => {
+            setLoading(false);
             console.log("수정 성공");
             queryClient.invalidateQueries({ queryKey: ["careers", userId] });
             queryClient.invalidateQueries({ queryKey: ["profile", userId] });
             router.back();
           },
           onError: (err) => {
+            setLoading(false);
             console.error("수정 실패:", err);
           },
         }
@@ -107,12 +113,14 @@ export default function MyCareer({ careerId }: MyCareerProps) {
         },
         {
           onSuccess: () => {
+            setLoading(false);
             console.log("생성 성공");
             queryClient.invalidateQueries({ queryKey: ["careers", userId] });
             queryClient.invalidateQueries({ queryKey: ["profile", userId] });
             router.back();
           },
           onError: (err) => {
+            setLoading(false);
             console.error("생성 실패:", err);
           },
         }
@@ -122,6 +130,7 @@ export default function MyCareer({ careerId }: MyCareerProps) {
 
   return (
     <div className="flex-col items-center overflow-hidden">
+      <LoadingOverlay isLoading={loading} />
       <AppBar
         center={
           <Typography variant="HeadingNormalBold">

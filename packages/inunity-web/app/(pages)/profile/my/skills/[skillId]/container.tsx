@@ -12,6 +12,7 @@ import { SkillType, SkillLevel } from "@/entities/profile/model/SkillDto";
 import useEditSkill from "@/features/profile/hooks/useEditSkill";
 import usePostSkill from "@/features/profile/hooks/usePostSkill";
 import { useQueryClient } from "@tanstack/react-query";
+import LoadingOverlay from "@/shared/ui/LoadingOverlay";
 
 interface MySkillsProps {
   skillId?: number; // Optional for creation mode
@@ -22,6 +23,7 @@ export default function MySkills({ skillId }: MySkillsProps) {
   const [name, setName] = useState("");
   const [level, setLevel] = useState<SkillLevel>("LOW");
   const [type, setType] = useState<SkillType>("ETC");
+  const [loading, setLoading] = useState(false);
 
   const router = useNativeRouter();
   const queryClient = useQueryClient();
@@ -64,17 +66,23 @@ export default function MySkills({ skillId }: MySkillsProps) {
       return;
     }
 
+    setLoading(true);
+
     if (isEditMode) {
       editSkill(
         { skillId: skillId!, name, level, type },
         {
           onSuccess: () => {
+            setLoading(false);
             console.log("수정 성공");
             queryClient.invalidateQueries({ queryKey: ["skills", userId] });
             queryClient.invalidateQueries({ queryKey: ["profile", userId] });
             router.back();
           },
-          onError: (err) => console.error("수정 실패:", err),
+          onError: (err) => {
+            setLoading(false);
+            console.error("수정 실패:", err);
+          },
         }
       );
     } else {
@@ -82,12 +90,16 @@ export default function MySkills({ skillId }: MySkillsProps) {
         { name, level, type },
         {
           onSuccess: () => {
+            setLoading(false);
             console.log("생성 성공");
             queryClient.invalidateQueries({ queryKey: ["skills", userId] });
             queryClient.invalidateQueries({ queryKey: ["profile", userId] });
             router.back();
           },
-          onError: (err) => console.error("생성 실패:", err),
+          onError: (err) => {
+            setLoading(false);
+            console.error("생성 실패:", err);
+          },
         }
       );
     }
@@ -111,6 +123,7 @@ export default function MySkills({ skillId }: MySkillsProps) {
 
   return (
     <div className="flex-col items-center overflow-hidden">
+      <LoadingOverlay isLoading={loading} />
       <AppBar
         center={
           <Typography variant="HeadingNormalBold">

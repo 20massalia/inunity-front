@@ -156,6 +156,7 @@ import usePortfolio from "@/entities/profile/hooks/usePortfolio";
 import useEditPortfolio from "@/features/profile/hooks/useEditPortfolio";
 import usePostPortfolio from "@/features/profile/hooks/usePostPortfolio";
 import { useQueryClient } from "@tanstack/react-query";
+import LoadingOverlay from "@/shared/ui/LoadingOverlay";
 
 interface MyPortfolioProps {
   portfolioId?: number; // Optional for creation mode
@@ -167,6 +168,7 @@ export default function MyPortfolio({ portfolioId }: MyPortfolioProps) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const router = useNativeRouter();
   const queryClient = useQueryClient();
@@ -212,17 +214,23 @@ export default function MyPortfolio({ portfolioId }: MyPortfolioProps) {
       return;
     }
 
+    setLoading(true);
+
     if (isEditMode) {
       editPortfolio(
         { portfolioId: portfolioId!, title, startDate, endDate, url },
         {
           onSuccess: () => {
+            setLoading(false);
             console.log("수정 성공");
             queryClient.invalidateQueries({ queryKey: ["portfolios", userId] });
             queryClient.invalidateQueries({ queryKey: ["profile", userId] });
             router.back();
           },
-          onError: (err) => console.error("수정 실패:", err),
+          onError: (err) => {
+            setLoading(false);
+            console.error("수정 실패:", err);
+          },
         }
       );
     } else {
@@ -230,12 +238,16 @@ export default function MyPortfolio({ portfolioId }: MyPortfolioProps) {
         { title, startDate, endDate, url },
         {
           onSuccess: () => {
+            setLoading(false);
             console.log("생성 성공");
             queryClient.invalidateQueries({ queryKey: ["portfolios", userId] });
             queryClient.invalidateQueries({ queryKey: ["profile", userId] });
             router.back();
           },
-          onError: (err) => console.error("생성 실패:", err),
+          onError: (err) => {
+            setLoading(false);
+            console.error("생성 실패:", err);
+          },
         }
       );
     }
@@ -243,6 +255,7 @@ export default function MyPortfolio({ portfolioId }: MyPortfolioProps) {
 
   return (
     <div className="flex-col items-center overflow-hidden">
+      <LoadingOverlay isLoading={loading} />
       <AppBar
         center={
           <Typography variant="HeadingNormalBold">
