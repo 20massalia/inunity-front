@@ -6,7 +6,7 @@ import { CardProps } from "./Card";
 
 export function DetailedCard(props: CardProps<'detailed'>) {
   return (
-    <div className="p-3 w-[80vw]  bg-white rounded border border-black/10 flex flex-col h-[350px]">
+    <div className="p-3 w-[80vw]  bg-white rounded border border-black/10 flex flex-col h-full">
       <img 
         className="h-32 w-full object-cover"
         src={props.thumbnailUrl ?? "https://via.placeholder.com/276x128"} 
