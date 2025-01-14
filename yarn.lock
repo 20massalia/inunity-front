@@ -4420,9 +4420,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-firebase/app@npm:^21.6.0":
-  version: 21.6.0
-  resolution: "@react-native-firebase/app@npm:21.6.0"
+"@react-native-firebase/app@npm:^21.6.2":
+  version: 21.6.2
+  resolution: "@react-native-firebase/app@npm:21.6.2"
   dependencies:
     firebase: "npm:10.13.2"
   peerDependencies:
@@ -4432,7 +4432,20 @@ __metadata:
   peerDependenciesMeta:
     expo:
       optional: true
-  checksum: 10c0/45fc5c065738d782e15cd6bbf2bb4e0bb17b7d1e046472bc72e3e5dddfbd43218dbc9b94b09773c938f0501fdbd1d3793fc2ac74fb327ff95685156e57a25082
+  checksum: 10c0/e6a6cf4543dbc240e5e19e11023f2db09ad02d2b18dd2d932e4bc3b2e3d6f642bf79805d1f7d2959fa62c91ba6a4479499990f72f6034d2ca0d8632ba36311eb
+  languageName: node
+  linkType: hard
+
+"@react-native-firebase/messaging@npm:^21.6.2":
+  version: 21.6.2
+  resolution: "@react-native-firebase/messaging@npm:21.6.2"
+  peerDependencies:
+    "@react-native-firebase/app": 21.6.2
+    expo: ">=47.0.0"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 10c0/ba9bf397179508dd8e1a62b1471a7992af0f547663288e1615994232c3c4685e9ffc3955c6a2d26350993603df5f4ad41b8b33c73dea224eb402b4cd00b4b797
   languageName: node
   linkType: hard
 
@@ -10157,7 +10170,8 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.2"
     "@react-native-cookies/cookies": "npm:^6.2.1"
-    "@react-native-firebase/app": "npm:^21.6.0"
+    "@react-native-firebase/app": "npm:^21.6.2"
+    "@react-native-firebase/messaging": "npm:^21.6.2"
     "@react-native-menu/menu": "npm:^1.1.6"
     "@react-navigation/native": "npm:^6.0.2"
     "@types/jest": "npm:^29.5.12"
@@ -16625,11 +16639,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A^5#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.3#optional!builtin<compat/typescript>":
   version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"
+  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=b45daf"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/7c9d2e07c81226d60435939618c91ec2ff0b75fbfa106eec3430f0fcf93a584bc6c73176676f532d78c3594fe28a54b36eb40b3d75593071a7ec91301533ace7
+  checksum: 10c0/ac8307bb06bbfd08ae7137da740769b7d8c3ee5943188743bb622c621f8ad61d244767480f90fbd840277fbf152d8932aa20c33f867dea1bb5e79b187ca1a92f
   languageName: node
   linkType: hard
 

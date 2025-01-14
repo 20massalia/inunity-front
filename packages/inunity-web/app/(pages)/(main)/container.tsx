@@ -39,11 +39,17 @@ import { ClipLoader } from "react-spinners";
 
 export default function HomeContainer() {
   // ViewModel 이용
-  const {
-    articles,
-    notices,
-    notifications: { length },
-  } = useHomeViewModel();
+  const { articles, notices, notifications } = useHomeViewModel();
+  const unreadCount =
+    notifications.data?.pages.reduce((total, page) => {
+      return (
+        total +
+        page.content.reduce((pageTotal, notification) => {
+          return pageTotal + (notification.isRead ? 0 : 1);
+        }, 0)
+      );
+    }, 0) ?? 0;
+
   const { messageManager } = useMessageManager();
   const settings: Settings = {
     dots: true,
@@ -80,13 +86,13 @@ export default function HomeContainer() {
               onClick={() => router.push("/notification")}
             >
               <FontAwesomeIcon fontSize={24} icon={faBell} />
-              {(length ?? 0) > 0 && (
+              {(unreadCount ?? 0) > 0 && (
                 <div className=" absolute -bottom-2 -right-2 w-5 h-5 bg-red-600 rounded-full flex justify-center items-center ">
                   <Typography
                     className="text-white"
                     variant="ParagraphNormalBold"
                   >
-                    {length}
+                    {unreadCount}
                   </Typography>
                 </div>
               )}

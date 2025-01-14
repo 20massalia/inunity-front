@@ -73,7 +73,7 @@ export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="w-full">
       {/* 탭 헤더 */}
       <div className="flex border-b border-gray-200">
         {tabs.map((tab) => (

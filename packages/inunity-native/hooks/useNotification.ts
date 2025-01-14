@@ -1,101 +1,107 @@
 import { useState, useRef, useEffect } from "react";
 import { Platform } from "react-native";
-import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
+import messaging from "@react-native-firebase/messaging";
+import AuthManager from "@/lib/AuthManager";
 
+async function updateTokenOnServer(token: string) {
+  const cookies = await AuthManager.getAllCookiesFromStorage();
+  const cookieString = Object.entries(cookies)
+    .map(([key, value]) => `${key}=${value.value}`)
+    .join("; ");
 
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-
-  // if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    // Learn more about projectId:
-    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-    // EAS projectId is used here.
-    try {
-      console.log('loading project id ')
-      const projectId =
-        Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
-      if (!projectId) {
-        throw new Error('Project ID not found');
+  try {
+    const response = await fetch(
+      "https://server.inunity.club/v1/fcm/token?token=" + token,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          cookie: cookieString,
+        },
+        credentials: "omit",
       }
-      console.log('proj id: ', projectId)
-      
-      token = (await Notifications.getExpoPushTokenAsync({
-        projectId,
-      })).data;
+    );
 
-      console.log(token);
-    } catch (e) {
-      console.log(e)
-      token = `${e}`;
+    if (!response.ok) {
+      throw new Error("Failed to update token on server");
     }
-  // } else {
-  //   alert('Must use physical device for Push Notifications');
-  // }
 
-  return token;
+    console.log("Successfully updated push token on server");
+  } catch (error) {
+    console.error("Error updating token on server:", error);
+  }
 }
 
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+  if (enabled) {
+    console.log("Authorization status:", authStatus);
+    return true;
+  }
 
+  console.log("User declined push notifications");
+  return false;
+}
 
 export default function useNotification() {
-  
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([]);
-  const [notification, setNotification] = useState<Notifications.Notification | undefined>(
-    undefined
-  );
-  const notificationListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
+  const [fcmToken, setFcmToken] = useState("");
+  const [notification, setNotification] = useState<any>(undefined);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token ?? ''));
+    const initialize = async () => {
+      const hasPermission = await requestUserPermission();
+      if (hasPermission) {
+        const token = await messaging().getToken();
+        if (token) {
+          setFcmToken(token);
+          updateTokenOnServer(token);
+        }
+      }
+    };
 
-    if (Platform.OS === 'android') {
-      Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
-    }
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+    initialize();
 
-    Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    const unsubscribeOnMessage = messaging().onMessage(
+      async (remoteMessage) => {
+        console.log(
+          "A new FCM message arrived!",
+          JSON.stringify(remoteMessage)
+        );
+        setNotification(remoteMessage);
+      }
+    );
+
+    const unsubscribeOnNotificationOpenedApp =
+      messaging().onNotificationOpenedApp((remoteMessage) => {
+        console.log(
+          "Notification caused app to open from background state:",
+          JSON.stringify(remoteMessage)
+        );
+      });
+
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            "Notification caused app to open from quit state:",
+            JSON.stringify(remoteMessage)
+          );
+        }
+      });
 
     return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(notificationListener.current);
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
+      unsubscribeOnMessage();
+      unsubscribeOnNotificationOpenedApp();
     };
   }, []);
 
-  
+  return {
+    fcmToken,
+    notification,
+  };
 }

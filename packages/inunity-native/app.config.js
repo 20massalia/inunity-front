@@ -39,6 +39,7 @@ export default {
       "expo-router",
       "expo-secure-store",
       "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
       [
         "expo-build-properties",
         {
