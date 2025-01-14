@@ -16,7 +16,7 @@ import fetchExtended from "@/lib/fetchExtended";
 import LoadingOverlay from "@/shared/ui/LoadingOverlay";
 import useProfile from "@/entities/profile/hooks/useProfile";
 import useSkill from "@/entities/profile/hooks/useSkill";
-// import usePortfolioOG from "@/entities/profile/hooks/usePortfolioOG";
+import usePortfolioOG from "@/entities/profile/hooks/usePortfolioOG";
 import useCareer from "@/entities/profile/hooks/useCareer";
 import useDeleteSkill from "@/features/profile/hooks/useDeleteSkill";
 import useDeleteCareer from "@/features/profile/hooks/useDeleteCareer";
@@ -95,7 +95,7 @@ export default function ProfileContainer({
 
   const { data: profile, isPending: isProfileLoading } = useProfile(userId!);
   const { data: skills, isPending: isSkillsLoading } = useSkill(userId!);
-  // const { portfolio, ogData, isPortfolioLoading } = usePortfolioOG(userId!);
+  const { portfolio, ogData, isPortfolioLoading } = usePortfolioOG(userId!);
   const { data: careers, isLoading: isCareersLoading } = useCareer(userId!);
   const { mutate: deleteCareer, isPending: isDeleteCareerLoading } =
     useDeleteCareer(userId!);
@@ -225,7 +225,6 @@ export default function ProfileContainer({
   /*
     [2] 프로젝트 탭 (projectHistory)
   */
-  /*
   const ProjectsTabContent = () => (
     <div className="flex flex-col gap-4 mt-4 px-2">
       {portfolio && portfolio.length > 0 ? (
@@ -278,10 +277,9 @@ export default function ProfileContainer({
       </Button>
     </div>
   );
-  */
-  const ProjectsTabContent = () => (
-    <div className="text-center text-gray-500">프로젝트 탭은 주석 처리됨</div>
-  );
+  // const ProjectsTabContent = () => (
+  //   <div className="text-center text-gray-500">프로젝트 탭은 주석 처리됨</div>
+  // );
 
   /*
     [3] 사용 기술 탭 (skill)
