@@ -183,7 +183,7 @@ export default function HomeContainer() {
           </Typography>
         </div>
         <div className="text-pri p-4  w-full ">
-          <div className=" justify-start items-start gap-4 flex overflow-x-scroll">
+          <div className=" justify-start  gap-4 flex overflow-x-scroll overflow-y-hidden">
             {notices.data?.pages
               .flatMap((page) => page.content)
               .map((notice) => (

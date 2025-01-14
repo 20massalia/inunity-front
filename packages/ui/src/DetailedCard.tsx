@@ -6,7 +6,7 @@ import { CardProps } from "./Card";
 
 export function DetailedCard(props: CardProps<'detailed'>) {
   return (
-    <div className="p-3 bg-white rounded border border-black/10 flex flex-col h-full">
+    <div className="p-3 w-[80vw]  bg-white rounded border border-black/10 flex flex-col h-[350px]">
       <img 
         className="h-32 w-full object-cover"
         src={props.thumbnailUrl ?? "https://via.placeholder.com/276x128"} 
@@ -34,7 +34,7 @@ export function DetailedCard(props: CardProps<'detailed'>) {
             {props.title}
           </div>
         </div>
-        <div className="text-black/50 text-sm font-medium w-[70vw] line-clamp-3">
+        <div className="text-black/50 text-sm font-medium  line-clamp-3">
           {props.content}
         </div>
           {props.bottomFeatureSlot}

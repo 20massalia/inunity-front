@@ -12,9 +12,6 @@ export default function NoticeCard({ ...notice }: ResponseArticleThumbnail) {
       variant='detailed'
       fromUpdate={notice.updatedAt.toDateString()}
       isBookmarked={false}
-      bottomFeatureSlot={
-        <ToggleBoomarkIcon article={notice}/>
-      }
     />
   );
 }
