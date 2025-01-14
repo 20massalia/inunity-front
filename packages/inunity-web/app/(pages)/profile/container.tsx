@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import { SwipeableTabs, Tab, Typography } from "ui";
+import { Button, SwipeableTabs, Tab, Typography } from "ui";
 import { DropdownMenu } from "ui/src/DropdownMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -41,6 +41,9 @@ export default function ProfileContainer({
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(0);
 
+  // 본인 프로필 여부 (내 프로필 모드)
+  const isOwner = !initialUserId;
+
   // 내 프로필 모드이면(userId가 없으면) /v1/users/information에서 userId를 가져옴
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -65,19 +68,29 @@ export default function ProfileContainer({
     fetchUserInfo();
   }, [initialUserId]);
 
+  // 아이콘별 연락처 url 달기
+  const handleIconClick = (platform: string) => {
+    const contract = profile?.contracts?.find(
+      (c) => c.name.toLowerCase() === platform.toLowerCase()
+    );
+
+    if (contract?.url) {
+      window.open(contract.url, "_blank");
+    } else {
+      alert(`${platform} URL이 설정되지 않았어요 😢`);
+    }
+  };
+
   const { data: profile, isPending: isProfileLoading } = useProfile(userId!);
   const { data: skills, isPending: isSkillsLoading } = useSkill(userId!);
   // const { portfolio, ogData, isPortfolioLoading } = usePortfolioOG(userId!);
   const { data: careers, isLoading: isCareersLoading } = useCareer(userId!);
   const { mutate: deleteCareer, isPending: isDeleteCareerLoading } =
-    useDeleteCareer(userId || 0);
+    useDeleteCareer(userId!);
   const { mutate: deletePortfolio, isPending: isDeletePortfolioLoading } =
-    useDeletePortfolio(userId || 0);
+    useDeletePortfolio(userId!);
   const { mutate: deleteSkill, isPending: isDeleteSkillLoading } =
-    useDeleteSkill(userId || 0);
-
-  // 본인 프로필 여부 (내 프로필 모드)
-  const isOwner = !initialUserId;
+    useDeleteSkill(userId!);
 
   // 로딩 처리
   const isDataLoading =
@@ -191,6 +204,9 @@ export default function ProfileContainer({
           입력된 경력이 없어요. 😢
         </div>
       )}
+      <Button size="large" onClick={() => router.push(`/profile/my/careers`)}>
+        추가하기
+      </Button>
     </div>
   );
 
@@ -242,6 +258,12 @@ export default function ProfileContainer({
           입력된 프로젝트가 없어요. 😢
         </div>
       )}
+      <Button
+        size="large"
+        onClick={() => router.push(`/profile/my/projects/page`)}
+      >
+        추가하기
+      </Button>
     </div>
   );
   */
@@ -301,6 +323,12 @@ export default function ProfileContainer({
             입력된 기술이 없어요. 😢
           </div>
         )}
+        <Button
+          size="large"
+          onClick={() => router.push(`/profile/my/skills/page`)}
+        >
+          추가하기
+        </Button>
       </div>
     );
   };
@@ -308,7 +336,7 @@ export default function ProfileContainer({
   // Tabs
   const tabs: Tab[] = [
     {
-      title: "경력",
+      title: "활동",
       id: 0,
       content: <CareersTabContent />,
     },
@@ -373,10 +401,7 @@ export default function ProfileContainer({
           "
         >
           <img
-            src={
-              avatarUrl ||
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvb3gXJk30-3FIzUq_daOcVoHvflOva4AdIA&s"
-            }
+            src={avatarUrl || "https://via.placeholder.com/116x116"}
             alt="profile image"
             className="object-cover w-full h-full"
           />
@@ -384,14 +409,20 @@ export default function ProfileContainer({
 
         <div className="flex flex-col justify-center ml-4 mt-1">
           <div className="flex flex-row gap-4 text-xl text-gray-600">
-            <FontAwesomeIcon icon={faMessage} className="cursor-pointer" />
+            <FontAwesomeIcon
+              icon={faMessage}
+              className="cursor-pointer"
+              onClick={() => handleIconClick("KakaoTalk")}
+            />
             <FontAwesomeIcon
               icon={faGithub as IconProp}
               className="cursor-pointer"
+              onClick={() => handleIconClick("Github")}
             />
             <FontAwesomeIcon
               icon={faInstagram as IconProp}
               className="cursor-pointer"
+              onClick={() => handleIconClick("Instagram")}
             />
           </div>
           {profile.description ? (

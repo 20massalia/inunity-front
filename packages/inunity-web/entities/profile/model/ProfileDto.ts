@@ -15,5 +15,6 @@ export default interface ProfileDto {
   isAnonymous?: boolean;
   organization: string;
   job: string;
+  profileImageUrl: string;
   contracts: RequestCreateUpdateContract[];
 }

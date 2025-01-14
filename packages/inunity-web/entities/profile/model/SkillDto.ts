@@ -9,7 +9,7 @@ export type SkillType =
   | "ETC";
 
 export default interface SkillDto {
-  skillId?: number;
+  skillId: number;
   type: SkillType;
   name: string;
   level: SkillLevel;

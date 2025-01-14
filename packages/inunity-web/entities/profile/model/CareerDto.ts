@@ -1,5 +1,5 @@
 export default interface CareerDto {
-  careerId?: number;
+  careerId: number;
   companyName: string;
   position: string;
   startDate: string;

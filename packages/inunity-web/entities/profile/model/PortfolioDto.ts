@@ -1,6 +1,6 @@
 export default interface PortfolioDto {
   title: string;
-  portfolioId?: number;
+  portfolioId: number;
   url: string;
   startDate: string;
   endDate: string;

@@ -9,9 +9,16 @@ import { Input, Typography } from "ui";
 import fetchExtended from "@/lib/fetchExtended";
 import useCareer from "@/entities/profile/hooks/useCareer";
 import useEditCareer from "@/features/profile/hooks/useEditCareer";
+import usePostCareer from "@/features/profile/hooks/usePostCareer";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function MyCareer({ careerId }: { careerId: number }) {
+interface MyCareerProps {
+  // careerId가 없으면 생성 모드
+  // 있으면 수정 모드로 간주
+  careerId?: number;
+}
+
+export default function MyCareer({ careerId }: MyCareerProps) {
   const [userId, setUserId] = useState<number | null>(null);
   const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -20,8 +27,13 @@ export default function MyCareer({ careerId }: { careerId: number }) {
 
   const router = useNativeRouter();
   const queryClient = useQueryClient();
-  const { data: careers, isLoading } = useCareer(userId || 0);
+
+  // 수정 모드인지 생성 모드인지 구분
+  const isEditMode = !!careerId;
+
   const { mutate: editCareer } = useEditCareer(userId || 0);
+  const { mutate: postCareer } = usePostCareer(userId || 0);
+  const { data: careers, isLoading } = useCareer(isEditMode ? userId || 0 : 0);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -38,12 +50,12 @@ export default function MyCareer({ careerId }: { careerId: number }) {
         console.error("Failed to fetch user information:", error);
       }
     };
-
     fetchUserInfo();
   }, []);
 
+  // 수정 모드라면, 기존 경력 정보를 로컬 state에 세팅
   useEffect(() => {
-    if (!isLoading && careers) {
+    if (isEditMode && !isLoading && careers) {
       const career = careers.find((c) => c.careerId === Number(careerId));
       if (career) {
         setCompanyName(career.companyName || "");
@@ -54,43 +66,75 @@ export default function MyCareer({ careerId }: { careerId: number }) {
         console.warn(`No career found for careerId: ${careerId}`);
       }
     }
-  }, [careers, careerId, isLoading]);
+  }, [careers, careerId, isLoading, isEditMode]);
 
-  const handleUpdate = () => {
-    editCareer(
-      {
-        careerId,
-        companyName,
-        startDate,
-        endDate,
-        position,
-      },
-      {
-        onSuccess: () => {
-          console.log("수정 성공");
+  const handleSubmit = () => {
+    if (!userId) {
+      alert("유저 정보를 불러오지 못했습니다.");
+      return;
+    }
 
-          queryClient.invalidateQueries({ queryKey: ["careers", userId] });
-          queryClient.invalidateQueries({ queryKey: ["profile", userId] });
-          router.back();
+    if (isEditMode) {
+      // === 수정 모드 ===
+      editCareer(
+        {
+          careerId: careerId!,
+          companyName,
+          startDate,
+          endDate,
+          position,
         },
-        onError: (err) => {
-          console.error("수정 실패:", err);
+        {
+          onSuccess: () => {
+            console.log("수정 성공");
+            queryClient.invalidateQueries({ queryKey: ["careers", userId] });
+            queryClient.invalidateQueries({ queryKey: ["profile", userId] });
+            router.back();
+          },
+          onError: (err) => {
+            console.error("수정 실패:", err);
+          },
+        }
+      );
+    } else {
+      // === 생성 모드 ===
+      postCareer(
+        {
+          companyName,
+          startDate,
+          endDate,
+          position,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            console.log("생성 성공");
+            queryClient.invalidateQueries({ queryKey: ["careers", userId] });
+            queryClient.invalidateQueries({ queryKey: ["profile", userId] });
+            router.back();
+          },
+          onError: (err) => {
+            console.error("생성 실패:", err);
+          },
+        }
+      );
+    }
   };
 
   return (
     <div className="flex-col items-center overflow-hidden">
       <AppBar
-        center={<Typography variant="HeadingNormalBold">경력 관리</Typography>}
+        center={
+          <Typography variant="HeadingNormalBold">
+            {isEditMode ? "경력 수정" : "경력 생성"}
+          </Typography>
+        }
         leftIcon={
           <FontAwesomeIcon icon={faChevronLeft} onClick={() => router.back()} />
         }
         rightIcon={
           <div
             className="w-fit text-sm font-medium whitespace-nowrap cursor-pointer"
-            onClick={handleUpdate}
+            onClick={handleSubmit}
           >
             완료
           </div>
@@ -113,13 +157,13 @@ export default function MyCareer({ careerId }: { careerId: number }) {
             <Input
               value={startDate}
               setValue={setStartDate}
-              placeholder="시작 일자"
+              placeholder="시작 일자(YYYY-MM-DD)"
               type="date"
             />
             <Input
               value={endDate}
               setValue={setEndDate}
-              placeholder="종료 일자"
+              placeholder="종료 일자(YYYY-MM-DD)"
               type="date"
             />
           </div>

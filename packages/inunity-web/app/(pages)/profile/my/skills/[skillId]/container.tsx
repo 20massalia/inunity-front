@@ -1,81 +1,96 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "@/widgets/AppBar";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState, useEffect } from "react";
 import { Input, Typography } from "ui";
 import fetchExtended from "@/lib/fetchExtended";
 import useSkill from "@/entities/profile/hooks/useSkill";
 import { SkillType, SkillLevel } from "@/entities/profile/model/SkillDto";
 import useEditSkill from "@/features/profile/hooks/useEditSkill";
+import usePostSkill from "@/features/profile/hooks/usePostSkill";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function MySkills({ skillId }: { skillId: number }) {
+interface MySkillsProps {
+  skillId?: number; // Optional for creation mode
+}
+
+export default function MySkills({ skillId }: MySkillsProps) {
   const [userId, setUserId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [level, setLevel] = useState<SkillLevel>("LOW");
   const [type, setType] = useState<SkillType>("ETC");
 
-  const { data: skills, isLoading } = useSkill(userId || 0);
   const router = useNativeRouter();
   const queryClient = useQueryClient();
+
+  const isEditMode = !!skillId;
+
+  const { data: skills, isLoading } = useSkill(isEditMode ? userId || 0 : 0);
   const { mutate: editSkill } = useEditSkill(userId || 0);
+  const { mutate: postSkill } = usePostSkill(userId || 0);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const response = await fetchExtended<{ id: number }>(
           "/v1/users/information",
-          {
-            method: "GET",
-            credentials: "include",
-          }
+          { method: "GET", credentials: "include" }
         );
         setUserId(response.id);
       } catch (error) {
         console.error("Failed to fetch user information:", error);
       }
     };
-
     fetchUserInfo();
   }, []);
 
   useEffect(() => {
-    if (!isLoading && skills) {
-      const skill = skills.find((s) => s.skillId === Number(skillId));
+    if (isEditMode && !isLoading && skills) {
+      const skill = skills.find((s) => s.skillId === skillId);
       if (skill) {
         setName(skill.name || "");
         setLevel(skill.level || "LOW");
         setType(skill.type || "ETC");
-      } else {
-        console.warn("Skill not found for skillId:", skillId);
       }
     }
-  }, [skills, skillId, isLoading]);
+  }, [skills, skillId, isLoading, isEditMode]);
 
-  const handleUpdate = () => {
-    editSkill(
-      {
-        skillId,
-        name,
-        level,
-        type,
-      },
-      {
-        onSuccess: () => {
-          console.log("수정 성공");
+  const handleSubmit = () => {
+    if (!userId) {
+      alert("유저 정보를 불러오지 못했습니다.");
+      return;
+    }
 
-          queryClient.invalidateQueries({ queryKey: ["skills", userId] });
-          queryClient.invalidateQueries({ queryKey: ["profile", userId] });
-          router.back();
-        },
-        onError: (err) => {
-          console.error("수정 실패:", err);
-        },
-      }
-    );
+    if (isEditMode) {
+      editSkill(
+        { skillId: skillId!, name, level, type },
+        {
+          onSuccess: () => {
+            console.log("수정 성공");
+            queryClient.invalidateQueries({ queryKey: ["skills", userId] });
+            queryClient.invalidateQueries({ queryKey: ["profile", userId] });
+            router.back();
+          },
+          onError: (err) => console.error("수정 실패:", err),
+        }
+      );
+    } else {
+      postSkill(
+        { name, level, type },
+        {
+          onSuccess: () => {
+            console.log("생성 성공");
+            queryClient.invalidateQueries({ queryKey: ["skills", userId] });
+            queryClient.invalidateQueries({ queryKey: ["profile", userId] });
+            router.back();
+          },
+          onError: (err) => console.error("생성 실패:", err),
+        }
+      );
+    }
   };
 
   const skillTypes: SkillType[] = [
@@ -98,15 +113,17 @@ export default function MySkills({ skillId }: { skillId: number }) {
     <div className="flex-col items-center overflow-hidden">
       <AppBar
         center={
-          <Typography variant="HeadingNormalBold">사용 기술 관리</Typography>
+          <Typography variant="HeadingNormalBold">
+            {isEditMode ? "사용 기술 수정" : "사용 기술 생성"}
+          </Typography>
         }
         leftIcon={
           <FontAwesomeIcon icon={faChevronLeft} onClick={() => router.back()} />
         }
         rightIcon={
           <div
-            className="w-fit text-sm font-medium whitespace-nowrap"
-            onClick={handleUpdate}
+            className="w-fit text-sm font-medium whitespace-nowrap cursor-pointer"
+            onClick={handleSubmit}
           >
             완료
           </div>
@@ -114,7 +131,6 @@ export default function MySkills({ skillId }: { skillId: number }) {
       />
 
       <div className="self-stretch flex flex-col items-start gap-6 px-5 py-4">
-        {/* 기술 이름 */}
         <div className="flex flex-col gap-2">
           <Typography variant="HeadingSmallBold">기술 이름</Typography>
           <Input
@@ -123,8 +139,6 @@ export default function MySkills({ skillId }: { skillId: number }) {
             placeholder="기술 이름을 입력하세요"
           />
         </div>
-
-        {/* 기술 타입 */}
         <div className="flex flex-col gap-2">
           <Typography variant="HeadingSmallBold">기술 타입</Typography>
           <select
@@ -139,8 +153,6 @@ export default function MySkills({ skillId }: { skillId: number }) {
             ))}
           </select>
         </div>
-
-        {/* 기술 수준 */}
         <div className="flex flex-col gap-2">
           <Typography variant="HeadingSmallBold">기술 수준</Typography>
           <div className="flex gap-4">
