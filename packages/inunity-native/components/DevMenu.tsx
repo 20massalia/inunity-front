@@ -65,6 +65,12 @@ export default function DevMenu({ children }: PropsWithChildren) {
               `[WebView 쿠키]\n${JSON.stringify(managerCookies, null, 2)}\n\n` +
               `[Storage 쿠키]\n${JSON.stringify(storageCookies, null, 2)}`
             );
+            console.debug(
+              "현재 쿠키 상태",
+              `[WebView 쿠키]\n${JSON.stringify(managerCookies, null, 2)}\n\n` +
+              `[Storage 쿠키]\n${JSON.stringify(storageCookies, null, 2)}`
+
+            )
           } catch (error) {
             Alert.alert("에러", "쿠키 조회 실패: " + error);
           }

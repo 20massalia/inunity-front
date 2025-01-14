@@ -16,7 +16,7 @@ export default function useSubmitArticle() {
       isAnonymous,
       categoryId,
     }: SubmitArticleRequest) => {
-      await fetchExtended(`v1/articles/${categoryId}`, {
+      return await fetchExtended(`v1/articles/${categoryId}`, {
         body: { title, content, isAnonymous },
         method: 'POST',
       });

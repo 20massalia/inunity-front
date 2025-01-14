@@ -146,7 +146,7 @@ class AppLifecycleHandler {
       }
 
       console.info("[AppLifecycleHandler] 앱이 재시작되어 쿠키를 복구합니다.");
-      await AuthManager.setBulkCookiesToManager(storedCookies);
+      // await AuthManager.setBulkCookiesToManager(storedCookies);
       
       return {
         lastActiveAt: Date.now(),

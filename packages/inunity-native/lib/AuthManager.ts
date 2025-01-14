@@ -9,6 +9,10 @@ export enum CookieName {
   SessionId = "JSESSIONID",
 }
 
+function isCookieName(key: string): key is CookieName {
+  return Object.values(CookieName).includes(key as CookieName);
+}
+
 export default class AuthManager {
   private static readonly BASE_URL = "https://server.inunity.club";
   private static readonly COOKIE_KEYS = Object.values(CookieName);
@@ -36,11 +40,9 @@ export default class AuthManager {
    * @param cookies 설정할 쿠키 객체들
    */
   static async setBulkCookiesToManager(cookies: Cookies): Promise<void> {
-    await Promise.all(
-      Object.entries(cookies).map(([key, cookie]) =>
-        CookieManager.set(this.BASE_URL, cookie, true)
-      )
-    );
+    for (const [key, cookie] of Object.entries(cookies)) {
+      await CookieManager.set(this.BASE_URL, cookie, true)
+    }
   }
 
   /**
@@ -72,12 +74,13 @@ export default class AuthManager {
    * @param cookies 저장할 쿠키 객체들
    */
   static async saveBulkCookiesToStorage(cookies: Cookies): Promise<void> {
-    await Promise.all(
-      Object.entries(cookies).map(([key, cookie]) => {
-        if (key in CookieName)
-          SecureStoreManager.save(key as CookieName, JSON.stringify(cookie));
-      })
-    );
+    for (const [key, cookie] of Object.entries(cookies)) {
+      if (isCookieName(key)) {
+        console.log(key, cookie);
+        await SecureStoreManager.clear(key as CookieName);
+        await SecureStoreManager.save(key as CookieName, cookie);
+      }
+    }
   }
 
   /**

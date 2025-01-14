@@ -12,7 +12,7 @@ import useNotification from "@/hooks/useNotification";
 import { WebViewProvider } from "@/components/useWebView";
 import AuthManager, { CookieName } from "@/lib/AuthManager";
 import AppLifecycleHandler from "@/lib/AppLifecycleHandler";
-import { Cookie } from "@react-native-cookies/cookies";
+import { Cookie, Cookies } from "@react-native-cookies/cookies";
 import useCookies from "@/hooks/useCookies";
 import DevMenu from "@/components/DevMenu";
 
@@ -40,21 +40,27 @@ export default function RootLayout() {
     isError: isCookieError,
   } = useCookies();
 
-  const checkCookieValidity = async (url: string, cookie: Cookie) => {
-    if (!cookie) {
+  const checkCookieValidity = async (url: string, cookies: Cookies) => {
+    if (!cookies) {
       throw new Error("No cookie provided");
     }
 
-    const cookieString = `${cookie.name}=${cookie.value}`;
+    const cookieString = Object.entries(cookies)
+      .map(([key, value]) => `${key}=${value.value}`)
+      .join("; ");
+    console.log(cookieString);
+
     const res = await fetch(url, {
       headers: {
         cookie: cookieString,
       },
+      // fetch 자체 credential이 쿠키를 덮어쓰는 문제 해결 
+      credentials: 'omit',
       method: "GET",
     });
 
     if (!res.ok) {
-      throw new Error(res.status.toString());
+      throw new Error(`${res.status} | ${JSON.stringify(await res.json())}`);
     }
 
     const body = (await res.json()) as ApiResponse;
@@ -80,7 +86,7 @@ export default function RootLayout() {
       }
 
       // Validate access token
-      await checkCookieValidity(`${API_BASE_URL}/auth/test`, accessToken);
+      await checkCookieValidity(`${API_BASE_URL}/auth/test`, cookies);
       console.log("Access token valid", accessToken);
 
       // Set cookie in WebView

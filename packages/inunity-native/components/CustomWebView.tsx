@@ -50,6 +50,7 @@ export default function CustomWebView({
       incognito={false}
       webviewDebuggingEnabled
       javaScriptEnabled
+      sharedCookiesEnabled
       onNavigationStateChange={props.onNavigationStateChange}
       userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       onLoadStart={() => setIsLoading(true)}
@@ -57,8 +58,9 @@ export default function CustomWebView({
       onMessage={(event) => {
         const message = parseMessage(event.nativeEvent.data);
         handleMessage(message, {
-          [MessageEventType.Login]: () => {
-            router.push("/list");
+          [MessageEventType.Login]: async () => {
+            const cookies = await AuthManager.getAllCookiesFromManager();
+            await AuthManager.saveBulkCookiesToStorage(cookies);
           },
           [MessageEventType.Navigation]: () => {
             const navigation = message.value as NavigationEvent;
