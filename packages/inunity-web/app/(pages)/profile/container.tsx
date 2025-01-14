@@ -39,6 +39,7 @@ export default function ProfileContainer({
   const queryClient = useQueryClient();
   const [userId, setUserId] = useState<number | null>(initialUserId || null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [department, setDepartment] = useState("");
   const [activeTab, setActiveTab] = useState(0);
 
   // 본인 프로필 여부 (내 프로필 모드)
@@ -52,6 +53,7 @@ export default function ProfileContainer({
           const response = await fetchExtended<{
             id: number;
             profileImageUrl: string | null;
+            department: string;
           }>("/v1/users/information", {
             method: "GET",
             credentials: "include",
@@ -59,6 +61,7 @@ export default function ProfileContainer({
 
           setUserId(response.id);
           setAvatarUrl(response.profileImageUrl);
+          setDepartment(response.department);
         } catch (error) {
           console.error("Failed to fetch user information:", error);
         }
@@ -67,6 +70,15 @@ export default function ProfileContainer({
 
     fetchUserInfo();
   }, [initialUserId]);
+
+  // 배너 컬러
+  const departmentColors: { [key: string]: string } = {
+    컴퓨터공학부: "#002874",
+    임베디드시스템공학과: "#C3EDFF",
+    정보통신공학과: "#DBDBDB",
+  };
+
+  const bannerColor = departmentColors[department] || "#002874";
 
   // 아이콘별 연락처 url 달기
   const handleIconClick = (platform: string) => {
@@ -130,7 +142,7 @@ export default function ProfileContainer({
             queryClient.invalidateQueries({ queryKey: ["profile", userId] });
           },
           onError: (err) => {
-            console.error("프로젝트(포트폴리오) 삭제 실패:", err);
+            console.error("프로젝트 삭제 실패:", err);
           },
         });
         break;
@@ -310,7 +322,12 @@ export default function ProfileContainer({
                   />
                 </div>
               )}
-              <div className="text-lg font-extrabold">{skill.name}</div>
+              <div className="flex items-center gap-2">
+                <div className="text-lg font-extrabold">{skill.name}</div>
+                <div className="text-sm font-light text-gray-400">
+                  {skill.type}
+                </div>
+              </div>
               <div className="flex items-center mt-1 text-sm text-gray-700">
                 <span className="font-extrabold">기술 숙련도</span>
                 <span className="mx-1 text-black/50">·</span>
@@ -366,7 +383,10 @@ export default function ProfileContainer({
     <div className="h-full flex flex-col">
       <LoadingOverlay isLoading={false} />
       {/* 상단 배너 */}
-      <div className="relative w-full bg-blue-900 h-44">
+      <div
+        className="relative w-full h-44"
+        style={{ backgroundColor: bannerColor }}
+      >
         <div className="absolute top-4 left-4">
           <FontAwesomeIcon
             icon={faChevronLeft}
