@@ -8,6 +8,8 @@ import { CertificateSetupFunnel } from "@/features/onboarding/ui/steps/Certifica
 import { NewUserFunnel } from "../../../features/onboarding/ui/steps/NewUserFunnel";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useMessageManager } from "@/shared/ui/MessageContext";
+import { MessageEventType } from "message-type/message-type";
 
 export default function AuthContainer() {
   const [step, setStep] = useLocalStorage("onboarding_step", "Welcome");
@@ -25,7 +27,7 @@ export default function AuthContainer() {
     id: "auth",
     initial: { step: "Welcome", context: {} },
   });
-
+  const { messageManager } = useMessageManager();
   const router = useNativeRouter();
 
   return (
@@ -77,10 +79,12 @@ export default function AuthContainer() {
                 history.replace("Password", { ...context, password })
               }
               handleLoginSuccess={() => {
+                messageManager?.sendMessage(MessageEventType.Login);
                 history.push("ExistingUser", {});
                 setStep("ExistingUser");
               }}
               handleRegisterSuccess={() => {
+                messageManager?.sendMessage(MessageEventType.Login);
                 history.push("NewUser", {});
                 setStep("NewUser");
               }}
@@ -99,7 +103,7 @@ export default function AuthContainer() {
               </>
             }
             onNext={() => router.replace("/")}
-            />
+          />
         )}
         NewUser={({ history }) => (
           <NewUserFunnel

@@ -49,14 +49,13 @@ export default function RootLayout() {
       .map(([key, value]) => `${key}=${value.value}`)
       .join("; ");
     console.log(cookieString);
-    console.log(
-      "JSESSIONID=47F348F2C4f976C9fE346663DB3D70875C; accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDIyMDE1NDMiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sIm1lbWJlcklkIjo0LCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzM2ODEwMTk0LCJleHAiOjE3MzY4MTM3OTR9.GnqqyXRWl_rpI7rvMpTHp144rDtSZi6vDr_JhRH4iew; refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDIyMDE1NDMiLCJ1c2VySWQiOjQsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3MzY4MTAxOTQsImV4cCI6MTczNjgxMDc5NH0.tOexdnMCmT0m96j6yRlxSFQmbMOmZWyvmeIXMf9vg_4"
-    );
 
     const res = await fetch(url, {
       headers: {
         cookie: cookieString,
       },
+      // fetch 자체 credential이 쿠키를 덮어쓰는 문제 해결 
+      credentials: 'omit',
       method: "GET",
     });
 

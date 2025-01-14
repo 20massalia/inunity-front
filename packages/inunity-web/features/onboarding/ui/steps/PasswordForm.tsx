@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Button, Input, Typography } from "ui";
 import FadeInOutStep from "./FadeInOutStep";
+import { useMessageManager } from "@/shared/ui/MessageContext";
 
 interface PasswordFormProps {
   studentNumber: string;
@@ -56,6 +57,7 @@ export default function PasswordForm({
   handleLoginSuccess,
   handleRegisterSuccess,
 }: PasswordFormProps) {
+  
   const handleNext = async () => {
     if (!password.trim()) {
       alert("비밀번호를 입력해주세요!");
