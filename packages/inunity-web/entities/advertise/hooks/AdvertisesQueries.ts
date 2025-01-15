@@ -56,10 +56,10 @@ export default class AdvertisesQueries {
    *  - 페이징 없이 한 번에 가져오는 예시.
    */
   static advertisesQuery() {
-    return queryOptions<AdvertiseDto[]>({
+    return queryOptions<Page<AdvertiseDto>>({
       queryKey: this.QueryKeys.list(),
       queryFn: async () => {
-        return await fetchExtended<AdvertiseDto[]>(`v1/advertises`);
+        return await fetchExtended<Page<AdvertiseDto>>(`v1/advertises`);
       },
     });
   }

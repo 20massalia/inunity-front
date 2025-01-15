@@ -37,6 +37,7 @@ import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/Article
 import useCategories from "@/entities/category/hooks/useCategories";
 import useAdvertises from "@/entities/advertise/hooks/useAdvertises";
 import { ClipLoader } from "react-spinners";
+import useAdvertisesOG from "@/entities/advertise/hooks/useAdvertisesOg";
 
 export default function HomeContainer() {
   // ViewModel 이용
@@ -64,6 +65,7 @@ export default function HomeContainer() {
 
   const categoryQuery = useCategories();
   const advertisesQuery = useAdvertises();
+  const advertises = advertisesQuery.data?.content || [];
 
   return (
     <>
@@ -112,21 +114,24 @@ export default function HomeContainer() {
         )}
         {/* 배너 슬라이더 섹션 */}
         <Slider {...settings} className="w-full mb-7">
-          {advertisesQuery.data?.map((banner) => (
-            <div key={banner.advertiseId} className="pt-5 px-2">
-              <Image
-                src={""}
-                alt={banner.title}
-                className="rounded-xl object-cover h-[200px] w-full"
-                height={200}
-                width={600}
-              />
-              <div
-                className="absolute inset-0"
-                onClick={() => window.open(banner.url, "_blank")}
-              />
-            </div>
-          ))}
+          {advertises.map((ad, index) => {
+            return (
+              <div key={ad.advertiseId} className="pt-5 px-2">
+                <Image
+                  src={ad.url}
+                  alt={ad.title}
+                  className="rounded-xl object-cover h-[200px] w-full"
+                  height={200}
+                  width={600}
+                  unoptimized
+                />
+                <div
+                  className="absolute inset-0"
+                  onClick={() => window.open(ad.url, "_blank")}
+                />
+              </div>
+            );
+          })}
         </Slider>
         <div className="flex flex-row flex-wrap py-3 justify-center items-start gap-1 gap-y-4">
           {[
