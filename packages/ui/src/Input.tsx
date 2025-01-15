@@ -21,7 +21,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
                 placeholder={placeholder}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                type={!masked ? 'text' : 'password'}
+                type={props.type ?? (!masked ? 'text' : 'password')}
             />
             {rightIcon && <div className="w-5 h-5 relative">{rightIcon}</div>}
         </div>

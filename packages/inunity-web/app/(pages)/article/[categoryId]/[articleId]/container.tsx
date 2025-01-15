@@ -96,7 +96,6 @@ export default function ArticleDetailContainer({
     text: "",
     isAnonymous: true,
   });
-  const [isAnonymous, setIsAnonymous] = useState(true);
   const { isWebView } = usePlatform();
 
   useEffect(() => {
@@ -164,7 +163,6 @@ export default function ArticleDetailContainer({
             profileImage={article.userImageUrl}
             name={article.nickname ?? "익명"}
             introduction={article.department}
-            id={article.userId}
           />
           <Viewer content={JSON.parse(article.content)} />
         </div>
@@ -186,7 +184,6 @@ export default function ArticleDetailContainer({
                     profileImage={comment.userImageUrl}
                     name={comment.nickname ?? "익명"}
                     introduction={comment.department}
-                    id={comment.userId}
                     actions={
                       <DropdownMenu
                         menuId={`comment_${comment.commentId}`}
@@ -198,7 +195,7 @@ export default function ArticleDetailContainer({
                                 setComment({
                                   text: comment.content,
                                   commentId: comment.commentId,
-                                  isAnonymous: comment.isAnonymous,
+                                  isAnonymous: comment.isAnonymous!,
                                 });
                                 inputRef.current?.focus();
                               } else
@@ -220,7 +217,10 @@ export default function ArticleDetailContainer({
                             label: "삭제",
                             onClick: () => {
                               if (confirm("댓글을 정말로 삭제할까요?"))
-                                deleteComment.mutate(comment.commentId);
+                                deleteComment.mutate({
+                                  articleId,
+                                  commentId: comment.commentId,
+                                });
                             },
                           },
                           {
@@ -239,7 +239,7 @@ export default function ArticleDetailContainer({
                     variant="LabelNormalRegular"
                     className="inline text-end"
                   >
-                    {comment.createAt.toString()}
+                    {comment.createAt?.toString()}
                   </Typography>
                 </div>
               </>
@@ -250,7 +250,12 @@ export default function ArticleDetailContainer({
       {!isWebView && (
         <div className="flex flex-col p-3">
           <div className="flex flex-row gap-2">
-            <CheckBox checked={isAnonymous} setChecked={setIsAnonymous} />
+            <CheckBox
+              checked={comment.isAnonymous}
+              setChecked={(checked) =>
+                setComment((prev) => ({ ...prev, isAnonymous: checked }))
+              }
+            />
             익명
           </div>
           <div className="flex flex-row gap-4 ">

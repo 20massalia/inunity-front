@@ -4,7 +4,7 @@ import useNotification from "@/features/notification/hooks/useNotification";
 import useFeaturedArticles from "./useFeaturedArticles";
 
 export default function useHomeViewModel() {
-  const articles = useFeaturedArticles(5);
+  const articles = useFeaturedArticles();
   // Todo: 공지사항 필터링되는거 만들기 
   const notices = useArticles({categoryId: 1});
   const notifications = useNotification();

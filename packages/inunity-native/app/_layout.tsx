@@ -1,89 +1,150 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
-
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-// Import your global CSS file
-import "../globals.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+import "../globals.css";
 import useNotification from "@/hooks/useNotification";
 import { WebViewProvider } from "@/components/useWebView";
-import AuthManager from "@/lib/AuthManager";
+import AuthManager, { CookieName } from "@/lib/AuthManager";
 import AppLifecycleHandler from "@/lib/AppLifecycleHandler";
-import { Cookie } from "@react-native-cookies/cookies";
+import { Cookie, Cookies } from "@react-native-cookies/cookies";
+import useCookies from "@/hooks/useCookies";
+import DevMenu from "@/components/DevMenu";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const API_BASE_URL = "https://server.inunity.club/v1";
+
+interface ApiResponse {
+  status: number;
+  message: string;
+  data: unknown;
+}
 
 export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
-  const [cookieSynced, setCookieSynced] = useState(false);
   const [cycleManagerInitialized, setCycleManagerInitialized] = useState(false);
 
-  useEffect(() => {
-    if (loaded && cookieSynced && cycleManagerInitialized) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, cookieSynced, cycleManagerInitialized]);
+  const {
+    cookies,
+    isLoading: isCookieLoading,
+    isSuccess: isCookieSuccess,
+    isError: isCookieError,
+  } = useCookies();
 
-  const syncCookie = async () => {
-    // 스토리지에 쿠키가 있으면 꺼내서 셋.
-    try {
-      const cookieFromStorage = await AuthManager.getCookieFromStorage();
-      console.log("cookie:", (cookieFromStorage as Cookie).name);
-      if (cookieFromStorage)
-        await AuthManager.setCookieToManager(cookieFromStorage);
-    } catch (e) {
-      console.error(e);
+  const checkCookieValidity = async (url: string, cookies: Cookies) => {
+    if (!cookies) {
+      throw new Error("No cookie provided");
     }
-    // 쿠키 싱크 성공 유무와 관계없이 통과.
-    console.log("cookie synced or not");
-    setCookieSynced(true);
+
+    const cookieString = Object.entries(cookies)
+      .map(([key, value]) => `${key}=${value.value}`)
+      .join("; ");
+    console.log(cookieString);
+
+    const res = await fetch(url, {
+      headers: {
+        cookie: cookieString,
+      },
+      // fetch 자체 credential이 쿠키를 덮어쓰는 문제 해결 
+      credentials: 'omit',
+      method: "GET",
+    });
+
+    if (!res.ok) {
+      throw new Error(`${res.status} | ${JSON.stringify(await res.json())}`);
+    }
+
+    const body = (await res.json()) as ApiResponse;
+    if (body.status < 200 || body.status >= 300) {
+      throw new Error(body.message);
+    }
   };
 
+  const authorizeApp = async () => {
+    if (!isCookieSuccess || !cookies?.[CookieName.AccessToken]) {
+      router.replace("/auth");
+      await SplashScreen.hideAsync();
+      return;
+    }
+
+    try {
+      const accessToken = cookies[CookieName.AccessToken];
+
+      // Check if token is expired
+      const expiryDate = new Date(accessToken.expires!);
+      if (expiryDate < new Date()) {
+        throw new Error("Access token expired");
+      }
+
+      // Validate access token
+      await checkCookieValidity(`${API_BASE_URL}/auth/test`, cookies);
+      console.log("Access token valid", accessToken);
+
+      // Set cookie in WebView
+      await AuthManager.setBulkCookiesToManager(cookies);
+
+      await SplashScreen.hideAsync();
+    } catch (e) {
+      console.log("Authentication failed:", e);
+      router.replace("/auth");
+      await SplashScreen.hideAsync();
+    }
+  };
+
+  // Initialize AppLifecycleHandler
   useEffect(() => {
-    syncCookie().then(() => {
-      setCookieSynced(true);
-    });
     if (!cycleManagerInitialized) {
       AppLifecycleHandler.init();
       setCycleManagerInitialized(true);
     }
   }, []);
 
+  // Handle app initialization
+  useEffect(() => {
+    if (loaded && !isCookieLoading && cycleManagerInitialized) {
+      if (!isCookieError) {
+        authorizeApp();
+      } else {
+        router.replace("/auth");
+        SplashScreen.hideAsync();
+      }
+    }
+  }, [loaded, isCookieLoading, cycleManagerInitialized]);
+
   useNotification();
 
-  if (!loaded) {
+  if (!loaded || !cycleManagerInitialized) {
     return null;
   }
 
   return (
     <SafeAreaProvider>
-      <GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <WebViewProvider>
           <ThemeProvider value={DefaultTheme}>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen name="article/[categoryId]/index" />
-              <Stack.Screen name="article/[categoryId]/write" />
-              <Stack.Screen name="article/[categoryId]/[articleId]/index" />
-              <Stack.Screen name="(tabs)" />
-
-              <Stack.Screen name="list" />
-              <Stack.Screen name="notification/index" />
-              <Stack.Screen name="notification/setting" />
-              <Stack.Screen name="license" options={{ title: "license" }} />
-            </Stack>
+            <DevMenu>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="auth/index" />
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen name="article/[categoryId]/index" />
+                <Stack.Screen name="article/[categoryId]/write" />
+                <Stack.Screen name="article/[categoryId]/[articleId]/index" />
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="list" />
+                <Stack.Screen name="notification/index" />
+                <Stack.Screen name="notification/setting" />
+                <Stack.Screen name="license" options={{ title: "license" }} />
+              </Stack>
+            </DevMenu>
           </ThemeProvider>
         </WebViewProvider>
       </GestureHandlerRootView>

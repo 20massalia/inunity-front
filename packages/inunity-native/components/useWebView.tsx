@@ -4,14 +4,9 @@ import {
   useState,
   useContext,
   useRef,
-  useEffect,
-  MutableRefObject,
+  PropsWithChildren,
 } from "react";
-import { Alert } from "react-native";
 import WebView from "react-native-webview";
-import { registerDevMenuItems } from "expo-dev-menu";
-import AuthManager, { CookieName } from "@/lib/AuthManager";
-import { Href, router } from "expo-router";
 
 export type WebViewContextType = {
   webViewRefs: React.MutableRefObject<Record<string, WebView | null>>;
@@ -25,9 +20,9 @@ export type WebViewContextType = {
 
 export const webViewOrigin =
   process.env.EXPO_PUBLIC_WEB_URL ?? "http://localhost:3000/";
-const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
+export const WebViewContext = createContext<WebViewContextType | undefined>(undefined);
 
-export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
+export const WebViewProvider = ({ children }: PropsWithChildren) => {
   const [activeWebView, setActiveWebView] = useState<string>();
   const [webViews, setWebViews] = useState({ index: webViewOrigin });
   const [isLoading, setIsLoading] = useState(true);
@@ -39,57 +34,6 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
     setWebViews((prev) => ({ ...prev, [webViewId]: url }));
   };
 
-  useEffect(() => {
-    const devMenuItems = [
-      {
-        name: "Set WebView URL",
-        callback: () => {
-          Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            {
-              text: "OK",
-              onPress: (value) => {
-                if (activeWebView) setUrl(activeWebView, value ?? "");
-              },
-            },
-          ]);
-        },
-      },
-      {
-        name: "Get cookies from manager",
-        callback: async () => {
-          const cookies = await AuthManager.getCookieFromManager(
-            CookieName.AccessToken
-          );
-          console.info(cookies);
-          Alert.alert("디버그", JSON.stringify(cookies));
-        },
-      },
-      {
-        name: "push to route",
-        callback: async () => {
-          Alert.prompt("디버그 메뉴", "WebView URL을 입력해주세요.", [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            {
-              text: "OK",
-              onPress: (value) => {
-                if (value ) router.push(value as Href<string>);
-              },
-            },
-          ]);
-        },
-      },
-    ];
-    registerDevMenuItems(devMenuItems);
-  }, []);
 
   return (
     <WebViewContext.Provider
@@ -108,7 +52,7 @@ export const WebViewProvider = ({ children }: React.PropsWithChildren) => {
   );
 };
 
-export const useWebView = (webViewId: string) => {
+export const useWebViewWithId = (webViewId: string) => {
   const webView = useContext(WebViewContext);
   if (!webView) {
     throw new Error(
@@ -123,4 +67,16 @@ export const useWebView = (webViewId: string) => {
     setUrl,
     webViewRef: webView.webViewRefs.current[webViewId] || null,
   };
+};
+
+
+
+export const useWebView = () => {
+  const webView = useContext(WebViewContext);
+  if (!webView) {
+    throw new Error(
+      "useWebView must be used within <WebViewProvider> component!"
+    );
+  }
+  return webView;
 };

@@ -9372,6 +9372,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^11.17.0":
+  version: 11.17.0
+  resolution: "framer-motion@npm:11.17.0"
+  dependencies:
+    motion-dom: "npm:^11.16.4"
+    motion-utils: "npm:^11.16.0"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/2d56715afe85a2e922a2b174de4f29a0d2b9f973dd9b3cc7b6cc93d45bf1b8ea744f187e2c47ca468f8619c2c8c462db0c2879f3b16f452487a67f381f19e1c0
+  languageName: node
+  linkType: hard
+
 "freeport-async@npm:2.0.0":
   version: 2.0.0
   resolution: "freeport-async@npm:2.0.0"
@@ -10314,6 +10336,7 @@ __metadata:
     eslint-config-next: "npm:14.2.15"
     lodash: "npm:^4.17.21"
     message-type: "workspace:^"
+    motion: "npm:^11.17.0"
     next: "npm:14.2.15"
     next-pwa: "npm:^5.6.0"
     open-graph-scraper: "npm:^6.8.3"
@@ -12901,6 +12924,43 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: 10c0/46ea0f3ffa8bc6a5bc0c7081ffc3907777f0ed6516888d40a518c5111f8366d97d2678911ad1a6882bf592fa9de6c784fea32e1687bb94e1f4944170af48a5cf
+  languageName: node
+  linkType: hard
+
+"motion-dom@npm:^11.16.4":
+  version: 11.16.4
+  resolution: "motion-dom@npm:11.16.4"
+  dependencies:
+    motion-utils: "npm:^11.16.0"
+  checksum: 10c0/66de6d40aef59d3004aaf17e39c7c2d2c679306207fdb28c73917d6a05e8c962747fea53d2e516c25d994109d38e127943a759fed18a0fadfc2572a3335fc0d2
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^11.16.0":
+  version: 11.16.0
+  resolution: "motion-utils@npm:11.16.0"
+  checksum: 10c0/e68efa08b9546a2fb065537cedcbab1a416d43cdc5773e02ea01408c276e56bbea9ef76d330e80d8536a6ac585b0bbb6f4f2b9d97637d8d36418483e4492ddff
+  languageName: node
+  linkType: hard
+
+"motion@npm:^11.17.0":
+  version: 11.17.0
+  resolution: "motion@npm:11.17.0"
+  dependencies:
+    framer-motion: "npm:^11.17.0"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/01f0f62cea7d269ef0b1a7ddb84cacad8c688dafa88efd3850f5c29b543a6c7cec24812e523c6b4ce55748bf9649490a29fb1f9cd26632dc77a7240382e595f8
   languageName: node
   linkType: hard
 
@@ -16711,11 +16771,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A^5#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.3#optional!builtin<compat/typescript>":
   version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=b45daf"
+  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/ac8307bb06bbfd08ae7137da740769b7d8c3ee5943188743bb622c621f8ad61d244767480f90fbd840277fbf152d8932aa20c33f867dea1bb5e79b187ca1a92f
+  checksum: 10c0/7c9d2e07c81226d60435939618c91ec2ff0b75fbfa106eec3430f0fcf93a584bc6c73176676f532d78c3594fe28a54b36eb40b3d75593071a7ec91301533ace7
   languageName: node
   linkType: hard
 

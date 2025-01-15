@@ -20,7 +20,6 @@ import AppBar from "../../../widgets/AppBar";
 import NoticeCard from "@/features/notice/ui/NoticeCard";
 import useHomeViewModel from "../../../features/home/useHomeViewModel";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
-import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import ArticleCard from "@/entities/article/ui/ArticleCard";
 import Slider, { Settings } from "react-slick";
 import Image from "next/image";
@@ -61,9 +60,6 @@ export default function HomeContainer() {
   }, [messageManager]);
 
   const router = useNativeRouter();
-  const user = {
-    userId: 1,
-  };
 
   const categoryQuery = useCategories();
 
@@ -108,7 +104,9 @@ export default function HomeContainer() {
         }}
       >
         {(articles.isRefetching || notices.isRefetching) && (
-          <div className="flex flex-row justify-center w-full">{<ClipLoader />}</div>
+          <div className="flex flex-row justify-center w-full">
+            {<ClipLoader />}
+          </div>
         )}
         <Slider {...settings} className="w-full mb-7">
           {[banner, banner2, banner3].map((banner, idx) => (
@@ -185,7 +183,7 @@ export default function HomeContainer() {
           </Typography>
         </div>
         <div className="text-pri p-4  w-full ">
-          <div className=" justify-start items-start gap-4 flex overflow-x-scroll">
+          <div className=" justify-start items-stretch gap-4 flex overflow-x-scroll overflow-y-hidden">
             {notices.data?.pages
               .flatMap((page) => page.content)
               .map((notice) => (
@@ -199,19 +197,21 @@ export default function HomeContainer() {
           <Typography variant="HeadingXLargeBold" className="px-4">
             인기 게시글
           </Typography>
-          {articles.data?.content.map((article) => (
-            <ArticleCard
-              {...article}
-              key={article.articleId}
-              bottomFeatureSlot={
-                <>
-                  <ToggleLikeIcon article={article} />
-                  {/* <ToggleBoomarkIcon article={article} /> */}
-                </>
-              }
-              actions={<ArticleListDropdownMenu article={article} />}
-            />
-          ))}
+          {articles.data?.pages
+            ?.flatMap((page) => page.content)
+            ?.map((article) => (
+              <ArticleCard
+                {...article}
+                key={article.articleId}
+                bottomFeatureSlot={
+                  <>
+                    <ToggleLikeIcon article={article} />
+                    {/* <ToggleBoomarkIcon article={article} /> */}
+                  </>
+                }
+                actions={<ArticleListDropdownMenu article={article} />}
+              />
+            ))}
         </div>
       </ScrollView>
     </>

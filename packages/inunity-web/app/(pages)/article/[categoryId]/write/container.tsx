@@ -24,14 +24,15 @@ export default function ArticleWriteContainer({
   const router = useNativeRouter();
   const [isAnonymous, setIsAnonymous] = useState(true);
   const submitArticle = useSubmitArticle();
-  const {messageManager} = useMessageManager();
+  const { messageManager } = useMessageManager();
   useEffect(() => {
     if (submitArticle.isSuccess) {
       alert("글을 작성했어요! 🎉");
-      router.back();
+      const articleId = submitArticle.data;
+      router.replace(`/article/${categoryId}/${articleId}`);
     } else if (submitArticle.isError) {
-      messageManager?.log(submitArticle.error)
-      alert('글 작성에 실패했어요.. 🥲')
+      messageManager?.log(submitArticle.error);
+      alert("글 작성에 실패했어요.. 🥲");
     }
   }, [submitArticle.isSuccess, submitArticle.isError]);
 
@@ -54,6 +55,7 @@ export default function ArticleWriteContainer({
         rightIcon={
           <div
             onClick={() => {
+              if (data?.blocks.length == 0) confirm('글을 작성해주세요.')
               if (confirm("글을 작성할까요?"))
                 submitArticle.mutate({
                   categoryId,
@@ -69,7 +71,7 @@ export default function ArticleWriteContainer({
           </div>
         }
       />
-      <LoadingOverlay isLoading={submitArticle.isPending  }/>
+      <LoadingOverlay isLoading={submitArticle.isPending} />
       <div className="flex-1 p-5 overflow-scroll">
         <div className="flex flex-row justify-end">
           <CheckBox checked={isAnonymous} setChecked={setIsAnonymous} />

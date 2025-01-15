@@ -28,6 +28,7 @@
     "editor-react-parser": "^1.0.5",
     "lodash": "^4.17.21",
     "message-type": "workspace:^",
+    "motion": "^11.17.0",
     "next": "14.2.15",
     "open-graph-scraper": "^6.8.3",
     "react-icons": "^5.4.0",

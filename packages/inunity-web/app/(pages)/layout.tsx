@@ -28,9 +28,8 @@ export default function RootLayout({
 }>) {
   const topInset = Number(headers().get("Top-Inset")) || 0;
   const heads = headers();
-  const ua = userAgent({headers: heads}).ua
+  const ua = userAgent({ headers: heads }).ua;
   const platform = platformResolver(ua);
-  
 
   return (
     <html lang="en" className="overscroll-none ">
@@ -49,8 +48,14 @@ export default function RootLayout({
         `}
         </Script>
         <Script id="inject-vh">
-          {`const vh = window.innerHeight * 0.01;
-          document.documentElement.style.setProperty('--vh', \`\$\{vh\}px\`); `}
+          {`
+          const setVhProperty = () => {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', \`\$\{vh\}px\`); 
+          };
+          window.addEventListener('resize', setVhProperty);
+          setVhProperty();
+          `}
         </Script>
         <style>{`:root { --sat: ${topInset}px; }`}</style>
       </head>

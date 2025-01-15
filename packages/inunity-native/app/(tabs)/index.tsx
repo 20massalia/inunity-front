@@ -1,12 +1,12 @@
 import CustomWebView from "@/components/CustomWebView";
-import { useWebView, webViewOrigin } from "@/components/useWebView";
+import { useWebViewWithId, webViewOrigin } from "@/components/useWebView";
 import { isLightColor } from "@/lib/ColorUtil";
 import {
   parseMessage,
   handleMessage,
   useMessageManager,
 } from "@/lib/MessageManager";
-import { router } from "expo-router";
+import { Navigator, router, SplashScreen } from "expo-router";
 import { setStatusBarStyle } from "expo-status-bar";
 import {
   MessageEventType,
@@ -18,14 +18,13 @@ import WebView from "react-native-webview";
 import { MutableRefObject, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CookieManager from "@react-native-cookies/cookies";
-import AuthManager from "@/lib/AuthManager";
+import AuthManager, { CookieName } from "@/lib/AuthManager";
 import React from "react";
 
 export default function Index() {
-  const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebView("index");
+  const { setIsLoading, isLoading, webViewRefs, setUrl } = useWebViewWithId("index");
   const [cookie, setCookie] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
-  console.log(insets.top);
 
   return (
     <WebView
@@ -35,11 +34,10 @@ export default function Index() {
           webViewRefs.current["index"] = node;
         }
       }}
- 
       source={{
         uri: webViewOrigin,
         headers: {
-          'Top-Inset': `${insets.top}`,
+          "Top-Inset": `${insets.top}`,
         },
         // uri: 'http://localhost:3000/test'
         // uri: 'https://inunity-server.squidjiny.com/v1/auth/test'
@@ -54,8 +52,8 @@ export default function Index() {
       incognito={false}
       webviewDebuggingEnabled
       javaScriptEnabled
-      userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       sharedCookiesEnabled
+      userAgent={`Mozilla/5.0 (${Platform.OS}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 INUnity_WebView`}
       onLoadStart={() => setIsLoading(true)}
       onLoadEnd={() => setIsLoading(false)}
       onMessage={(event) => {
