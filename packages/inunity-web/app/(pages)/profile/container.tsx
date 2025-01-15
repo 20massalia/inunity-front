@@ -179,53 +179,48 @@ export default function ProfileContainer({
   */
   const CareersTabContent = () => (
     <div className="flex flex-col gap-4 mt-4 px-2">
-      <ScrollView>
-        {careers && careers.length > 0 ? (
-          careers.map((career) => (
-            <div key={career.careerId} className="relative p-4 rounded-md">
-              {isOwner && (
-                <div className="absolute right-2 top-4">
-                  <DropdownMenu
-                    menuId={`career-${career.careerId}`}
-                    actions={[
-                      {
-                        label: "수정",
-                        onClick: () => handleEdit("careers", career.careerId),
-                      },
-                      {
-                        label: "삭제",
-                        onClick: () => handleDelete("careers", career.careerId),
-                      },
-                    ]}
-                  />
-                </div>
-              )}
-
-              <div className="text-lg font-extrabold">{career.companyName}</div>
-              <div className="flex items-center mt-1 text-sm text-gray-700">
-                <span className="font-extrabold">{career.position}</span>
-                <span className="mx-1 text-black/50">·</span>
-                <span>
-                  {career.startDate?.substring(0, 4)} -{" "}
-                  {career.endDate?.substring(0, 4)}
-                </span>
+      {careers && careers.length > 0 ? (
+        careers.map((career) => (
+          <div key={career.careerId} className="relative p-4 rounded-md">
+            {isOwner && (
+              <div className="absolute right-2 top-4">
+                <DropdownMenu
+                  menuId={`career-${career.careerId}`}
+                  actions={[
+                    {
+                      label: "수정",
+                      onClick: () => handleEdit("careers", career.careerId),
+                    },
+                    {
+                      label: "삭제",
+                      onClick: () => handleDelete("careers", career.careerId),
+                    },
+                  ]}
+                />
               </div>
+            )}
+
+            <div className="text-lg font-extrabold">{career.companyName}</div>
+            <div className="flex items-center mt-1 text-sm text-gray-700">
+              <span className="font-extrabold">{career.position}</span>
+              <span className="mx-1 text-black/50">·</span>
+              <span>
+                {career.startDate?.substring(0, 4)} -{" "}
+                {career.endDate?.substring(0, 4)}
+              </span>
             </div>
-          ))
-        ) : (
-          <div className="text-center text-gray-500">
-            입력된 경력이 없어요. 😢
           </div>
-        )}
-        {isOwner && (
-          <Button
-            size="large"
-            onClick={() => router.push(`/profile/my/careers`)}
-          >
-            추가하기
-          </Button>
-        )}
-      </ScrollView>
+        ))
+      ) : (
+        <div className="text-center text-gray-500">
+          입력된 경력이 없어요. 😢
+        </div>
+      )}
+      {isOwner && (
+        <Button size="large" onClick={() => router.push(`/profile/my/careers`)}>
+          추가하기
+        </Button>
+      )}
     </div>
   );
 
@@ -234,58 +229,56 @@ export default function ProfileContainer({
   */
   const ProjectsTabContent = () => (
     <div className="flex flex-col gap-4 mt-4 px-2">
-      <ScrollView>
-        {portfolio && portfolio.length > 0 ? (
-          portfolio.map((project, i) => (
-            <div key={project.portfolioId} className="relative p-4 rounded-md">
-              {isOwner && (
-                <div className="absolute right-2 top-4">
-                  <DropdownMenu
-                    menuId={`portfolio-${project.portfolioId}`}
-                    actions={[
-                      {
-                        label: "수정",
-                        onClick: () =>
-                          handleEdit("projects", project.portfolioId),
-                      },
-                      {
-                        label: "삭제",
-                        onClick: () =>
-                          handleDelete("projects", project.portfolioId),
-                      },
-                    ]}
-                  />
-                </div>
-              )}
-              <div className="text-lg font-extrabold">{project.title}</div>
-              <div className="mt-1 text-sm text-gray-700">
-                {project.startDate} - {project.endDate}
-              </div>
-              {ogData && ogData[i]?.image ? (
-                <img
-                  src={ogData[i]?.image}
-                  alt={ogData[i]?.title || project.url}
-                  className="w-full h-64 object-cover rounded-md mt-4"
+      {portfolio && portfolio.length > 0 ? (
+        portfolio.map((project, i) => (
+          <div key={project.portfolioId} className="relative p-4 rounded-md">
+            {isOwner && (
+              <div className="absolute right-2 top-4">
+                <DropdownMenu
+                  menuId={`portfolio-${project.portfolioId}`}
+                  actions={[
+                    {
+                      label: "수정",
+                      onClick: () =>
+                        handleEdit("projects", project.portfolioId),
+                    },
+                    {
+                      label: "삭제",
+                      onClick: () =>
+                        handleDelete("projects", project.portfolioId),
+                    },
+                  ]}
                 />
-              ) : (
-                <div className="mt-4 text-gray-500">{project.url}</div>
-              )}
+              </div>
+            )}
+            <div className="text-lg font-extrabold">{project.title}</div>
+            <div className="mt-1 text-sm text-gray-700">
+              {project.startDate} - {project.endDate}
             </div>
-          ))
-        ) : (
-          <div className="text-center text-gray-500">
-            입력된 프로젝트가 없어요. 😢
+            {ogData && ogData[i]?.image ? (
+              <img
+                src={ogData[i]?.image}
+                alt={ogData[i]?.title || project.url}
+                className="w-full h-36 object-cover rounded-md mt-4"
+              />
+            ) : (
+              <div className="mt-4 text-gray-500">{project.url}</div>
+            )}
           </div>
-        )}
-        {isOwner && (
-          <Button
-            size="large"
-            onClick={() => router.push(`/profile/my/projects`)}
-          >
-            추가하기
-          </Button>
-        )}
-      </ScrollView>
+        ))
+      ) : (
+        <div className="text-center text-gray-500">
+          입력된 프로젝트가 없어요. 😢
+        </div>
+      )}
+      {isOwner && (
+        <Button
+          size="large"
+          onClick={() => router.push(`/profile/my/projects`)}
+        >
+          추가하기
+        </Button>
+      )}
     </div>
   );
 
@@ -308,54 +301,52 @@ export default function ProfileContainer({
 
     return (
       <div className="flex flex-col gap-4 mt-4 px-2">
-        <ScrollView>
-          {skills && skills.length > 0 ? (
-            skills.map((skill) => (
-              <div key={skill.skillId} className="relative p-4 rounded-md">
-                {isOwner && (
-                  <div className="absolute right-2 top-4">
-                    <DropdownMenu
-                      menuId={`skill-${skill.skillId}`}
-                      actions={[
-                        {
-                          label: "수정",
-                          onClick: () => handleEdit("skills", skill.skillId),
-                        },
-                        {
-                          label: "삭제",
-                          onClick: () => handleDelete("skills", skill.skillId),
-                        },
-                      ]}
-                    />
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <div className="text-lg font-extrabold">{skill.name}</div>
-                  <div className="text-sm font-light text-gray-400">
-                    {skill.type}
-                  </div>
+        {skills && skills.length > 0 ? (
+          skills.map((skill) => (
+            <div key={skill.skillId} className="relative p-4 rounded-md">
+              {isOwner && (
+                <div className="absolute right-2 top-4">
+                  <DropdownMenu
+                    menuId={`skill-${skill.skillId}`}
+                    actions={[
+                      {
+                        label: "수정",
+                        onClick: () => handleEdit("skills", skill.skillId),
+                      },
+                      {
+                        label: "삭제",
+                        onClick: () => handleDelete("skills", skill.skillId),
+                      },
+                    ]}
+                  />
                 </div>
-                <div className="flex items-center mt-1 text-sm text-gray-700">
-                  <span className="font-extrabold">기술 숙련도</span>
-                  <span className="mx-1 text-black/50">·</span>
-                  <span>{getLevelText(skill.level)}</span>
+              )}
+              <div className="flex items-center gap-2">
+                <div className="text-lg font-extrabold">{skill.name}</div>
+                <div className="text-sm font-light text-gray-400">
+                  {skill.type}
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="text-center text-gray-500">
-              입력된 기술이 없어요. 😢
+              <div className="flex items-center mt-1 text-sm text-gray-700">
+                <span className="font-extrabold">기술 숙련도</span>
+                <span className="mx-1 text-black/50">·</span>
+                <span>{getLevelText(skill.level)}</span>
+              </div>
             </div>
-          )}
-          {isOwner && (
-            <Button
-              size="large"
-              onClick={() => router.push(`/profile/my/skills`)}
-            >
-              추가하기
-            </Button>
-          )}
-        </ScrollView>
+          ))
+        ) : (
+          <div className="text-center text-gray-500">
+            입력된 기술이 없어요. 😢
+          </div>
+        )}
+        {isOwner && (
+          <Button
+            size="large"
+            onClick={() => router.push(`/profile/my/skills`)}
+          >
+            추가하기
+          </Button>
+        )}
       </div>
     );
   };
@@ -390,38 +381,35 @@ export default function ProfileContainer({
   }
 
   return (
-    <div className="flex flex-col overflow-hidden">
-      <LoadingOverlay isLoading={isPending} />
-      {/* 상단 배너 */}
-      <div
-        className="relative w-full h-44"
-        style={{ backgroundColor: bannerColor }}
-      >
-        <div className="absolute top-4 left-4">
-          <FontAwesomeIcon
-            icon={faChevronLeft}
-            className="text-white cursor-pointer"
-            size="lg"
-            onClick={router.back}
-          />
-        </div>
-        {isOwner && (
-          <div className="absolute top-4 right-4">
+    <div className="flex flex-col overflow-hidden ">
+      <ScrollView className="bg-[#fff]">
+        <LoadingOverlay isLoading={isPending} />
+        {/* 상단 배너 */}
+        <div
+          className="relative flex-shrink-0 h-44"
+          style={{ backgroundColor: bannerColor }}
+        >
+          <div className="absolute top-4 left-4">
             <FontAwesomeIcon
-              icon={faPencil}
+              icon={faChevronLeft}
               className="text-white cursor-pointer"
               size="lg"
-              onClick={() => {
-                router.push("/profile/my/info");
-              }}
+              onClick={router.back}
             />
           </div>
-        )}
-      </div>
-      <ScrollView
-        className="bg-[#f8f8f8]  justify-start items-start flex text-black gap-2"
-        onRefresh={() => {}}
-      >
+          {isOwner && (
+            <div className="absolute top-4 right-4">
+              <FontAwesomeIcon
+                icon={faPencil}
+                className="text-white cursor-pointer"
+                size="lg"
+                onClick={() => {
+                  router.push("/profile/my/info");
+                }}
+              />
+            </div>
+          )}
+        </div>
         {/* 프로필 이미지 + SNS 아이콘 등 */}
         <div className="relative flex flex-row px-4">
           <div
@@ -481,8 +469,9 @@ export default function ProfileContainer({
             </div>
           </div>
         </div>
+
         {/* 탭 영역 */}
-        <div className="mt-6 px-4 pb-8">
+        <div className="mt-6 px-4 pb-8 ">
           <SwipeableTabs
             tabs={tabs}
             activeTab={activeTab}

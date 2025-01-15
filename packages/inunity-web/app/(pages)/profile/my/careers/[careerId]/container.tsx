@@ -166,13 +166,13 @@ export default function MyCareer({ careerId }: MyCareerProps) {
             <Input
               value={startDate}
               setValue={setStartDate}
-              placeholder="시작 일자(YYYY-MM-DD)"
+              placeholder="시작 일자"
               type="date"
             />
             <Input
               value={endDate}
               setValue={setEndDate}
-              placeholder="종료 일자(YYYY-MM-DD)"
+              placeholder="종료 일자"
               type="date"
             />
           </div>
