@@ -1,11 +1,11 @@
 import React from "react";
-import ProfileContainer from "./container";
+import MyInfo from "./container";
 import SafeAreaView from "@/widgets/SafeAreaView";
 
 export default function Page() {
   return (
     <SafeAreaView>
-      <ProfileContainer />
+      <MyInfo />
     </SafeAreaView>
   );
 }
