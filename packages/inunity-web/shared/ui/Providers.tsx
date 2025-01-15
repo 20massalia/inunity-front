@@ -50,7 +50,7 @@ export default function Providers({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <PlatformProvider platform={platform}>
         <MenuProvider>
           <MessageProvider>{children}</MessageProvider>

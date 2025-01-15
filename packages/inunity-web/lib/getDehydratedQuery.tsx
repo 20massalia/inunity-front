@@ -47,7 +47,7 @@ export async function getDehydratedInfiniteQuery<
     (query) =>
       query.queryHash === (args.queryHash ?? JSON.stringify(args.queryKey))
   );
-  console.log(dehydratedQuery)
+  console.log(args.queryKey, dehydratedQuery)
 
   return {
     ...dehydratedQuery,

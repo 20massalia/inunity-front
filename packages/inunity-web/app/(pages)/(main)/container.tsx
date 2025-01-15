@@ -131,42 +131,42 @@ export default function HomeContainer() {
             {
               label: "컴퓨터공학부",
               image: "🧑‍💻",
-              link: "/article/1",
+              link: "/article/3",
             },
             {
               label: "임베디드시스템공학과",
               image: "🤖",
-              link: "/article/2",
+              link: "/article/4",
             },
             {
               label: "정보통신공학과",
               image: "🛜",
-              link: "/article/3",
+              link: "/article/5",
             },
             {
               label: "정보기술대학",
               image: "🏛️",
-              link: "/article/4",
+              link: "/article/2",
             },
             {
               label: "자유게시판",
               image: "💬",
-              link: "/article/5",
+              link: "/article/6",
             },
             {
               label: "모집게시판",
               image: "🙋🏻‍♂️",
-              link: "/article/6",
+              link: "/article/7",
             },
             {
               label: "질문게시판",
               image: "⁉️",
-              link: "/article/7",
+              link: "/article/8",
             },
             {
               label: "취업후기",
               image: "💼",
-              link: "/article/8",
+              link: "/article/9",
             },
           ].map((item) => (
             <div

@@ -13,10 +13,12 @@ import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "@/widgets/AppBar";
 import useServerNotification from "@/entities/notification/hooks/useServerNotification";
 import { ClipLoader } from "react-spinners";
+import { useState } from "react";
 
 export default function NotificationListContainer() {
   const notifications = useServerNotification();
   const router = useNativeRouter();
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
     <>
@@ -66,12 +68,14 @@ export default function NotificationListContainer() {
             content: (
               <div className="p-5 gap-3 flex flex-col">
                 {/* {[].map((noti) => (
-                  // <NotificationItem key={noti.id} notification={noti} />
-                ))} */}
+                      // <NotificationItem key={noti.id} notification={noti} />
+                    ))} */}
               </div>
             ),
           },
         ]}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       ></SwipeableTabs>
     </>
   );

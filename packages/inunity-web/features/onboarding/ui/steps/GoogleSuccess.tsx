@@ -2,12 +2,14 @@
 
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import { Typography, Button } from "ui";
+import FadeInOutStep from "./FadeInOutStep";
+import { useState } from "react";
 
 export default function GoogleSuccess() {
   const router = useNativeRouter();
-
+  const [shown, setShown] = useState(true);
   return (
-    <div className="h-dvh flex flex-col mx-5">
+    <FadeInOutStep shown={shown}>
       <Typography variant="HeadingLargeBold" className="mb-4">
         반가워요!
         <br />
@@ -18,6 +20,6 @@ export default function GoogleSuccess() {
           시작하기
         </Button>
       </div>
-    </div>
+    </FadeInOutStep>
   );
 }
