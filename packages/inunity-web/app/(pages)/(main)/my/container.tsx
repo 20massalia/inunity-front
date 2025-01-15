@@ -1,7 +1,9 @@
 "use client";
 
+import useWrittenArticles from "@/entities/article/hooks/useWrittenArticles";
+import useWrittenComments from "@/entities/comment/hooks/useWrittenComments";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import { faGithub, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import fetchExtended from "@/lib/fetchExtended";
 import {
   faBell,
   faChartSimple,
@@ -9,54 +11,76 @@ import {
   faChevronRight,
   faEdit,
   faEye,
+  faHeart,
   faLock,
   faMessage,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { ScrollView, Typography } from "ui";
 
 export default function MyPageContainer() {
   const router = useNativeRouter();
+  const articles = useWrittenArticles();
+  const comments = useWrittenComments();
 
   const stats = [
     {
       label: "작성글",
-      value: "32",
+      value: articles.data?.pages?.[0].totalElements,
       icon: <FontAwesomeIcon icon={faEdit} className="w-4 h-4" />,
       link: "/my/article",
     },
     {
       label: "댓글",
-      value: "128",
+      value: comments.data?.length ?? 0,
       icon: <FontAwesomeIcon icon={faMessage} className="w-4 h-4" />,
       link: "/my/comment",
     },
     {
-      label: "조회수",
-      value: "1,234",
-      icon: <FontAwesomeIcon icon={faEye} className="w-4 h-4" />,
+      label: "좋아요 수",
+      value:
+        articles.data?.pages.reduce((total, page) => {
+          return (
+            total +
+            page.content.reduce((pageTotal, article) => {
+              return pageTotal + (article.likeNum ? 0 : 1);
+            }, 0)
+          );
+        }, 0) ?? 0,
+      icon: <FontAwesomeIcon icon={faHeart} className="w-4 h-4" />,
     },
   ];
+
+  const user = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      return await fetchExtended<{nickname: string; department: string;}>('v1/users/information');
+    }
+  })
 
   return (
     <div className="w-full h-full">
       <ScrollView className="max-w-3xl mx-auto p-4 space-y-6">
         {/* 프로필 헤더 */}
-        <button className="bg-white rounded-xl p-6 shadow-sm  hover:bg-gray-100 text-left" onClick={() => router.push('/profile/my')}>
+        <button
+          className="bg-white rounded-xl p-6 shadow-sm  hover:bg-gray-100 text-left"
+          onClick={() => router.push("/profile/my")}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
                 <span className="text-2xl">👤</span>
               </div>
               <div>
-                <Typography variant="HeadingNormalBold">김정아</Typography>
+                <Typography variant="HeadingNormalBold">{user.data?.nickname}</Typography>
                 <Typography
                   variant="ParagraphSmallRegular"
                   className="text-gray-600"
                 >
-                  정보통신공학과
+                  {user.data?.department}
                 </Typography>
               </div>
             </div>
@@ -90,59 +114,57 @@ export default function MyPageContainer() {
         </div>
 
         {/* 최근 활동 */}
-        <div className="bg-white rounded-xl shadow-sm">
-          <div
-            className="p-4 border-b"
-            onClick={() => {
-              router.push("/my/article");
-            }}
-          >
-            <Typography
-              variant="HeadingSmallBold"
-              className="flex items-center"
+        {articles.data?.pages?.[0]?.empty === false && (
+          <div className="bg-white rounded-xl shadow-sm">
+            <div
+              className="p-4 border-b"
+              onClick={() => {
+                router.push("/my/article");
+              }}
             >
-              <FontAwesomeIcon icon={faChartSimple} className="w-5 h-5 mr-2" />
-              최근 활동
-            </Typography>
-          </div>
-          <div className="divide-y">
-            {[
-              {
-                articleId: 1,
-                title: "React 상태관리 관련 질문입니다",
-                boardName: "질문 게시판",
-                updateDt: "2시간 전",
-              },
-            ].map((article) => (
-              <div
-                className="p-4 hover:bg-gray-50"
-                onClick={() => router.push(`/article/1/${article.articleId}`)}
+              <Typography
+                variant="HeadingSmallBold"
+                className="flex items-center"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Typography variant="ParagraphNormalBold">
-                      {article.title}
-                    </Typography>
-                    <Typography
-                      variant="LabelSmallRegular"
-                      className="text-gray-600"
-                    >
-                      {article.boardName}
-                    </Typography>
-                  </div>
-                  <Typography
-                    variant="LabelSmallRegular"
-                    className="text-gray-500"
+                <FontAwesomeIcon
+                  icon={faChartSimple}
+                  className="w-5 h-5 mr-2"
+                />
+                최근 활동
+              </Typography>
+            </div>
+            <div className="divide-y">
+              {articles.data?.pages
+                .slice(0, 1)
+                .flatMap((page) => page.content)
+                .slice(0, 3)
+                .map((article) => (
+                  <div
+                    className="p-4 hover:bg-gray-50"
+                    onClick={() =>
+                      router.push(`/article/1/${article.articleId}`)
+                    }
                   >
-                    {article.updateDt}
-                  </Typography>
-                </div>
-              </div>
-            ))}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Typography variant="ParagraphNormalBold">
+                          {article.title}
+                        </Typography>
+                      </div>
+                      <Typography
+                        variant="LabelSmallRegular"
+                        className="text-gray-500"
+                      >
+                        {article.updatedAt.format("yyyy-MM-dd")}
+                      </Typography>
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* 구독 중인 게시판 */}
+        {/* 구독 중인 게시판
         <div className="bg-white rounded-xl shadow-sm">
           <div
             className="p-4 border-b"
@@ -172,9 +194,9 @@ export default function MyPageContainer() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
-        <div className="grid grid-cols-1 gap-4">
+        {/* <div className="grid grid-cols-1 gap-4">
           <button className="bg-white p-6 rounded-xl shadow-sm hover:bg-gray-50 flex items-center justify-between group">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200">
@@ -226,7 +248,7 @@ export default function MyPageContainer() {
               className="w-5 h-5 text-gray-400"
             />
           </button>
-        </div>
+        </div> */}
       </ScrollView>
     </div>
   );

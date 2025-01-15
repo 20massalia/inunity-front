@@ -50,7 +50,9 @@ export default function Providers({
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      {process.env.NODE_ENV == "development" && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
       <PlatformProvider platform={platform}>
         <MenuProvider>
           <MessageProvider>{children}</MessageProvider>

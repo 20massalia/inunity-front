@@ -91,6 +91,7 @@ export default function RootLayout() {
 
       // Set cookie in WebView
       await AuthManager.setBulkCookiesToManager(cookies);
+      console.log('cookie setted')
 
       await SplashScreen.hideAsync();
     } catch (e) {

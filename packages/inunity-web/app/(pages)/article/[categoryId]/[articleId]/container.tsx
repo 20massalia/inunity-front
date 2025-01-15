@@ -31,6 +31,7 @@ import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/Article
 import { ClipLoader } from "react-spinners";
 import { usePlatform } from "@/lib/PlatformProvider";
 import LoadingOverlay from "@/shared/ui/LoadingOverlay";
+import useCategories from "@/entities/category/hooks/useCategories";
 export const Viewer = ({ content }: { content: OutputData }) => {
   return (
     <div className="overflow-x-scroll">
@@ -115,16 +116,25 @@ export default function ArticleDetailContainer({
     }
   }, [deleteComment.isError]);
 
+  const categories = useCategories();
+  const currentCategory = categories.data?.find(
+    (category) => category.id == categoryId
+  );
   if (!article) return <div>no data</div>;
-  return (
-    <>
-      <AppBar
-        center={
-          <div className="flex flex-col">
-            <Typography className="text-xs font-bold">컴퓨터공학부</Typography>
-            <Typography variant="HeadingNormalBold">공지사항</Typography>
-          </div>
-        }
+  
+   return (
+     <>
+       <AppBar
+         center={
+           <div className="flex flex-col">
+             <Typography className="text-xs font-bold">
+               {currentCategory?.name}
+             </Typography>
+             {currentCategory?.isNotice && (
+               <Typography variant="HeadingNormalBold">공지사항</Typography>
+             )}
+           </div>
+         }
         leftIcon={
           <FontAwesomeIcon
             icon={faChevronLeft}

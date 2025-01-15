@@ -3,5 +3,6 @@ export default interface ResponseCategory {
   name: string;
   description: string;
   isActive: boolean;
+  isNotice: boolean;
   icon: string;
 }

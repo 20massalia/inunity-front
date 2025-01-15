@@ -13,6 +13,7 @@ import { useNativeRouter } from "@/hooks/useNativeRouter";
 import useSubmitArticle from "@/features/board/hooks/useSubmitArticle";
 import { useMessageManager } from "@/shared/ui/MessageContext";
 import LoadingOverlay from "@/shared/ui/LoadingOverlay";
+import useCategories from "@/entities/category/hooks/useCategories";
 
 export default function ArticleWriteContainer({
   categoryId,
@@ -35,14 +36,22 @@ export default function ArticleWriteContainer({
       alert("글 작성에 실패했어요.. 🥲");
     }
   }, [submitArticle.isSuccess, submitArticle.isError]);
+  const categories = useCategories();
+  const currentCategory = categories.data?.find(
+    (category) => category.id == categoryId
+  );
 
   return (
     <>
       <AppBar
         center={
           <div className="flex flex-col">
-            <Typography className="text-xs font-bold">컴퓨터공학부</Typography>
-            <Typography variant="HeadingNormalBold">공지사항</Typography>
+            <Typography className="text-xs font-bold">
+              {currentCategory?.name}
+            </Typography>
+            {currentCategory?.isNotice && (
+              <Typography variant="HeadingNormalBold">공지사항</Typography>
+            )}
           </div>
         }
         leftIcon={
@@ -55,7 +64,7 @@ export default function ArticleWriteContainer({
         rightIcon={
           <div
             onClick={() => {
-              if (data?.blocks.length == 0) confirm('글을 작성해주세요.')
+              if (data?.blocks.length == 0) confirm("글을 작성해주세요.");
               if (confirm("글을 작성할까요?"))
                 submitArticle.mutate({
                   categoryId,
