@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
-import { Button, SwipeableTabs, Tab, Typography } from "ui";
+import { Button, ScrollView, SwipeableTabs, Tab, Typography } from "ui";
 import { DropdownMenu } from "ui/src/DropdownMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -216,9 +216,11 @@ export default function ProfileContainer({
           입력된 경력이 없어요. 😢
         </div>
       )}
-      <Button size="large" onClick={() => router.push(`/profile/my/careers`)}>
-        추가하기
-      </Button>
+      {isOwner && (
+        <Button size="large" onClick={() => router.push(`/profile/my/careers`)}>
+          추가하기
+        </Button>
+      )}
     </div>
   );
 
@@ -251,7 +253,7 @@ export default function ProfileContainer({
             )}
             <div className="text-lg font-extrabold">{project.title}</div>
             <div className="mt-1 text-sm text-gray-700">
-              {project.startDate} ~ {project.endDate}
+              {project.startDate} - {project.endDate}
             </div>
             {ogData && ogData[i]?.image ? (
               <img
@@ -269,17 +271,16 @@ export default function ProfileContainer({
           입력된 프로젝트가 없어요. 😢
         </div>
       )}
-      <Button
-        size="large"
-        onClick={() => router.push(`/profile/my/projects/page`)}
-      >
-        추가하기
-      </Button>
+      {isOwner && (
+        <Button
+          size="large"
+          onClick={() => router.push(`/profile/my/projects`)}
+        >
+          추가하기
+        </Button>
+      )}
     </div>
   );
-  // const ProjectsTabContent = () => (
-  //   <div className="text-center text-gray-500">프로젝트 탭은 주석 처리됨</div>
-  // );
 
   /*
     [3] 사용 기술 탭 (skill)
@@ -338,12 +339,14 @@ export default function ProfileContainer({
             입력된 기술이 없어요. 😢
           </div>
         )}
-        <Button
-          size="large"
-          onClick={() => router.push(`/profile/my/skills/page`)}
-        >
-          추가하기
-        </Button>
+        {isOwner && (
+          <Button
+            size="large"
+            onClick={() => router.push(`/profile/my/skills`)}
+          >
+            추가하기
+          </Button>
+        )}
       </div>
     );
   };
@@ -378,7 +381,7 @@ export default function ProfileContainer({
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col overflow-hidden">
       <LoadingOverlay isLoading={isPending} />
       {/* 상단 배너 */}
       <div
@@ -406,73 +409,78 @@ export default function ProfileContainer({
           </div>
         )}
       </div>
-
-      {/* 프로필 이미지 + SNS 아이콘 등 */}
-      <div className="relative flex flex-row px-4">
-        <div
-          className="
+      <ScrollView
+        className="bg-[#f8f8f8]  justify-start items-start flex text-black gap-2"
+        onRefresh={() => {}}
+      >
+        {/* 프로필 이미지 + SNS 아이콘 등 */}
+        <div className="relative flex flex-row px-4">
+          <div
+            className="
             -mt-12
             w-24 h-24
             rounded-full
             overflow-hidden
             shrink-0
           "
-        >
-          <img
-            src={avatarUrl || "https://via.placeholder.com/116x116"}
-            alt="profile image"
-            className="object-cover w-full h-full"
+          >
+            <img
+              src={avatarUrl || "https://via.placeholder.com/116x116"}
+              alt="profile image"
+              className="object-cover w-full h-full"
+            />
+          </div>
+
+          <div className="flex flex-col justify-center ml-4 mt-1">
+            <div className="flex flex-row gap-4 text-xl text-gray-600">
+              <FontAwesomeIcon
+                icon={faMessage}
+                className="cursor-pointer"
+                onClick={() => handleIconClick("KakaoTalk")}
+              />
+              <FontAwesomeIcon
+                icon={faGithub as IconProp}
+                className="cursor-pointer"
+                onClick={() => handleIconClick("Github")}
+              />
+              <FontAwesomeIcon
+                icon={faInstagram as IconProp}
+                className="cursor-pointer"
+                onClick={() => handleIconClick("Instagram")}
+              />
+            </div>
+            {profile.description ? (
+              <p className="text-sm text-gray-700 mt-1">
+                {profile.description}
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        {/* 이름 / 회사 / 직무 */}
+        <div className="mt-4 px-4">
+          <h1 className="text-xl font-bold">{profile.nickname}</h1>
+
+          <div className="mt-2 space-y-2">
+            <div className="flex items-center text-sm">
+              <span className="font-semibold">소속 |</span>
+              <span className="ml-1">{profile.organization}</span>
+            </div>
+            <div className="flex items-center text-sm">
+              <span className="font-semibold">직무 |</span>
+              <span className="ml-1">{profile.job}</span>
+            </div>
+          </div>
+        </div>
+        {/* 탭 영역 */}
+        <div className="mt-6 px-4 pb-8">
+          <SwipeableTabs
+            tabs={tabs}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
           />
         </div>
-
-        <div className="flex flex-col justify-center ml-4 mt-1">
-          <div className="flex flex-row gap-4 text-xl text-gray-600">
-            <FontAwesomeIcon
-              icon={faMessage}
-              className="cursor-pointer"
-              onClick={() => handleIconClick("KakaoTalk")}
-            />
-            <FontAwesomeIcon
-              icon={faGithub as IconProp}
-              className="cursor-pointer"
-              onClick={() => handleIconClick("Github")}
-            />
-            <FontAwesomeIcon
-              icon={faInstagram as IconProp}
-              className="cursor-pointer"
-              onClick={() => handleIconClick("Instagram")}
-            />
-          </div>
-          {profile.description ? (
-            <p className="text-sm text-gray-700 mt-1">{profile.description}</p>
-          ) : null}
-        </div>
-      </div>
-
-      {/* 이름 / 회사 / 직무 */}
-      <div className="mt-4 px-4">
-        <h1 className="text-xl font-bold">{profile.nickname}</h1>
-
-        <div className="mt-2 space-y-2">
-          <div className="flex items-center text-sm">
-            <span className="font-semibold">소속 |</span>
-            <span className="ml-1">{profile.organization}</span>
-          </div>
-          <div className="flex items-center text-sm">
-            <span className="font-semibold">직무 |</span>
-            <span className="ml-1">{profile.job}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 탭 영역 */}
-      <div className="mt-6 px-4 pb-8">
-        <SwipeableTabs
-          tabs={tabs}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-      </div>
+      </ScrollView>
     </div>
   );
 }
