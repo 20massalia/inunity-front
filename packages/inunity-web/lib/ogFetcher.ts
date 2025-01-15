@@ -9,23 +9,20 @@ export interface OGData {
 
 export async function getOGData(url: string): Promise<OGData> {
   try {
-    const { result } = await ogs({ url });
-
-    const imageUrl =
-      Array.isArray(result.ogImage) && result.ogImage.length > 0
-        ? (result.ogImage[0] as any)?.url
-        : typeof result.ogImage === "object"
-        ? (result.ogImage as any)?.url
-        : "";
+    const response = await fetch(`/api/og-data?url=${encodeURIComponent(url)}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
 
     return {
-      title: result.ogTitle || "",
-      description: result.ogDescription || "",
-      image: imageUrl || "",
-      url,
+      title: data.title || "",
+      description: data.description || "",
+      image: data.image || "",
+      url: url,
     };
   } catch (error) {
     console.error(`Failed to fetch OG data for ${url}:`, error);
-    return { url }; // 기본 URL만 반환
+    return { url };
   }
 }
