@@ -55,11 +55,13 @@ export default function MyPageContainer() {
   ];
 
   const user = useQuery({
-    queryKey: ['user'],
+    queryKey: ["user"],
     queryFn: async () => {
-      return await fetchExtended<{nickname: string; department: string;}>('v1/users/information');
-    }
-  })
+      return await fetchExtended<{ nickname: string; department: string }>(
+        "v1/users/information"
+      );
+    },
+  });
 
   return (
     <div className="w-full h-full">
@@ -75,7 +77,9 @@ export default function MyPageContainer() {
                 <span className="text-2xl">👤</span>
               </div>
               <div>
-                <Typography variant="HeadingNormalBold">{user.data?.nickname}</Typography>
+                <Typography variant="HeadingNormalBold">
+                  {user.data?.nickname}
+                </Typography>
                 <Typography
                   variant="ParagraphSmallRegular"
                   className="text-gray-600"
@@ -140,6 +144,7 @@ export default function MyPageContainer() {
                 .slice(0, 3)
                 .map((article) => (
                   <div
+                    key={article.articleId}
                     className="p-4 hover:bg-gray-50"
                     onClick={() =>
                       router.push(`/article/1/${article.articleId}`)

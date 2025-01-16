@@ -1,4 +1,5 @@
 export default interface ResponseComment {
+  articleId: number;
   //ResponseComment: 댓글 내용. 보낼때는 List<ResponseComment> comments로 갑니다
   /*
 commentId 댓글 PK
@@ -20,5 +21,5 @@ createAt: 작성 날짜/시간 2024-12-24T10:20:35.123
   content: string;
   isOwner: boolean;
   createAt?: Date;
-  replyComments: Omit<ResponseComment[], 'replyComments'>
+  replyComments: Omit<ResponseComment[], "replyComments">;
 }

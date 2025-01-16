@@ -11,12 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import AppBar from "@/widgets/AppBar";
-import useNotification from "@/features/notification/hooks/useNotification";
 import useArticles from "@/entities/article/hooks/useArticles";
 import ArticleCard from "@/entities/article/ui/ArticleCard";
 import ToggleLikeIcon from "@/features/board/ui/\bToggleLike/ToggleLikeIcon";
 import ToggleBoomarkIcon from "@/features/board/ui/ToggleBookmark/ToggleBookmarkIcon";
 import { useState } from "react";
+import useWrittenArticles from "@/entities/article/hooks/useWrittenArticles";
+import useWrittenComments from "@/entities/comment/hooks/useWrittenComments";
 
 const activities = ["article", "comment"];
 export default function ActivityListContainer({
@@ -25,7 +26,9 @@ export default function ActivityListContainer({
   activity: "article" | "comment";
 }) {
   const router = useNativeRouter();
-  const articleQuery = useArticles();
+  const articles = useWrittenArticles();
+  const comments = useWrittenComments();
+
   const tabIndex = activities.findIndex((v) => v == activity);
 
   return (
@@ -50,7 +53,7 @@ export default function ActivityListContainer({
             content: (
               <div className="p-5 gap-3 flex flex-col">
                 <ScrollView>
-                  {articleQuery.data?.pages
+                  {articles.data?.pages
                     .flatMap((page) => page.content)
                     .map((article) => (
                       <ArticleCard
@@ -74,20 +77,24 @@ export default function ActivityListContainer({
             content: (
               <div className="p-5 gap-3 flex flex-col">
                 <ScrollView>
-                  {articleQuery.data?.pages
-                    .flatMap((page) => page.content)
-                    .map((article) => (
-                      <ArticleCard
-                        {...article}
-                        key={article.articleId}
-                        bottomFeatureSlot={
-                          <>
-                            <ToggleLikeIcon article={article} />
-                            <ToggleBoomarkIcon article={article} />
-                          </>
-                        }
-                      />
-                    ))}
+                  {comments.data?.map((comment) => (
+                    <ArticleCard
+                      key={comment.commentId}
+                      title={""}
+                      userId={0}
+                      department={""}
+                      nickname={""}
+                      isAnonymous={false}
+                      articleId={0}
+                      content={comment.content}
+                      createAt={comment.createAt!}
+                      updatedAt={comment.createAt!}
+                      commentNum={0}
+                      likeNum={0}
+                      isLiked={false}
+                      userImageUrl={""}
+                    />
+                  ))}
                 </ScrollView>
               </div>
             ),

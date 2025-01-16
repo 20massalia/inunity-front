@@ -47,7 +47,6 @@ export const ListCard: React.FC<CardProps<'list'>> = ({
         profileImage={avatarUrl}
         name={author ?? "익명"}
         introduction={authorDescription}
-        id={2}
         actions={actions}
       />
       <Typography

@@ -68,7 +68,6 @@ export const ArticleListItem: React.FC<ArticleListItemProps> = ({
         profileImage={avatarUrl}
         name={name}
         introduction={department}
-        id={0}
         actions={
           <DropdownMenu
             menuId={`article_${articleId}`}
