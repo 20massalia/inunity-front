@@ -37,7 +37,6 @@ import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/Article
 import useCategories from "@/entities/category/hooks/useCategories";
 import useAdvertises from "@/entities/advertise/hooks/useAdvertises";
 import { ClipLoader } from "react-spinners";
-import useAdvertisesOG from "@/entities/advertise/hooks/useAdvertisesOg";
 
 export default function HomeContainer() {
   // ViewModel 이용

@@ -93,12 +93,11 @@ export default function RootLayout() {
       await AuthManager.setBulkCookiesToManager(cookies);
       console.log('cookie setted')
 
-      await SplashScreen.hideAsync();
     } catch (e) {
       console.log("Authentication failed:", e);
       router.replace("/auth");
-      await SplashScreen.hideAsync();
     }
+    await SplashScreen.hideAsync();
   };
 
   // Initialize AppLifecycleHandler
