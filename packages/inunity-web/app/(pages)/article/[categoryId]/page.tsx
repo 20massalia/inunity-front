@@ -4,7 +4,6 @@ import getDehydratedQuery, {
 import ArticleListContainer from "@/app/(pages)/article/[categoryId]/container";
 import { Hydration } from "@/shared/ui/Hydration";
 import SafeAreaView from "@/widgets/SafeAreaView";
-import { generateMockArticleThumbnails } from "@/entities/article/model/ArticleMock";
 import ArticleQueries from "@/entities/article/hooks/ArticleQueries";
 import CategoryQuery from "@/entities/category/hooks/CategoryQuery";
 

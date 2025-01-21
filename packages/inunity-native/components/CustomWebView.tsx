@@ -4,7 +4,6 @@ import { Platform } from "react-native";
 import {
   handleMessage,
   parseMessage,
-  useMessageManager,
 } from "@/lib/MessageManager";
 import {
   MessageEventType,
@@ -12,12 +11,11 @@ import {
   PageEvent,
 } from "message-type/message-type";
 import { router } from "expo-router";
-import { isLightColor } from "@/lib/ColorUtil";
-import { setStatusBarStyle } from "expo-status-bar";
-import { MutableRefObject, useEffect, useState } from "react";
 import AuthManager from "@/lib/AuthManager";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import React from "react";
+import * as Notifications from "expo-notifications";
+
 
 export default function CustomWebView({
   id,
@@ -61,6 +59,8 @@ export default function CustomWebView({
           [MessageEventType.Login]: async () => {
             const cookies = await AuthManager.getAllCookiesFromManager();
             await AuthManager.saveBulkCookiesToStorage(cookies);
+            const token = await Notifications.getDevicePushTokenAsync();
+            
           },
           [MessageEventType.Navigation]: () => {
             const navigation = message.value as NavigationEvent;

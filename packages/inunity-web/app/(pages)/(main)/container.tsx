@@ -35,15 +35,22 @@ const myFont = localFont({ src: "../../../assets/fonts/TossFaceFontMac.ttf" });
 
 import ArticleListDropdownMenu from "@/features/board/ui/ArticleListMenu/ArticleListDropdownMenu";
 import useCategories from "@/entities/category/hooks/useCategories";
+import useAdvertises from "@/entities/advertise/hooks/useAdvertises";
 import { ClipLoader } from "react-spinners";
 
 export default function HomeContainer() {
   // ViewModel 이용
-  const {
-    articles,
-    notices,
-    notifications: { length },
-  } = useHomeViewModel();
+  const { articles, notices, notifications } = useHomeViewModel();
+  const unreadCount =
+    notifications.data?.pages.reduce((total, page) => {
+      return (
+        total +
+        page.content.reduce((pageTotal, notification) => {
+          return pageTotal + (notification.isRead ? 0 : 1);
+        }, 0)
+      );
+    }, 0) ?? 0;
+
   const { messageManager } = useMessageManager();
   const settings: Settings = {
     dots: true,
@@ -62,6 +69,8 @@ export default function HomeContainer() {
   const router = useNativeRouter();
 
   const categoryQuery = useCategories();
+  const advertisesQuery = useAdvertises();
+  const advertises = advertisesQuery.data?.content || [];
 
   return (
     <>
@@ -80,13 +89,13 @@ export default function HomeContainer() {
               onClick={() => router.push("/notification")}
             >
               <FontAwesomeIcon fontSize={24} icon={faBell} />
-              {(length ?? 0) > 0 && (
+              {(unreadCount ?? 0) > 0 && (
                 <div className=" absolute -bottom-2 -right-2 w-5 h-5 bg-red-600 rounded-full flex justify-center items-center ">
                   <Typography
                     className="text-white"
                     variant="ParagraphNormalBold"
                   >
-                    {length}
+                    {unreadCount}
                   </Typography>
                 </div>
               )}
@@ -108,59 +117,68 @@ export default function HomeContainer() {
             {<ClipLoader />}
           </div>
         )}
+        {/* 배너 슬라이더 섹션 */}
         <Slider {...settings} className="w-full mb-7">
-          {[banner, banner2, banner3].map((banner, idx) => (
-            <div key={idx} className="pt-5 px-2">
-              <Image
-                src={banner}
-                alt=""
-                className="rounded-xl object-cover h-[200px] w-full"
-                height={200}
-              ></Image>
-            </div>
-          ))}
+          {advertises.map((ad, index) => {
+            return (
+              <div key={ad.advertiseId} className="pt-5 px-2">
+                <Image
+                  src={ad.url}
+                  alt={ad.title}
+                  className="rounded-xl object-cover h-[200px] w-full"
+                  height={200}
+                  width={600}
+                  unoptimized
+                />
+                <div
+                  className="absolute inset-0"
+                  onClick={() => window.open(ad.url, "_blank")}
+                />
+              </div>
+            );
+          })}
         </Slider>
         <div className="flex flex-row flex-wrap py-3 justify-center items-start gap-1 gap-y-4">
           {[
             {
               label: "컴퓨터공학부",
               image: "🧑‍💻",
-              link: "/article/1",
+              link: "/article/3",
             },
             {
               label: "임베디드시스템공학과",
               image: "🤖",
-              link: "/article/2",
+              link: "/article/4",
             },
             {
               label: "정보통신공학과",
               image: "🛜",
-              link: "/article/3",
+              link: "/article/5",
             },
             {
               label: "정보기술대학",
               image: "🏛️",
-              link: "/article/4",
+              link: "/article/2",
             },
             {
               label: "자유게시판",
               image: "💬",
-              link: "/article/5",
+              link: "/article/6",
             },
             {
               label: "모집게시판",
               image: "🙋🏻‍♂️",
-              link: "/article/6",
+              link: "/article/7",
             },
             {
               label: "질문게시판",
               image: "⁉️",
-              link: "/article/7",
+              link: "/article/8",
             },
             {
               label: "취업후기",
               image: "💼",
-              link: "/article/8",
+              link: "/article/9",
             },
           ].map((item) => (
             <div

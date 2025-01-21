@@ -47,10 +47,11 @@ export async function getDehydratedInfiniteQuery<
     (query) =>
       query.queryHash === (args.queryHash ?? JSON.stringify(args.queryKey))
   );
+  console.log(args.queryKey, dehydratedQuery)
 
   return {
     ...dehydratedQuery,
-    state: dehydratedQuery.state as QueryState<TData, Error>
+    state: dehydratedQuery?.state as QueryState<TData, Error>
   }
 }
 

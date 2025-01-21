@@ -14,7 +14,6 @@ import { Divider, Input, SimpleListItem, Typography } from "ui";
 import { useNativeRouter } from "@/hooks/useNativeRouter";
 import useCategories from "@/entities/category/hooks/useCategories";
 
-const icons = ["school", "laptop-code", "microchip", "wifi", 'person-circle-question'] as IconName[];
 
 export default function BoardListContainer() {
   const [searchValue, setSearchValue] = useState("");
@@ -22,7 +21,6 @@ export default function BoardListContainer() {
   const categoryQuery = useCategories();
   const categories = categoryQuery.data?.map((category, idx) => ({
     ...category,
-    icon: icons[idx],
   }));
   const router = useNativeRouter();
 
@@ -44,7 +42,7 @@ export default function BoardListContainer() {
             <SimpleListItem
               text={menu.name}
               key={menu.id}
-              leftIcon={<FontAwesomeIcon icon={menu.icon} />}
+              leftIcon={<FontAwesomeIcon icon={menu.icon as IconName} />}
               onClick={() => {
                 router.push(`/article/${menu.id}`);
               }}

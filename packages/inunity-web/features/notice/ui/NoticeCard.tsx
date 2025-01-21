@@ -12,6 +12,7 @@ export default function NoticeCard({ ...notice }: ResponseArticleThumbnail) {
       variant='detailed'
       fromUpdate={notice.updatedAt.toDateString()}
       isBookmarked={false}
+      thumbnailUrl="/inu.svg"
     />
   );
 }

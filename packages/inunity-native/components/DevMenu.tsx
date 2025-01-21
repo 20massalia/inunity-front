@@ -8,6 +8,7 @@ import { Alert } from "react-native";
 import { useWebView } from "./useWebView";
 import AuthManager from "@/lib/AuthManager";
 import { Cookie } from "@react-native-cookies/cookies";
+import * as Notifications from "expo-notifications";
 
 export default function DevMenu({ children }: PropsWithChildren) {
   const { activeWebView, setUrl } = useWebView();
@@ -210,6 +211,19 @@ export default function DevMenu({ children }: PropsWithChildren) {
           );
         },
       },
+      {
+        name: "Send test notification",
+        callback: async () => {
+              await Notifications.scheduleNotificationAsync({
+                content: {
+                  title: "테스트 알림",
+                  body: "이것은 테스트 알림입니다.",
+                  data: { data: "goes here" },
+                },
+                trigger: null, // 즉시 전송
+              });
+        }
+      }
     ];
     registerDevMenuItems(devMenuItems);
   }, []);

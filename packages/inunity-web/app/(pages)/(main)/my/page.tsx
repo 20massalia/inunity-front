@@ -1,3 +1,8 @@
+import SafeAreaView from "@/widgets/SafeAreaView";
+import MyPageContainer from "./container";
+
 export default function Page() {
-    return 'my'
+  return <SafeAreaView>
+    <MyPageContainer/>
+  </SafeAreaView>
 }

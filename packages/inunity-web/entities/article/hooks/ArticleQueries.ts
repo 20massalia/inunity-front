@@ -37,6 +37,7 @@ export default class ArticleQueries {
     details: () => [...this.QueryKeys.all, "detail"] as const,
     detail: (id: number) => [...this.QueryKeys.details(), id] as const,
     featured: () => [...this.QueryKeys.lists(), "featured"] as const,
+    written: () => [...this.QueryKeys.lists(), 'written'] as const
   } as const;
 
   static singleArticleQuery(id: number) {
@@ -102,6 +103,26 @@ export default class ArticleQueries {
               categoryId: categoryId?.toString(),
               keyword,
             },
+            next: { revalidate: 3600 },
+          }
+        );
+      },
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) =>
+        lastPage.last ? undefined : lastPage.number + 1,
+      getPreviousPageParam: (firstPage) =>
+        firstPage.first ? undefined : firstPage.number,
+    });
+  }
+
+  static infiniteWrittenArticleQuery() {
+    return infiniteQueryOptions({
+      queryKey: this.QueryKeys.written(),
+      queryFn: async ({ pageParam, queryKey: [_, __, filter] }) => {
+        return await fetchExtended<Page<ResponseArticleThumbnail>>(
+          `/v1/users/articles/wrote`,
+          {
+            query: { page: pageParam.toString(), size: "20" },
             next: { revalidate: 3600 },
           }
         );

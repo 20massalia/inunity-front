@@ -1,17 +1,30 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect, TouchEvent, MouseEvent } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  TouchEvent,
+  MouseEvent,
+} from "react";
 
 export type Tab = {
   title: string;
   id: number;
-  content: React.ReactNode
+  content: React.ReactNode;
 };
 
-export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
-  const [activeTab, setActiveTab] = useState(0);
-  const [touchStart, setTouchStart] = useState<number|null>(null);
-  const [touchEnd, setTouchEnd] = useState<number|null>(null);
+export const SwipeableTabs = ({
+  tabs,
+  activeTab,
+  setActiveTab,
+}: {
+  tabs: Tab[];
+  activeTab: number;
+  setActiveTab: (tab: ((prev: number) => number) | number ) => void;
+}) => {
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const tabContainerRef = useRef(null);
 
   // 최소 스와이프 거리
@@ -28,16 +41,16 @@ export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
     if (isLeftSwipe && activeTab < tabs.length - 1) {
-      setActiveTab(prev => prev + 1);
+      setActiveTab((prev: number) => prev + 1);
     }
     if (isRightSwipe && activeTab > 0) {
-      setActiveTab(prev => prev - 1);
+      setActiveTab((prev) => prev - 1);
     }
   };
 
@@ -58,22 +71,22 @@ export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
   const onMouseUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    
+
     if (!startX || !touchEnd) return;
     const distance = startX - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
     if (isLeftSwipe && activeTab < tabs.length - 1) {
-      setActiveTab(prev => prev + 1);
+      setActiveTab((prev) => prev + 1);
     }
     if (isRightSwipe && activeTab > 0) {
-      setActiveTab(prev => prev - 1);
+      setActiveTab((prev) => prev - 1);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="w-full">
       {/* 탭 헤더 */}
       <div className="flex border-b border-gray-200">
         {tabs.map((tab) => (
@@ -81,9 +94,10 @@ export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex-1 py-4 px-4 text-sm font-medium text-center transition-colors duration-200
-              ${activeTab === tab.id 
-                ? 'text-primary border-b-2 border-primary' 
-                : 'text-gray-500 hover:text-gray-700'
+              ${
+                activeTab === tab.id
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
           >
             {tab.title}
@@ -103,17 +117,14 @@ export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
       >
-        <div 
+        <div
           className="flex transition-transform duration-300 ease-in-out"
           style={{
             transform: `translateX(-${activeTab * 100}%)`,
           }}
         >
           {tabs.map((tab) => (
-            <div
-              key={tab.id}
-              className="w-full flex-shrink-0"
-            >
+            <div key={tab.id} className="w-full flex-shrink-0">
               {tab.content}
             </div>
           ))}
@@ -122,4 +133,3 @@ export const SwipeableTabs = ({tabs}: {tabs: Tab[]}) => {
     </div>
   );
 };
-

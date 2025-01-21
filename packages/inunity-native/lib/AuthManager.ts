@@ -22,9 +22,7 @@ export default class AuthManager {
    * @returns {Promise<Cookies>} 모든 쿠키 객체
    */
   static async getAllCookiesFromManager(): Promise<Cookies> {
-    return Platform.OS === "ios"
-      ? await CookieManager.getAll(true)
-      : await CookieManager.get(this.BASE_URL);
+    return await CookieManager.get(this.BASE_URL);
   }
 
   /**
@@ -41,7 +39,7 @@ export default class AuthManager {
    */
   static async setBulkCookiesToManager(cookies: Cookies): Promise<void> {
     for (const [key, cookie] of Object.entries(cookies)) {
-      await CookieManager.set(this.BASE_URL, cookie, true)
+      await CookieManager.set(this.BASE_URL, cookie, true);
     }
   }
 
