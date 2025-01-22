@@ -118,7 +118,7 @@ export default function HomeContainer() {
           </div>
         )}
         {/* 배너 슬라이더 섹션 */}
-        <Slider {...settings} className="w-full mb-7">
+        {/* <Slider  {...settings} className="w-full mb-7">
           {advertises.map((ad, index) => {
             return (
               <div key={ad.advertiseId} className="pt-5 px-2">
@@ -137,7 +137,7 @@ export default function HomeContainer() {
               </div>
             );
           })}
-        </Slider>
+        </Slider> */}
         <div className="flex flex-row flex-wrap py-3 justify-center items-start gap-1 gap-y-4">
           {[
             {

@@ -9,7 +9,7 @@ import Header from "@editorjs/header";
 import uploadImage from "./uploadImage";
 export const EDITOR_TOOLS = {
   code: Code,
-  paragraph: { class: Paragraph, inlineToolbar: true },
+  // paragraph: { class: Paragraph, inlineToolbar: true },
   header: Header,
   list: List,
   quote: Quote,

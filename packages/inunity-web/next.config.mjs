@@ -1,9 +1,9 @@
 import pwa from "next-pwa";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
+// import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const withPWA = pwa({
   dest: "public",
@@ -12,14 +12,14 @@ const withPWA = pwa({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `https://${process.env.NEXT_PUBLIC_JEAN}/:path*`,
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/:path*",
+  //       destination: `https://${process.env.NEXT_PUBLIC_JEAN}/:path*`,
+  //     },
+  //   ];
+  // },
 };
 
 export default withPWA(nextConfig);
