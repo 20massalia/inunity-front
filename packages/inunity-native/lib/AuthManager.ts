@@ -14,11 +14,13 @@ function isCookieName(key: string): key is CookieName {
 }
 
 export default class AuthManager {
-  private static readonly BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "https://server.inunity.club";
+  private static readonly BASE_URL =
+    process.env.EXPO_PUBLIC_API_BASE_URL || "https://server.inunity.club";
   private static readonly COOKIE_KEYS = Object.values(CookieName);
-  
+
   // Mock authentication for local development
-  private static readonly MOCK_AUTH = process.env.EXPO_PUBLIC_MOCK_AUTH === "true";
+  private static readonly MOCK_AUTH =
+    process.env.EXPO_PUBLIC_MOCK_AUTH === "true";
 
   /**
    * CookieManager를 이용해 WebView에 저장된 모든 쿠키를 가져옵니다.
@@ -122,7 +124,7 @@ export default class AuthManager {
         value: "mock-access-token-" + Date.now(),
         domain: "localhost",
         path: "/",
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24시간 후 만료
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24시간 후 만료
         secure: false,
         httpOnly: false,
       },
@@ -131,7 +133,7 @@ export default class AuthManager {
         value: "mock-refresh-token-" + Date.now(),
         domain: "localhost",
         path: "/",
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7일 후 만료
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7일 후 만료
         secure: false,
         httpOnly: false,
       },
@@ -140,7 +142,7 @@ export default class AuthManager {
         value: "mock-session-" + Date.now(),
         domain: "localhost",
         path: "/",
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24시간 후 만료
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24시간 후 만료
         secure: false,
         httpOnly: false,
       },
