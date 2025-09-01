@@ -1,0 +1,10 @@
+🚀 Mock server is running on http://localhost:8080
+📱 Available endpoints:
+   GET  /health
+   GET  /v1/auth/test
+   POST /v1/auth/login
+   GET  /v1/users
+   GET  /v1/articles
+   GET  /v1/categories
+
+🔑 Mock credentials: studentId: "202012345", password: "password"

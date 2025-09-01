@@ -14,8 +14,11 @@ function isCookieName(key: string): key is CookieName {
 }
 
 export default class AuthManager {
-  private static readonly BASE_URL = "https://server.inunity.club";
+  private static readonly BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "https://server.inunity.club";
   private static readonly COOKIE_KEYS = Object.values(CookieName);
+  
+  // Mock authentication for local development
+  private static readonly MOCK_AUTH = process.env.EXPO_PUBLIC_MOCK_AUTH === "true";
 
   /**
    * CookieManager를 이용해 WebView에 저장된 모든 쿠키를 가져옵니다.
@@ -103,5 +106,60 @@ export default class AuthManager {
       this.clearAllCookiesFromStorage(),
       this.clearAllCookiesFromManager(),
     ]);
+  }
+
+  /**
+   * 로컬 개발을 위한 Mock 인증 쿠키를 생성합니다.
+   */
+  static async createMockAuthCookies(): Promise<Cookies> {
+    if (!this.MOCK_AUTH) {
+      throw new Error("Mock authentication is not enabled");
+    }
+
+    const mockCookies: Cookies = {
+      [CookieName.AccessToken]: {
+        name: CookieName.AccessToken,
+        value: "mock-access-token-" + Date.now(),
+        domain: "localhost",
+        path: "/",
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24시간 후 만료
+        secure: false,
+        httpOnly: false,
+      },
+      [CookieName.RefreshToken]: {
+        name: CookieName.RefreshToken,
+        value: "mock-refresh-token-" + Date.now(),
+        domain: "localhost",
+        path: "/",
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7일 후 만료
+        secure: false,
+        httpOnly: false,
+      },
+      [CookieName.SessionId]: {
+        name: CookieName.SessionId,
+        value: "mock-session-" + Date.now(),
+        domain: "localhost",
+        path: "/",
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24시간 후 만료
+        secure: false,
+        httpOnly: false,
+      },
+    };
+
+    return mockCookies;
+  }
+
+  /**
+   * Mock 인증이 활성화되어 있는지 확인합니다.
+   */
+  static isMockAuthEnabled(): boolean {
+    return this.MOCK_AUTH;
+  }
+
+  /**
+   * Mock 인증을 위한 로컬 도메인 URL을 반환합니다.
+   */
+  static getLocalBaseUrl(): string {
+    return this.MOCK_AUTH ? "http://localhost" : this.BASE_URL;
   }
 }

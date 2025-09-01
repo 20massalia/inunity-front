@@ -19,7 +19,7 @@ import DevMenu from "@/components/DevMenu";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const API_BASE_URL = "https://server.inunity.club/v1";
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "https://server.inunity.club/v1";
 
 interface ApiResponse {
   status: number;
@@ -70,6 +70,28 @@ export default function RootLayout() {
   };
 
   const authorizeApp = async () => {
+    // Mock 인증이 활성화된 경우 Mock 쿠키 생성
+    if (AuthManager.isMockAuthEnabled()) {
+      try {
+        console.log("Mock authentication enabled, creating mock cookies");
+        const mockCookies = await AuthManager.createMockAuthCookies();
+        
+        // Mock 쿠키를 WebView와 Storage에 설정
+        await AuthManager.setBulkCookiesToManager(mockCookies);
+        await AuthManager.saveBulkCookiesToStorage(mockCookies);
+        
+        console.log('Mock cookies set successfully');
+        await SplashScreen.hideAsync();
+        return;
+      } catch (e) {
+        console.log("Mock authentication failed:", e);
+        router.replace("/auth");
+        await SplashScreen.hideAsync();
+        return;
+      }
+    }
+
+    // 기존 쿠키 인증 로직
     if (!isCookieSuccess || !cookies?.[CookieName.AccessToken]) {
       router.replace("/auth");
       await SplashScreen.hideAsync();

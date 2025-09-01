@@ -15,39 +15,39 @@ interface PasswordFormProps {
 }
 
 async function attemptLogin(studentNumber: string, password: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/auth/login`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // 쿠키 포함
-      body: JSON.stringify({ studentId: Number(studentNumber), password }),
-    }
-  );
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+  const response = await fetch(`${apiUrl}/v1/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // 쿠키 포함
+    body: JSON.stringify({ studentId: studentNumber, password }),
+  });
 
   // 응답이 실패인 경우 에러 메시지 파싱
   if (!response.ok) {
     const { message } = await response.json();
     throw new Error(message);
   }
+
+  return response.json();
 }
 
 async function attemptRegister(studentNumber: string, password: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/auth/register`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // 쿠키 포함
-      body: JSON.stringify({ studentId: Number(studentNumber), password }),
-    }
-  );
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+  const response = await fetch(`${apiUrl}/v1/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // 쿠키 포함
+    body: JSON.stringify({ studentId: studentNumber, password }),
+  });
 
   // 응답이 실패인 경우 에러 메시지 파싱
   if (!response.ok) {
     const { message } = await response.json();
     throw new Error(`회원 가입 중 오류 발생: ${message}`);
   }
+
+  return response.json();
 }
 
 export default function PasswordForm({
@@ -57,7 +57,6 @@ export default function PasswordForm({
   handleLoginSuccess,
   handleRegisterSuccess,
 }: PasswordFormProps) {
-  
   const handleNext = async () => {
     if (!password.trim()) {
       alert("비밀번호를 입력해주세요!");

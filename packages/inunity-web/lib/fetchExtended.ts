@@ -110,7 +110,7 @@ export const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
 // Create an extended fetch function and use it instead of the global fetch.
 const fetchExtended = returnFetchJson({
   // default options
-  baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
+  baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080",
 });
 
 export default fetchExtended

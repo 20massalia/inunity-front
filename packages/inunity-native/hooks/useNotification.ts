@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Platform } from "react-native";
-import messaging from "@react-native-firebase/messaging";
+// Firebase는 프로덕션에서만 사용
+// import messaging from "@react-native-firebase/messaging";
 import AuthManager from "@/lib/AuthManager";
 
 async function updateTokenOnServer(token: string) {
@@ -33,18 +34,9 @@ async function updateTokenOnServer(token: string) {
 }
 
 async function requestUserPermission() {
-  const authStatus = await messaging().requestPermission();
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-  if (enabled) {
-    console.log("Authorization status:", authStatus);
-    return true;
-  }
-
-  console.log("User declined push notifications");
-  return false;
+  // 로컬 개발에서는 Firebase 없이 Mock 권한 부여
+  console.log("Mock: Push notification permission granted");
+  return true;
 }
 
 export default function useNotification() {
@@ -55,48 +47,21 @@ export default function useNotification() {
     const initialize = async () => {
       const hasPermission = await requestUserPermission();
       if (hasPermission) {
-        const token = await messaging().getToken();
-        if (token) {
-          setFcmToken(token);
-          updateTokenOnServer(token);
-        }
+        // Mock FCM 토큰 생성
+        const mockToken = `mock-fcm-token-${Date.now()}`;
+        setFcmToken(mockToken);
+        console.log("Mock FCM token generated:", mockToken);
+        // updateTokenOnServer(mockToken); // Mock 서버에 토큰 업데이트
       }
     };
 
     initialize();
 
-    const unsubscribeOnMessage = messaging().onMessage(
-      async (remoteMessage) => {
-        console.log(
-          "A new FCM message arrived!",
-          JSON.stringify(remoteMessage)
-        );
-        setNotification(remoteMessage);
-      }
-    );
-
-    const unsubscribeOnNotificationOpenedApp =
-      messaging().onNotificationOpenedApp((remoteMessage) => {
-        console.log(
-          "Notification caused app to open from background state:",
-          JSON.stringify(remoteMessage)
-        );
-      });
-
-    messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
-        if (remoteMessage) {
-          console.log(
-            "Notification caused app to open from quit state:",
-            JSON.stringify(remoteMessage)
-          );
-        }
-      });
+    // Mock 메시지 리스너 (로컬 개발용)
+    console.log("Mock: Push notification listeners initialized");
 
     return () => {
-      unsubscribeOnMessage();
-      unsubscribeOnNotificationOpenedApp();
+      console.log("Mock: Push notification listeners cleaned up");
     };
   }, []);
 
