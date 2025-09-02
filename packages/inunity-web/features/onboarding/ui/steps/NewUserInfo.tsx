@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Button, Input, Typography, CheckBox } from "ui";
-import { DateInput } from "../DateInput";
+import { DateInput } from "@/features/onboarding/ui/DateInput";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import FadeInOutStep from "./FadeInOutStep";
 

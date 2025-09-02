@@ -1,53 +1,20 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Button, Input, Typography } from "ui";
 import FadeInOutStep from "./FadeInOutStep";
-import { useMessageManager } from "@/shared/ui/MessageContext";
+import {
+  ApiError,
+  loginPortal,
+  registerPortal,
+} from "@/features/onboarding/api/onboarding.api";
 
 interface PasswordFormProps {
   studentNumber: string;
   password: string;
   setPassword: (password: string) => void;
-  handleLoginSuccess: () => void;
-  handleRegisterSuccess: () => void;
-}
-
-async function attemptLogin(studentNumber: string, password: string) {
-  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-  const response = await fetch(`${apiUrl}/v1/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include", // 쿠키 포함
-    body: JSON.stringify({ studentId: studentNumber, password }),
-  });
-
-  // 응답이 실패인 경우 에러 메시지 파싱
-  if (!response.ok) {
-    const { message } = await response.json();
-    throw new Error(message);
-  }
-
-  return response.json();
-}
-
-async function attemptRegister(studentNumber: string, password: string) {
-  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-  const response = await fetch(`${apiUrl}/v1/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include", // 쿠키 포함
-    body: JSON.stringify({ studentId: studentNumber, password }),
-  });
-
-  // 응답이 실패인 경우 에러 메시지 파싱
-  if (!response.ok) {
-    const { message } = await response.json();
-    throw new Error(`회원 가입 중 오류 발생: ${message}`);
-  }
-
-  return response.json();
+  handleLoginSuccess: () => void; // 4.1 기존 사용자 플로우
+  handleRegisterSuccess: () => void; // 4.2 신규 사용자 플로우(다음 스텝으로)
 }
 
 export default function PasswordForm({
@@ -57,6 +24,8 @@ export default function PasswordForm({
   handleLoginSuccess,
   handleRegisterSuccess,
 }: PasswordFormProps) {
+  const [shown, setShown] = useState(true);
+
   const handleNext = async () => {
     if (!password.trim()) {
       alert("비밀번호를 입력해주세요!");
@@ -64,36 +33,40 @@ export default function PasswordForm({
     }
 
     try {
-      // 1) 먼저 로그인 시도
-      await attemptLogin(studentNumber, password);
-      // 로그인 성공 시
-      handleLoginSuccess();
-    } catch (error) {
-      // 2) 로그인 실패 시 분기 처리
-      if (error instanceof Error) {
-        if (error.message === "서비스에 가입되지 않은 유저입니다.") {
-          // 회원가입 진행
+      // 1) 로그인 시도
+      const res = await loginPortal({ studentId: studentNumber, password });
+
+      // 2) 성공 → 가입 이력에 따라 분기
+      if (res.hasHistory) {
+        handleLoginSuccess(); // 4.1
+      } else {
+        // 4.2 "처음이네요!" 스텝으로 진행
+        handleRegisterSuccess();
+      }
+    } catch (e) {
+      // 3) 실패 → 미가입이면 회원가입 후 4.2로, 그 외는 에러 안내
+      if (e instanceof ApiError) {
+        if (e.code === "USER_NOT_FOUND") {
           try {
-            await attemptRegister(studentNumber, password);
-            handleRegisterSuccess();
-          } catch (registerError) {
-            if (registerError instanceof Error) {
-              alert(registerError.message);
-            } else {
-              alert("알 수 없는 오류가 발생했습니다.");
-            }
+            await registerPortal({ studentId: studentNumber, password });
+            handleRegisterSuccess(); // 4.2
+          } catch (re) {
+            const msg =
+              re instanceof ApiError
+                ? re.message
+                : "회원가입 중 알 수 없는 오류";
+            alert(msg);
           }
-        } else if (error.message === "포탈 로그인 실패: 아이디비번 틀림") {
+        } else if (e.code === "INVALID_CREDENTIALS") {
           alert("아이디 또는 비밀번호가 잘못되었습니다. 다시 확인해주세요.");
         } else {
-          alert(`로그인 실패: ${error.message || "알 수 없는 오류"}`);
+          alert(`로그인 실패: ${e.message}`);
         }
       } else {
-        alert("네트워크 오류: 알 수 없는 문제");
+        alert("네트워크 오류가 발생했습니다.");
       }
     }
   };
-  const [shown, setShown] = useState(true); // 텍스트가 보이는지 여부
 
   return (
     <FadeInOutStep onExit={handleNext} shown={shown}>
@@ -111,6 +84,7 @@ export default function PasswordForm({
           className="self-stretch"
         />
       </div>
+
       <div className="mt-auto mb-5 flex flex-col gap-4">
         <Button variant="primary" size="large" onClick={() => setShown(false)}>
           계속하기
