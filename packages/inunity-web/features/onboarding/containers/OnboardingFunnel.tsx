@@ -2,15 +2,19 @@
 
 import { useFunnel } from "@use-funnel/browser";
 import TextOnly from "@/features/onboarding/ui/steps/TextOnly";
+import InfoStep from "@/features/onboarding/ui/patterns/InfoStep";
 import FormStep from "@/features/onboarding/ui/patterns/FormStep";
-import ActionBar from "@/features/onboarding/ui/primitives/ActionBar";
-import PasswordForm from "@/features/onboarding/ui/steps/PasswordForm";
 import type { OnboardingCtx } from "@/features/onboarding/model/onboarding.types";
 import {
   studentNumberSchema,
   extraInfoSchema,
 } from "@/features/onboarding/model/onboarding.schema";
-import { submitExtraInfo } from "@/features/onboarding/api/onboarding.api";
+import {
+  submitExtraInfo,
+  loginPortal,
+  registerPortal,
+  ApiError,
+} from "@/features/onboarding/api/onboarding.api";
 import WebmailFunnel from "@/features/onboarding/containers/sub/WebmailFunnel";
 import CertificateFunnel from "@/features/onboarding/containers/sub/CertificateFunnel";
 
@@ -40,9 +44,8 @@ export default function OnboardingFunnel({
   });
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-real-screen flex flex-col">
       <funnel.Render
-        /* 1) 텍스트만 */
         Welcome={({ context, history }) => (
           <TextOnly
             title={
@@ -55,52 +58,82 @@ export default function OnboardingFunnel({
             onNext={() => history.push("PortalId", context)}
           />
         )}
-        /* 2) 포털 아이디 입력 (없음 → 9로 분기 버튼) */
         PortalId={({ context, history }) => (
-          <div className="flex flex-col gap-3">
-            <FormStep<{ studentNumber: string }>
-              title="학내 포털 아이디 입력"
-              fields={[
-                {
-                  type: "text",
-                  name: "studentNumber",
-                  label: "포털 아이디",
-                  placeholder: "학번 또는 아이디",
-                },
-              ]}
-              defaultValues={{ studentNumber: context.studentNumber ?? "" }}
-              onSubmit={(v) => {
-                const ok = studentNumberSchema.safeParse(v);
-                if (!ok.success) return alert(ok.error.issues[0]?.message);
-                history.push("PortalPw", {
-                  ...context,
-                  studentNumber: v.studentNumber,
-                });
-              }}
-            />
-            <div className="px-5 -mt-3">
-              <ActionBar
-                primaryText="포털 계정이 없나요?"
-                onPrimary={() => history.push("CertFlow_NoPortal", context)}
-              />
-            </div>
-          </div>
-        )}
-        /* 3) 포털 비밀번호 입력 → 4.1/4.2 분기 */
-        PortalPw={({ context, history }) => (
-          <PasswordForm
-            studentNumber={context.studentNumber ?? ""}
-            password={context.password ?? ""}
-            setPassword={(password: string) =>
-              history.replace("PortalPw", { ...context, password })
-            }
-            // 4.1: 가입 이력 有 → 자동 진행 스텝
-            handleLoginSuccess={() => history.push("ReturningIntro", context)}
-            // 4.2: 가입 이력 無 → 자동 진행 스텝
-            handleRegisterSuccess={() => history.push("FirstIntro", context)}
+          <FormStep<{ studentNumber: string }>
+            title={"학내 포탈에서 사용하는\n아이디를 입력해주세요."}
+            fields={[
+              {
+                type: "text",
+                name: "studentNumber",
+                label: "포탈 아이디",
+                placeholder: "9자리 학번",
+              },
+            ]}
+            defaultValues={{ studentNumber: context.studentNumber ?? "" }}
+            onSubmit={(v) => {
+              const ok = studentNumberSchema.safeParse(v);
+              if (!ok.success) return alert(ok.error.issues[0]?.message);
+              history.push("PortalPw", {
+                ...context,
+                studentNumber: v.studentNumber,
+              });
+            }}
+            secondaryText="학교 포탈 계정이 없나요?"
+            onSecondary={() => history.push("CertFlow_NoPortal", context)}
           />
         )}
-        /* 4.1) 텍스트만 */
+        PortalPw={({ context, history }) => (
+          <FormStep<{ password: string }>
+            title={"학내 포탈에서 사용하는\n비밀번호를 입력해주세요."}
+            fields={[
+              {
+                type: "password",
+                name: "password",
+                label: "포탈 비밀번호",
+                placeholder: "포탈 비밀번호",
+              },
+            ]}
+            defaultValues={{ password: context.password ?? "" }}
+            onSubmit={async (v) => {
+              const password = v.password?.trim();
+              if (!password) return alert("비밀번호를 입력해주세요!");
+              try {
+                const res = await loginPortal({
+                  studentId: context.studentNumber!,
+                  password,
+                });
+                if (res.hasHistory)
+                  history.push("ReturningIntro", { ...context, password });
+                else history.push("FirstIntro", { ...context, password });
+              } catch (e) {
+                if (e instanceof ApiError && e.code === "USER_NOT_FOUND") {
+                  try {
+                    await registerPortal({
+                      studentId: context.studentNumber!,
+                      password,
+                    });
+                    history.push("FirstIntro", { ...context, password });
+                  } catch (re) {
+                    alert(
+                      re instanceof ApiError
+                        ? re.message
+                        : "회원가입 중 알 수 없는 오류"
+                    );
+                  }
+                } else if (
+                  e instanceof ApiError &&
+                  e.code === "INVALID_CREDENTIALS"
+                ) {
+                  alert(
+                    "아이디 또는 비밀번호가 잘못되었습니다. 다시 확인해주세요."
+                  );
+                } else {
+                  alert("네트워크 오류가 발생했습니다.");
+                }
+              }
+            }}
+          />
+        )}
         ReturningIntro={({ context }) => (
           <TextOnly
             title={
@@ -115,7 +148,6 @@ export default function OnboardingFunnel({
             onNext={() => onComplete?.()}
           />
         )}
-        /* 4.2) 텍스트만 */
         FirstIntro={({ context, history }) => (
           <TextOnly
             title={
@@ -128,10 +160,9 @@ export default function OnboardingFunnel({
             onNext={() => history.push("ExtraInfo", context)}
           />
         )}
-        /* 5) 추가 정보 입력 */
         ExtraInfo={({ context, history }) => (
           <FormStep<{ name: string; nickname?: string; graduationYm?: string }>
-            title="추가 정보 입력"
+            title={"서비스 이용에 필요한\n몇 가지 정보를 입력해주세요."}
             fields={[
               {
                 type: "text",
@@ -143,10 +174,10 @@ export default function OnboardingFunnel({
                 type: "text",
                 name: "nickname",
                 label: "닉네임(선택)",
-                placeholder: "별명",
+                placeholder: "닉네임",
               },
               {
-                type: "text",
+                type: "month",
                 name: "graduationYm",
                 label: "졸업 연월(선택)",
                 placeholder: "YYYY-MM",
@@ -177,7 +208,6 @@ export default function OnboardingFunnel({
             }}
           />
         )}
-        /* 6) 텍스트만 */
         PreWebmail={({ context, history }) => (
           <TextOnly
             title={
@@ -189,7 +219,6 @@ export default function OnboardingFunnel({
             onNext={() => history.push("WebmailFlow", context)}
           />
         )}
-        /* 7) 웹메일(OAuth) → 8 또는 9~11로 분기 */
         WebmailFlow={({ context, history }) => (
           <WebmailFunnel
             initial="WebmailLogin"
@@ -203,7 +232,6 @@ export default function OnboardingFunnel({
             }
           />
         )}
-        /* 8) 환영 */
         Greet={({ context }) => (
           <TextOnly
             title={
@@ -216,7 +244,6 @@ export default function OnboardingFunnel({
             onNext={() => onComplete?.()}
           />
         )}
-        /* 9~11) 증명서 플로우 */
         CertFlow_NoPortal={({ context, history }) => (
           <CertificateFunnel
             variant="no-portal"
@@ -237,15 +264,13 @@ export default function OnboardingFunnel({
             onDone={() => history.push("Summary", context)}
           />
         )}
-        /* 6 or 11 종료 공통 */
         Summary={({ context }) => (
-          <div className="px-5">
-            <h2 className="text-xl font-bold mb-2">접수가 완료되었습니다.</h2>
-            <p className="text-sm text-gray-600 mb-6">
-              검토 후 이용할 수 있어요.
-            </p>
-            <ActionBar primaryText="확인" onPrimary={() => onComplete?.()} />
-          </div>
+          <InfoStep
+            title="접수가 완료되었습니다."
+            description="검토 후 이용할 수 있어요."
+            primaryText="확인"
+            onPrimary={() => onComplete?.()}
+          />
         )}
       />
     </div>

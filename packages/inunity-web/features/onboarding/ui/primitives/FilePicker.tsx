@@ -21,7 +21,7 @@ export default function FilePicker({
   const id = useId();
 
   return (
-    <div className="flex flex-col items-start mb-4">
+    <div className="flex flex-col w-full items-start mb-4">
       <label
         htmlFor={id}
         className="flex items-center justify-between w-full max-w-sm p-4 border rounded-lg cursor-pointer"

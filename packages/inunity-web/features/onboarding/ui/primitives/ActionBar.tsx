@@ -15,16 +15,20 @@ export default function ActionBar({
   onSecondary?: () => void;
 }) {
   return (
-    <div className="flex gap-2">
-      {secondaryText && onSecondary && (
-        <Button variant="primary" onClick={onSecondary}>
-          {secondaryText}
-        </Button>
-      )}
+    <div className="mt-auto flex flex-col gap-4">
       {primaryText && onPrimary && (
         <Button variant="primary" onClick={onPrimary}>
           {primaryText}
         </Button>
+      )}
+      {secondaryText && onSecondary && (
+        <button
+          type="button"
+          onClick={onSecondary}
+          className="w-full mt-3 text-center text-sm text-gray-600"
+        >
+          {secondaryText}
+        </button>
       )}
     </div>
   );

@@ -1,12 +1,11 @@
 "use client";
 
 import { useFunnel } from "@use-funnel/browser";
-import StepLayout from "@/features/onboarding/ui/StepLayout";
-import ActionBar from "@/features/onboarding/ui/primitives/ActionBar";
+import type { OnboardingCtx } from "@/features/onboarding/model/onboarding.types";
+import ActionStep from "@/features/onboarding/ui/patterns/ActionStep";
 import OAuthButton from "@/features/onboarding/ui/primitives/OAuthButton";
 import FormStep from "@/features/onboarding/ui/patterns/FormStep";
 import { extraInfoSchema } from "@/features/onboarding/model/onboarding.schema";
-import type { OnboardingCtx } from "@/features/onboarding/model/onboarding.types";
 
 type WebmailStep = "ExtraInfo" | "WebmailLogin";
 type StepMap = Record<WebmailStep, OnboardingCtx>;
@@ -26,7 +25,7 @@ export default function WebmailFunnel({
 }) {
   const funnel = useFunnel<StepMap>({
     id: "webmail",
-    initial: { step: initial as WebmailStep, context: ctx },
+    initial: { step: initial, context: ctx },
   });
 
   return (
@@ -48,7 +47,7 @@ export default function WebmailFunnel({
               placeholder: "별명",
             },
             {
-              type: "text",
+              type: "month",
               name: "graduationYm",
               label: "졸업 연월(선택)",
               placeholder: "YYYY-MM",
@@ -67,40 +66,28 @@ export default function WebmailFunnel({
               graduationYm: v.graduationYm || undefined,
             };
             const ok = extraInfoSchema.safeParse(patch as any);
-            if (!ok.success) {
-              alert(ok.error.issues[0]?.message);
-              return;
-            }
+            if (!ok.success) return alert(ok.error.issues[0]?.message);
             onPatch(patch);
             history.push("WebmailLogin", { ...context, ...patch });
           }}
         />
       )}
       WebmailLogin={({ context }) => (
-        <StepLayout
+        <ActionStep
           title="학과 인증 — 구글 로그인"
           description="학교 웹메일로 로그인해 주세요."
-          shown
-          footer={
-            <ActionBar
-              primaryText="완료"
-              onPrimary={onDone}
-              secondaryText="학교 웹메일 계정이 없나요?"
-              onSecondary={onNeedCertificate}
-            />
-          }
+          primaryText="완료"
+          onPrimary={onDone}
+          secondaryText="학교 웹메일 계정이 없나요?"
+          onSecondary={onNeedCertificate}
         >
-          <OAuthButton
-            provider="google"
-            onClick={() => {
-              // 실제 OAuth 트리거 연결 지점
-              // startGoogleOAuth().then(({ url }) => url && (window.location.href = url));
-            }}
-          />
+          <div className="flex justify-center items-center flex-1">
+            <OAuthButton provider="google" />
+          </div>
           <p className="text-xs text-gray-500 mt-2">
             구글 로그인 완료 후 ‘완료’를 눌러 진행하세요.
           </p>
-        </StepLayout>
+        </ActionStep>
       )}
     />
   );

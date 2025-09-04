@@ -1,10 +1,8 @@
 "use client";
 
 import { useFunnel } from "@use-funnel/browser";
-
-import StepLayout from "@/features/onboarding/ui/StepLayout";
-import FilePicker from "@/features/onboarding/ui/primitives/FilePicker";
-import ActionBar from "@/features/onboarding/ui/primitives/ActionBar";
+import type { OnboardingCtx } from "@/features/onboarding/model/onboarding.types";
+import UploadStep from "@/features/onboarding/ui/patterns/UploadStep";
 import FormStep from "@/features/onboarding/ui/patterns/FormStep";
 import useCertificateUpload from "@/features/onboarding/hooks/useCertificateUpload";
 import {
@@ -12,7 +10,6 @@ import {
   serviceAccountSchema,
   extraInfoSchema,
 } from "@/features/onboarding/model/onboarding.schema";
-import type { OnboardingCtx } from "@/features/onboarding/model/onboarding.types";
 import {
   createServiceAccount,
   submitExtraInfo,
@@ -36,44 +33,33 @@ export default function CertificateFunnel({
 }) {
   const funnel = useFunnel<StepMap>({
     id: `cert-${variant}`,
-    initial: { step: initial as CertStep, context: ctx },
+    initial: { step: initial, context: ctx },
   });
-
   const upload = useCertificateUpload();
 
   return (
     <funnel.Render
       CertAttach={({ context, history }) => (
-        <StepLayout
+        <UploadStep
           title="증명서 첨부"
-          description="3개월 이내 발급한 졸업/재학증명서를 제출해 주세요. 영업일 기준 최대 72시간 이내 처리됩니다."
-          shown
-          footer={
-            <ActionBar
-              primaryText={upload.isPending ? "업로드 중…" : "계속하기"}
-              onPrimary={async () => {
-                const ok = certificateSchema.safeParse({
-                  certificateFile: context.certificateFile,
-                });
-                if (!ok.success) {
-                  alert(ok.error.issues[0]?.message);
-                  return;
-                }
-                await upload.mutateAsync(context.certificateFile!);
-                history.push("DesiredId", context);
-              }}
-              disabled={!context.certificateFile || upload.isPending}
-            />
+          description={
+            "3개월 이내 발급한 졸업/재학증명서를 제출해 주세요.\n영업일 기준 최대 72시간 이내 처리됩니다."
           }
-        >
-          <FilePicker
-            value={context.certificateFile ?? null}
-            onChange={(f) => {
-              onPatch({ certificateFile: f });
-              history.replace("CertAttach", { ...context, certificateFile: f });
-            }}
-          />
-        </StepLayout>
+          file={context.certificateFile ?? null}
+          onChange={(f) => {
+            onPatch({ certificateFile: f });
+            history.replace("CertAttach", { ...context, certificateFile: f });
+          }}
+          uploading={upload.isPending}
+          onNext={async () => {
+            const ok = certificateSchema.safeParse({
+              certificateFile: context.certificateFile,
+            });
+            if (!ok.success) return alert(ok.error.issues[0]?.message);
+            await upload.mutateAsync(context.certificateFile!);
+            history.push("DesiredId", context);
+          }}
+        />
       )}
       DesiredId={({ context, history }) => (
         <FormStep<{ desiredId: string }>
@@ -91,10 +77,7 @@ export default function CertificateFunnel({
             const ok = serviceAccountSchema
               .pick({ desiredId: true })
               .safeParse(v);
-            if (!ok.success) {
-              alert(ok.error.issues[0]?.message);
-              return;
-            }
+            if (!ok.success) return alert(ok.error.issues[0]?.message);
             onPatch({ desiredId: v.desiredId });
             history.push("DesiredPw", { ...context, desiredId: v.desiredId });
           }}
@@ -116,10 +99,7 @@ export default function CertificateFunnel({
             const ok = serviceAccountSchema
               .pick({ desiredPassword: true })
               .safeParse(v);
-            if (!ok.success) {
-              alert(ok.error.issues[0]?.message);
-              return;
-            }
+            if (!ok.success) return alert(ok.error.issues[0]?.message);
             onPatch({ desiredPassword: v.desiredPassword });
             await createServiceAccount({
               desiredId: context.desiredId!,
@@ -160,7 +140,7 @@ export default function CertificateFunnel({
               placeholder: "별명",
             },
             {
-              type: "text",
+              type: "month",
               name: "graduationYm",
               label: "졸업 연월(선택)",
               placeholder: "YYYY-MM",
@@ -181,10 +161,7 @@ export default function CertificateFunnel({
               studentNumber: v.studentId,
             };
             const ok = extraInfoSchema.safeParse(patch as any);
-            if (!ok.success) {
-              alert(ok.error.issues[0]?.message);
-              return;
-            }
+            if (!ok.success) return alert(ok.error.issues[0]?.message);
             onPatch(patch);
             await submitExtraInfo({
               name: patch.name!,
