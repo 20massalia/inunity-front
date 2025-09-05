@@ -1,67 +1,87 @@
-# inunity-front
+<img width="1920" height="960" alt="inunity" src="https://github.com/user-attachments/assets/a13803a1-aebe-44c3-8664-86adcb4d2ab6" />
 
-### DX에 대해
-개발 경험도 굉장히 중요한 영역입니다. 개발 과정이 효율적이어야 쓸데 없는 곳에 시간을 덜 허비하고, 루즈해지지 않고 추진력 있게 나아갈 수 있습니다 🏃‍♀️
+# 정보기술대 커스텀 SNS 경진대회 
+**INUnity::정보대학교 구성원을 위한 정보 공유 커뮤니티**
 
-### 모노레포
-이 프로젝트는 모노레포를 이용해 React Native와 next에서 공통으로 쓰는 모듈을 효율적으로 관리합니다. 아래와 같은구조를 갖고 있습니다.
-> 🚨 모노레포 의존성 관리.. 정말 잘 하셔야 합니다. 특히 react 같이 공통으로 쓰는 모듈 버전을 잘못 건들였다가 대참사가 일어날 수 있어요.
+INUnity는 정보기술대학 구성원들 간의 소통과 교류를 중심으로 한 모바일 및 웹 플랫폼입니다.
+
+인증된 정보대 구성원은 익명으로 다양한 주제에 대해 활발하게 의견을 나눌 수 있습니다.
+
+기존 대학생 커뮤니티와 유사한 사용자 경험을 제공하면서도, 정보대만의 특화된 기능과 문화를 반영합니다.
+
+<br/>
+
+# 프로젝트 배경 및 목적
+## 배경
+
+1. 단과대 내 학과 간 소통 부족
+2. 휴학생의 고립감 및 소통 문제
+3. 재학생과 졸업생 간 연결성 약화
+4. 학교 및 단과대 특화 정보와 기능의 부재
+5. 정보 전달 경로의 파편화
+
+## 목적
+재학생과 졸업생에 걸쳐 정보대에 특화된 전공/취창업 및 학교생활에 필요한 양질의 정보를 공유할 수 있게 하고, 단과대/학과/학생회 등에서 전달하는 창구를 일원화합니다.
+
+또한 학교나 단과대에 특화된 특화 기능을 제공해 학교생활의 질을 향상시킵니다.
+
+<br>
+
+---
+
+<br>
+
+# 온보딩 리팩토링 개요
+
+* **범위**: 온보딩 전 과정을 설계/구현 - 기존 UI 유지, 내부 구조 전면 정리
+
+## 핵심 변경점
+
+* **상태 흐름 표준화**: `@use-funnel/browser` 루트 퍼널 + 서브 퍼널 2종(웹메일/증명서)
+* **레이어링 확립**: `containers / patterns / primitives` 3계층으로 역할 분리
+* **폼/검증 체계화**: `react-hook-form + zod`
+
+  * 필드(primitive) → 폼(form-level) → API 경계(요청/응답) 3단계 검증
+* **API 경계 강화**: 요청/응답 zod 스키마 + `ApiError` 코드 매핑
+* **컴포넌트 정리**: 중복 Step 제거 → `FormStep / UploadStep / InfoStep`로 통일
+* **UX 일관화**: 하단 고정 `ActionBar`(메인 버튼 + 아래 텍스트 CTA), `TextOnly` 자동 전환 유지
+
+## 온보딩 사용자 흐름
+
+`Welcome → PortalId → PortalPw → (ReturningIntro | FirstIntro) → ExtraInfo → PreWebmail → WebmailFlow → Greet`
+분기:
+
+* **포탈 계정 없음** → `CertFlow_NoPortal`
+* **포탈은 있으나 웹메일 없음** → `CertFlow_PortalNoWebmail`
+  서브 퍼널:
+* **WebmailFunnel**: 구글 OAuth, 필요 시 증명서 분기
+* **CertificateFunnel**: `증명서 첨부 → 아이디/비번 설정 → 추가 정보`
+
+## 디렉터리 구조(요약)
+
 ```
-pacakges
-ㄴ inunity-web
-ㄴ inunity-native
-ㄴ message-type
-ㄴ ui
-ㄴ ... 뭐가 더 추가될수도?
+features/onboarding/
+│
+├─ containers/OnboardingFunnel.tsx
+├─ containers/sub/{WebmailFunnel,CertificateFunnel}.tsx
+│
+├─ ui/steps/{StepLayout, FadeInOutStep, TextOnly}.tsx
+├─ ui/patterns/{FormStep, InfoStep, ActionStep, UploadStep}.tsx
+├─ ui/primitives/{ActionBar, FilePicker, OAuthButton}.tsx
+│
+├─ model/{onboarding.schema.ts,onboarding.types.ts}
+│
+└─ api/onboarding.api.ts
 ```
-## 실행
-### 설정
-```bash
-yarn install # 의존성 설치
-```
-아래 스크립트를 이용해 실행할 수 있습니다.
-- `yarn nextapp run dev`: next 앱을 단독으로 실행합니다.
 
-- Metro 번들러만 실행하기
-- `yarn nativeapp start`: 네이티브 단을 빌드하지 않고 Metro 번들러만을 실행합니다.
+## 기술 스택
 
-- `yarn nativeapp run ios`: development build를 생성하고, Metro 번들러를 실행합니다.
-- `yarn start`: 두 앱을 동시에 실행합니다. (next는 개밥서버, 네이티브는 iOS development build)
-- `yarn startsim`: `yarn start`를 웹뷰 URL을 `localhost`로 고정하고 실행합니다. iOS 시뮬레이터 환경에서 구동을 위한 기능입니다.
-```json
-    "nextapp": "yarn workspace inunity-web",
-    "nativeapp": "yarn workspace inunity-native ",
-    "start": "EXPO_PUBLIC_WEB_URL=http://$(ipconfig getifaddr en0):3000; yarn nextapp run dev & yarn nativeapp run ios",
-    "startsim": "EXPO_PUBLIC_WEB_URL=http://localhost:3000; yarn nextapp run dev & yarn nativeapp run ios"
+* **Web**: Next.js 14(App Router), TypeScript, TailwindCSS
+* **Form/Validation**: react-hook-form, zod
+* **Flow**: @use-funnel/browser
 
-    // inunity-native/pacakge.json
-    "android": "expo run:android --device",
-    "ios": "expo run:ios --device",
-```
-### 웹뷰 URL
-이 앱은 React Native 와 WebView 상의 react가 유기적으로 동작합니다. 따라서 정상적인 테스트/이용을 위해 웹뷰 URL을 지정해주어야 합니다. 이는 `EXPO_PUBLIC_WEB_URL` 환경변수를 지정해줌으로서 가능합니다. 아래는 설정하는 두 방법을 소개합니다. 
-1. .env 파일에 등록하기 (고정, 권장)
-```env
-# packages/inunity-native/.env.local
+## 개선 효과
 
-EXPO_PUBLIC_WEB_URL=http://192.168.1.146:3000 # next.js 서버를 구동하는 호스트
-```
-2. 일회성으로 테스트해보기
-```bash
-export EXPO_PUBLIC_WEB_URL=http://192.168.1.146:3000; yarn start
-```
-3. 네이티브 빌드 없이 Expo 서버만 실행하기
-
-   무슨 이유인지는 모르겠지만, Expo 서버만 실행했을 때 env가 주입이 안되는 것 같아요. 그래서 아래와 같이 따로 지정해주어야 합니다.
-   `EXPO_PUBLIC_WEB_URL=http://localhost:3000 yarn nativeapp start;`
-### API URL
-현재 테스트에 사용하고 있는 쿠키 인증 서버가 있습니다.
-
-https://github.com/INUnity-for-UNI/inunity-cookie-test
-
-이 레포지토리를 클론해서 세팅한 다음, 웹뷰 URL과 같이 이번엔 **next.js** 패키지의 env를 지정해주세요.
-```env
-# packages/inunity-web/.env.local
-
-NEXT_PUBLIC_API_URL=http://192.168.1.146:8888 # 쿠키 테스트 서버를 구동하는 호스트
-```
+* 새 단계/분기 추가 시 **컨테이너·스키마만 확장** 하여 개발 속도↑, 리스크↓
+* 폼/서버 양단 검증으로 **런타임 안정성** 확보
+* 컴포넌트 재사용 극대화로 **코드 중복↓, 유지보수성↑**
