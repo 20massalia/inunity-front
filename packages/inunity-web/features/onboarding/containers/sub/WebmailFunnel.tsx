@@ -33,6 +33,7 @@ export default function WebmailFunnel({
       ExtraInfo={({ context, history }) => (
         <FormStep<{ name: string; nickname?: string; graduationYm?: string }>
           title="사용자 정보 입력"
+          schema={extraInfoSchema}
           fields={[
             {
               type: "text",
@@ -59,16 +60,12 @@ export default function WebmailFunnel({
             graduationYm: context.graduationYm ?? "",
           }}
           onSubmit={(v) => {
-            const patch: Partial<OnboardingCtx> = {
+            history.push("WebmailLogin", {
+              ...context,
               name: v.name,
-              nickname: v.nickname || undefined,
-              isGraduated: !!v.graduationYm,
-              graduationYm: v.graduationYm || undefined,
-            };
-            const ok = extraInfoSchema.safeParse(patch as any);
-            if (!ok.success) return alert(ok.error.issues[0]?.message);
-            onPatch(patch);
-            history.push("WebmailLogin", { ...context, ...patch });
+              nickname: v.nickname,
+              graduationYm: v.graduationYm,
+            });
           }}
         />
       )}

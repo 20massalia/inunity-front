@@ -9,6 +9,7 @@ import {
   certificateSchema,
   serviceAccountSchema,
   extraInfoSchema,
+  certExtraInfoSchema,
 } from "@/features/onboarding/model/onboarding.schema";
 import {
   createServiceAccount,
@@ -64,6 +65,7 @@ export default function CertificateFunnel({
       DesiredId={({ context, history }) => (
         <FormStep<{ desiredId: string }>
           title="사용할 아이디 입력"
+          schema={serviceAccountSchema.pick({ desiredId: true })}
           fields={[
             {
               type: "text",
@@ -74,11 +76,6 @@ export default function CertificateFunnel({
           ]}
           defaultValues={{ desiredId: context.desiredId ?? "" }}
           onSubmit={(v) => {
-            const ok = serviceAccountSchema
-              .pick({ desiredId: true })
-              .safeParse(v);
-            if (!ok.success) return alert(ok.error.issues[0]?.message);
-            onPatch({ desiredId: v.desiredId });
             history.push("DesiredPw", { ...context, desiredId: v.desiredId });
           }}
         />
@@ -86,6 +83,7 @@ export default function CertificateFunnel({
       DesiredPw={({ context, history }) => (
         <FormStep<{ desiredPassword: string }>
           title="비밀번호 설정"
+          schema={serviceAccountSchema.pick({ desiredPassword: true })}
           fields={[
             {
               type: "password",
@@ -96,11 +94,6 @@ export default function CertificateFunnel({
           ]}
           defaultValues={{ desiredPassword: context.desiredPassword ?? "" }}
           onSubmit={async (v) => {
-            const ok = serviceAccountSchema
-              .pick({ desiredPassword: true })
-              .safeParse(v);
-            if (!ok.success) return alert(ok.error.issues[0]?.message);
-            onPatch({ desiredPassword: v.desiredPassword });
             await createServiceAccount({
               desiredId: context.desiredId!,
               desiredPassword: v.desiredPassword,
@@ -120,6 +113,7 @@ export default function CertificateFunnel({
           graduationYm?: string;
         }>
           title="추가 정보 입력"
+          schema={certExtraInfoSchema}
           fields={[
             {
               type: "text",
@@ -146,28 +140,12 @@ export default function CertificateFunnel({
               placeholder: "YYYY-MM",
             },
           ]}
-          defaultValues={{
-            name: context.name ?? "",
-            studentId: context.studentNumber ?? "",
-            nickname: context.nickname ?? "",
-            graduationYm: context.graduationYm ?? "",
-          }}
           onSubmit={async (v) => {
-            const patch: Partial<OnboardingCtx> = {
-              name: v.name,
-              nickname: v.nickname || undefined,
-              isGraduated: !!v.graduationYm,
-              graduationYm: v.graduationYm || undefined,
-              studentNumber: v.studentId,
-            };
-            const ok = extraInfoSchema.safeParse(patch as any);
-            if (!ok.success) return alert(ok.error.issues[0]?.message);
-            onPatch(patch);
             await submitExtraInfo({
-              name: patch.name!,
-              nickname: patch.nickname,
-              isGraduated: !!patch.isGraduated,
-              graduationYm: patch.graduationYm,
+              name: v.name,
+              nickname: v.nickname,
+              isGraduated: !!v.graduationYm,
+              graduationYm: v.graduationYm,
               studentId: v.studentId,
             });
             onDone();

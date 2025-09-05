@@ -6,8 +6,9 @@ import InfoStep from "@/features/onboarding/ui/patterns/InfoStep";
 import FormStep from "@/features/onboarding/ui/patterns/FormStep";
 import type { OnboardingCtx } from "@/features/onboarding/model/onboarding.types";
 import {
-  studentNumberSchema,
   extraInfoSchema,
+  passwordFormSchema,
+  portalIdFormSchema,
 } from "@/features/onboarding/model/onboarding.schema";
 import {
   submitExtraInfo,
@@ -61,6 +62,7 @@ export default function OnboardingFunnel({
         PortalId={({ context, history }) => (
           <FormStep<{ studentNumber: string }>
             title={"학내 포탈에서 사용하는\n아이디를 입력해주세요."}
+            schema={portalIdFormSchema}
             fields={[
               {
                 type: "text",
@@ -71,8 +73,6 @@ export default function OnboardingFunnel({
             ]}
             defaultValues={{ studentNumber: context.studentNumber ?? "" }}
             onSubmit={(v) => {
-              const ok = studentNumberSchema.safeParse(v);
-              if (!ok.success) return alert(ok.error.issues[0]?.message);
               history.push("PortalPw", {
                 ...context,
                 studentNumber: v.studentNumber,
@@ -85,6 +85,7 @@ export default function OnboardingFunnel({
         PortalPw={({ context, history }) => (
           <FormStep<{ password: string }>
             title={"학내 포탈에서 사용하는\n비밀번호를 입력해주세요."}
+            schema={passwordFormSchema}
             fields={[
               {
                 type: "password",
@@ -157,6 +158,7 @@ export default function OnboardingFunnel({
         ExtraInfo={({ context, history }) => (
           <FormStep<{ name: string; nickname?: string; graduationYm?: string }>
             title={"서비스 이용에 필요한\n몇 가지 정보를 입력해주세요."}
+            schema={extraInfoSchema}
             fields={[
               {
                 type: "text",
@@ -183,22 +185,13 @@ export default function OnboardingFunnel({
               graduationYm: context.graduationYm ?? "",
             }}
             onSubmit={async (v) => {
-              const payload: OnboardingCtx = {
+              history.push("PreWebmail", {
                 ...context,
                 name: v.name,
                 nickname: v.nickname || undefined,
                 isGraduated: !!v.graduationYm,
                 graduationYm: v.graduationYm || undefined,
-              };
-              const ok = extraInfoSchema.safeParse(payload);
-              if (!ok.success) return alert(ok.error.issues[0]?.message);
-              await submitExtraInfo({
-                name: payload.name!,
-                nickname: payload.nickname,
-                isGraduated: !!payload.isGraduated,
-                graduationYm: payload.graduationYm,
               });
-              history.push("PreWebmail", payload);
             }}
           />
         )}
