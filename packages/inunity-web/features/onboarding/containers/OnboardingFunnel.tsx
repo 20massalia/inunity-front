@@ -102,33 +102,27 @@ export default function OnboardingFunnel({
                   studentId: context.studentNumber!,
                   password,
                 });
+                // 로그인 성공 시에만 온보딩 진행
                 if (res.hasHistory)
                   history.push("ReturningIntro", { ...context, password });
                 else history.push("FirstIntro", { ...context, password });
               } catch (e) {
                 if (e instanceof ApiError && e.code === "USER_NOT_FOUND") {
-                  try {
-                    await registerPortal({
-                      studentId: context.studentNumber!,
-                      password,
-                    });
-                    history.push("FirstIntro", { ...context, password });
-                  } catch (re) {
-                    alert(
-                      re instanceof ApiError
-                        ? re.message
-                        : "회원가입 중 알 수 없는 오류"
-                    );
-                  }
+                  // 포탈 계정이 없는 경우 안내
+                  alert(
+                    "해당 포탈 계정이 존재하지 않습니다.\n'학교 포탈 계정이 없나요?' 버튼을 통해 회원가입을 진행해주세요."
+                  );
                 } else if (
                   e instanceof ApiError &&
                   e.code === "INVALID_CREDENTIALS"
                 ) {
                   alert(
-                    "아이디 또는 비밀번호가 잘못되었습니다. 다시 확인해주세요."
+                    "아이디 또는 비밀번호가 잘못되었습니다.\n다시 확인해주세요."
                   );
                 } else {
-                  alert("네트워크 오류가 발생했습니다.");
+                  alert(
+                    "네트워크 오류가 발생했습니다.\n잠시 후 다시 시도해주세요."
+                  );
                 }
               }
             }}

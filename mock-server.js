@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -14,6 +15,9 @@ app.use(
 // JSON 파싱
 app.use(express.json());
 
+// 파일 업로드를 위한 multer 설정 (메모리에만 저장)
+const upload = multer({ storage: multer.memoryStorage() });
+
 // Mock 사용자 데이터
 const mockUsers = [
   {
@@ -21,8 +25,14 @@ const mockUsers = [
     studentId: "202012345",
     name: "테스트 사용자",
     email: "test@example.com",
+    hasHistory: true,
+    hasWebmail: true,
+    displayName: "테스트 사용자",
   },
 ];
+
+// Mock 온보딩 데이터 저장소
+const onboardingData = new Map();
 
 // Mock 인증 미들웨어
 const mockAuthMiddleware = (req, res, next) => {
@@ -51,10 +61,27 @@ app.get("/v1/auth/test", mockAuthMiddleware, (req, res) => {
   });
 });
 
-// Mock 로그인
+// Mock 포털 로그인 (온보딩용)
 app.post("/v1/auth/login", (req, res) => {
   const { studentId, password } = req.body;
 
+  // 학번 형식 검증 (9자리 숫자)
+  if (!/^\d{9}$/.test(studentId)) {
+    return res.status(400).json({
+      code: "INVALID_STUDENT_ID",
+      message: "올바른 학번 형식이 아닙니다. (9자리 숫자)",
+    });
+  }
+
+  // 비밀번호 길이 검증
+  if (!password || password.length < 6) {
+    return res.status(400).json({
+      code: "INVALID_PASSWORD",
+      message: "비밀번호는 6자 이상이어야 합니다.",
+    });
+  }
+
+  // 기존 사용자 (hasHistory: true)
   if (studentId === "202012345" && password === "password") {
     // Mock 쿠키 설정
     res.cookie("accessToken", `mock-access-${Date.now()}`, {
@@ -79,27 +106,112 @@ app.post("/v1/auth/login", (req, res) => {
     });
 
     res.json({
-      status: 200,
-      message: "Mock login successful",
-      data: { userId: 1, name: "테스트 사용자" },
+      ok: true,
+      hasHistory: true,
+      hasWebmail: true,
+      displayName: "테스트 사용자",
     });
-  } else {
+  }
+  // 신규 사용자 (hasHistory: false)
+  else if (studentId === "202012346" && password === "password") {
+    // Mock 쿠키 설정
+    res.cookie("accessToken", `mock-access-${Date.now()}`, {
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 24시간
+    });
+
+    res.cookie("refreshToken", `mock-refresh-${Date.now()}`, {
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7일
+    });
+
+    res.cookie("JSESSIONID", `mock-session-${Date.now()}`, {
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 24시간
+    });
+
+    res.json({
+      ok: true,
+      hasHistory: false,
+      hasWebmail: false,
+      displayName: "신규 사용자",
+    });
+  }
+  // 잘못된 자격증명
+  else if (studentId === "202012345" && password !== "password") {
     res.status(401).json({
-      status: 401,
-      message: "Invalid credentials",
+      code: "INVALID_CREDENTIALS",
+      message: "포탈 로그인 실패: 아이디비번 틀림",
+    });
+  }
+  // 미가입 사용자
+  else {
+    res.status(404).json({
+      code: "USER_NOT_FOUND",
+      message: "서비스에 가입되지 않은 유저입니다.",
     });
   }
 });
 
-// Mock 회원가입
+// Mock 포털 회원가입 (온보딩용) - 포탈 계정이 없는 경우에만 사용
 app.post("/v1/auth/register", (req, res) => {
   const { studentId, password } = req.body;
 
-  // Mock 회원가입 성공 (실제로는 중복 체크 등을 해야 함)
+  // 학번 형식 검증 (9자리 숫자)
+  if (!/^\d{9}$/.test(studentId)) {
+    return res.status(400).json({
+      code: "INVALID_STUDENT_ID",
+      message: "올바른 학번 형식이 아닙니다. (9자리 숫자)",
+    });
+  }
+
+  // 비밀번호 길이 검증
+  if (!password || password.length < 6) {
+    return res.status(400).json({
+      code: "INVALID_PASSWORD",
+      message: "비밀번호는 6자 이상이어야 합니다.",
+    });
+  }
+
+  // 이미 가입된 사용자 체크
+  if (studentId === "202012345" || studentId === "202012346") {
+    return res.status(409).json({
+      code: "USER_ALREADY_EXISTS",
+      message: "이미 가입된 사용자입니다.",
+    });
+  }
+
+  // Mock 쿠키 설정
+  res.cookie("accessToken", `mock-access-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 24시간
+  });
+
+  res.cookie("refreshToken", `mock-refresh-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7일
+  });
+
+  res.cookie("JSESSIONID", `mock-session-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 24시간
+  });
+
+  // Mock 회원가입 성공
   res.json({
-    status: 200,
-    message: "Mock registration successful",
-    data: { userId: 2, studentId, name: "새로운 사용자" },
+    ok: true,
   });
 });
 
@@ -153,6 +265,125 @@ app.get("/v1/categories", mockAuthMiddleware, (req, res) => {
   });
 });
 
+// ===== 온보딩 관련 API =====
+
+// 추가 정보 저장 (5단계/11단계)
+app.post("/v1/onboarding/extra-info", (req, res) => {
+  const { name, nickname, isGraduated, graduationYm, studentId } = req.body;
+
+  // 온보딩 데이터 저장
+  const userId = req.headers["x-user-id"] || "mock-user";
+  onboardingData.set(userId, {
+    name,
+    nickname,
+    isGraduated,
+    graduationYm,
+    studentId,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Mock 쿠키 설정 (온보딩 과정에서도 인증 상태 유지)
+  res.cookie("accessToken", `mock-access-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 24시간
+  });
+
+  res.cookie("refreshToken", `mock-refresh-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7일
+  });
+
+  res.cookie("JSESSIONID", `mock-session-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 24시간
+  });
+
+  res.json({
+    ok: true,
+  });
+});
+
+// 구글 OAuth 시작 (7단계)
+app.post("/v1/auth/google/start", (req, res) => {
+  // Mock OAuth URL 반환
+  res.json({
+    url: "https://accounts.google.com/oauth/authorize?client_id=mock&redirect_uri=mock&scope=email&response_type=code&state=mock",
+  });
+});
+
+// 증명서 업로드 (9단계)
+app.post("/v1/onboarding/certificates", upload.single("file"), (req, res) => {
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({
+      code: "FILE_REQUIRED",
+      message: "파일이 필요합니다.",
+    });
+  }
+
+  // 파일 정보 로그 출력 (실제 저장은 하지 않음)
+  const fileName = Buffer.from(file.originalname, "latin1").toString("utf8");
+  console.log(
+    `📁 Mock 파일 업로드: ${fileName} (${file.size} bytes, ${file.mimetype})`
+  );
+
+  // Mock 업로드 성공
+  const requestId = `cert-${Date.now()}-${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
+
+  res.json({
+    requestId,
+  });
+});
+
+// 서비스 계정 생성 (10~11단계)
+app.post("/v1/onboarding/service-account", (req, res) => {
+  const { desiredId, desiredPassword } = req.body;
+
+  // 아이디 중복 체크 (Mock)
+  if (desiredId === "admin" || desiredId === "test") {
+    return res.status(409).json({
+      code: "ID_ALREADY_EXISTS",
+      message: "이미 사용 중인 아이디입니다.",
+    });
+  }
+
+  // Mock 쿠키 설정 (최종 온보딩 완료 시 인증 상태 확정)
+  res.cookie("accessToken", `mock-access-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 24시간
+  });
+
+  res.cookie("refreshToken", `mock-refresh-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7일
+  });
+
+  res.cookie("JSESSIONID", `mock-session-${Date.now()}`, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 24시간
+  });
+
+  // Mock 계정 생성 성공
+  res.json({
+    ok: true,
+  });
+});
+
 // 404 핸들러
 app.use("*", (req, res) => {
   res.status(404).json({
@@ -168,10 +399,25 @@ app.listen(PORT, () => {
   console.log(`   GET  /health`);
   console.log(`   GET  /v1/auth/test`);
   console.log(`   POST /v1/auth/login`);
+  console.log(`   POST /v1/auth/register`);
   console.log(`   GET  /v1/users`);
   console.log(`   GET  /v1/articles`);
   console.log(`   GET  /v1/categories`);
+  console.log(`\n🎯 온보딩 관련 API:`);
+  console.log(`   POST /v1/onboarding/extra-info`);
+  console.log(`   POST /v1/auth/google/start`);
+  console.log(`   POST /v1/onboarding/certificates`);
+  console.log(`   POST /v1/onboarding/service-account`);
+  console.log(`\n🔑 Mock credentials:`);
+  console.log(`   기존 사용자: studentId: "202012345", password: "password"`);
+  console.log(`   신규 사용자: studentId: "202012346", password: "password"`);
+  console.log(`   잘못된 비밀번호: studentId: "202012345", password: "wrong"`);
+  console.log(`   미가입 사용자: studentId: "202012347", password: "password"`);
+  console.log(`\n📋 검증 규칙:`);
+  console.log(`   - 학번: 9자리 숫자만 허용`);
+  console.log(`   - 비밀번호: 6자 이상 필수`);
   console.log(
-    `\n🔑 Mock credentials: studentId: "202012345", password: "password"`
+    `   - 포탈 계정이 없는 경우: '학교 포탈 계정이 없나요?' 버튼 사용`
   );
+  console.log(`   - 포탈 로그인 실패 시 자동 회원가입 시도하지 않음`);
 });

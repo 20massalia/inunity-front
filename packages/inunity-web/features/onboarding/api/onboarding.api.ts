@@ -67,7 +67,7 @@ export async function submitExtraInfo(params: {
   name: string;
   nickname?: string;
   isGraduated: boolean;
-  graduationYm?: string; // YYYY-MM (isGraduated=true면 필수)
+  graduationYm?: string; // YYYY-MM
   studentId?: string; // 11단계(증명서 경로)에서 필요
 }): Promise<{ ok: true }> {
   const res = await fetch(`${API}/v1/onboarding/extra-info`, {
